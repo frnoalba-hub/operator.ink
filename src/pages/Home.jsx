@@ -136,8 +136,8 @@ export default function Home() {
           <img
             src={LOGO_URL}
             alt="Operator.ink"
-            className="w-full h-auto object-contain"
-            style={{ maxWidth: '100%' }}
+            className="h-auto object-contain"
+            style={{ width: '420px', maxWidth: '90vw' }}
           />
         </motion.div>
 
