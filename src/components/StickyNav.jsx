@@ -35,7 +35,7 @@ export default function StickyNav({ currentPage = 'home' }) {
             style={{ width: '240px', maxWidth: '55vw' }}
           />
         </a>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
           <a
             href={createPageUrl('Home')}
             className={`text-sm font-semibold transition-colors ${currentPage === 'home' ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
