@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Mail, Linkedin, ArrowRight, Search, Zap, BarChart2, Globe } from 'lucide-react';
+import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a891df439583825e4f7f0e/cc3b199f0_Untitled5.png";
