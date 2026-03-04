@@ -108,7 +108,7 @@ export default function Home() {
           <img
             src={LOGO_URL}
             alt="Operator.ink"
-            className="h-14 sm:h-16 lg:h-20 w-auto object-contain"
+            className="h-24 sm:h-32 lg:h-40 w-auto object-contain"
           />
           <div className="flex items-center gap-3">
             <a
