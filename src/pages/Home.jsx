@@ -49,24 +49,7 @@ export default function Home() {
         }}
       />
 
-      {/* Toast */}
-      <AnimatePresence>
-        {showToast && (
-          <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            className="fixed top-6 right-6 z-50"
-            role="status"
-            aria-live="polite"
-          >
-            <div className="bg-white text-black px-6 py-3 rounded-full shadow-2xl font-bold text-sm flex items-center gap-2">
-              <Check className="w-5 h-5 text-green-600" />
-              Request received — we'll be in touch.
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Toast removed — success/error messages now inline in IntakeForm */}
 
       {/* Skip link */}
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white text-black px-3 py-2 rounded-md z-50">
