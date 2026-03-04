@@ -103,8 +103,14 @@ export default function Home() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex items-center justify-end mb-6"
+          className="flex items-center justify-between mb-12 lg:mb-16"
         >
+          <img
+            src={LOGO_URL}
+            alt="Operator.ink"
+            className="h-auto object-contain"
+            style={{ width: '200px', maxWidth: '50vw' }}
+          />
           <div className="flex items-center gap-3">
             <a
               href={LINKEDIN_URL}
@@ -125,21 +131,6 @@ export default function Home() {
             </a>
           </div>
         </motion.nav>
-
-        {/* LOGO — full-width hero display */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex justify-center mb-12 lg:mb-16"
-        >
-          <img
-            src={LOGO_URL}
-            alt="Operator.ink"
-            className="h-auto object-contain"
-            style={{ width: '420px', maxWidth: '90vw' }}
-          />
-        </motion.div>
 
         {/* HERO */}
         <motion.header
