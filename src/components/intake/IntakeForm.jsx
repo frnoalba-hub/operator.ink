@@ -180,11 +180,19 @@ export default function IntakeForm() {
         uploadedUrls.push(file_url);
       }
 
-      // Save to local storage as backup
-      localStorage.setItem('backup_lead', JSON.stringify({
-        payload: { ...formData, file_urls: uploadedUrls },
-        ts: Date.now()
-      }));
+      // Save to database
+      await base44.entities.LeadSubmission.create({
+        client_name: formData.clientName,
+        client_email: formData.clientEmail,
+        company: formData.company,
+        service: formData.service,
+        conditional_answer: formData.conditionalAnswer,
+        budget: formData.budget,
+        timeline: formData.timeline,
+        scope: formData.clientNeeds,
+        file_urls: uploadedUrls,
+        status: 'new',
+      });
 
       setSubmitStatus('success');
       setFormData({ clientName: '', clientEmail: '', company: '', service: '', conditionalAnswer: '', budget: '', timeline: '', clientNeeds: '' });
