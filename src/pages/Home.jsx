@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Mail, Linkedin, ArrowRight, Search, Zap, BarChart2, Globe } from 'lucide-react';
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a891df439583825e4f7f0e/d4d1a3a71_Untitled3.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a891df439583825e4f7f0e/cc3b199f0_Untitled5.png";
 const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
 
 const capabilities = [
