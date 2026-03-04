@@ -49,16 +49,13 @@ body {
   overscroll-behavior: none;
 }
 
-/* Hide scrollbar on mobile */
-@media (max-width: 768px) {
-  html, body {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
-  }
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar {
-    display: none; /* Chrome/Safari/WebKit */
-  }
+/* Hide scrollbar everywhere */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+*::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/WebKit */
 }
 
 ::selection {
