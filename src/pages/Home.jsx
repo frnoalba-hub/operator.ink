@@ -197,51 +197,7 @@ export default function Home() {
             </div>
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            aria-label="Initialize Project Form"
-            className="rounded-[36px] border border-zinc-800 p-7 lg:p-8 flex flex-col gap-5"
-            style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0))' }}
-          >
-            {[
-              { id: 'clientName', label: 'Name', type: 'text', placeholder: 'Full name' },
-              { id: 'clientEmail', label: 'Email', type: 'email', placeholder: 'name@company.com' }
-            ].map(({ id, label, type, placeholder }) => (
-              <div key={id} className="flex flex-col gap-2">
-                <label htmlFor={id} className="text-xs font-bold uppercase tracking-widest text-zinc-500">{label}</label>
-                <input
-                  type={type}
-                  id={id}
-                  required
-                  value={formData[id]}
-                  onChange={(e) => handleChange(id, e.target.value)}
-                  placeholder={placeholder}
-                  className="w-full px-5 py-3 rounded-2xl bg-black border border-zinc-800 text-white placeholder-zinc-600 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 outline-none transition-all"
-                  style={{ minHeight: '52px' }}
-                />
-              </div>
-            ))}
-            <div className="flex flex-col gap-2">
-              <label htmlFor="clientNeeds" className="text-xs font-bold uppercase tracking-widest text-zinc-500">Scope</label>
-              <textarea
-                id="clientNeeds"
-                rows={5}
-                required
-                value={formData.clientNeeds}
-                onChange={(e) => handleChange('clientNeeds', e.target.value)}
-                placeholder="Brief description of your project..."
-                className="w-full px-5 py-4 rounded-2xl bg-black border border-zinc-800 text-white placeholder-zinc-600 resize-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 outline-none transition-all"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white text-black font-extrabold text-base hover:bg-zinc-200 disabled:opacity-50 transition-colors mt-1"
-              style={{ minHeight: '56px' }}
-            >
-              {submitting ? 'Sending…' : 'Execute Request'} <ArrowRight className="w-4 h-4" />
-            </button>
-          </form>
+          <IntakeForm />
         </motion.section>
 
         {/* FOOTER */}
