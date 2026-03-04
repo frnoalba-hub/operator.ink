@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Mail, Linkedin, ArrowRight, Search, Zap, BarChart2, Globe } from 'lucide-react';
+import { Check, Mail, ArrowRight, Search, Zap, BarChart2, Globe } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 
