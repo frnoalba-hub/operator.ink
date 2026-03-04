@@ -125,6 +125,13 @@ export default function Home() {
                 Deploy Request <ArrowRight className="w-4 h-4" />
               </a>
               <a
+                href={createPageUrl('Services')}
+                className="inline-flex items-center justify-center gap-2 px-8 rounded-2xl border border-zinc-800 text-white font-semibold text-base hover:border-zinc-500 transition-colors"
+                style={{ minHeight: '56px' }}
+              >
+                View Services <ArrowRight className="w-4 h-4 text-zinc-400" />
+              </a>
+              <a
                 href="mailto:orders@operator.ink"
                 className="inline-flex items-center justify-center gap-2 px-8 rounded-2xl border border-zinc-800 text-white font-semibold text-base hover:border-zinc-500 transition-colors"
                 style={{ minHeight: '56px' }}
