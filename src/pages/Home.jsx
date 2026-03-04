@@ -109,7 +109,7 @@ export default function Home() {
             src={LOGO_URL}
             alt="Operator.ink"
             className="h-auto object-contain"
-            style={{ width: '200px', maxWidth: '50vw' }}
+            style={{ width: '400px', maxWidth: '70vw' }}
           />
           <div className="flex items-center gap-3">
             <a
