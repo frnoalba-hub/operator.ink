@@ -32,7 +32,7 @@ export default function StickyNav({ currentPage = 'home' }) {
             src={LOGO_URL}
             alt="Operator.ink"
             className="h-auto object-contain"
-            style={{ width: '180px', maxWidth: '40vw' }}
+            style={{ width: '240px', maxWidth: '45vw' }}
           />
         </a>
         <div className="flex items-center gap-4">
