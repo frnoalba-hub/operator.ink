@@ -36,33 +36,7 @@ const capabilities = [
 ];
 
 export default function Home() {
-  const [formData, setFormData] = useState({ clientName: '', clientEmail: '', clientNeeds: '' });
-  const [showToast, setShowToast] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    setFormData({
-      clientName: localStorage.getItem('clientName') || '',
-      clientEmail: localStorage.getItem('clientEmail') || '',
-      clientNeeds: localStorage.getItem('clientNeeds') || '',
-    });
-  }, []);
-
-  const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    localStorage.setItem(field, value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-    localStorage.setItem('backup_lead', JSON.stringify({ payload: formData, ts: Date.now() }));
-    setFormData({ clientName: '', clientEmail: '', clientNeeds: '' });
-    ['clientName', 'clientEmail', 'clientNeeds'].forEach(k => localStorage.removeItem(k));
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3500);
-    setSubmitting(false);
-  };
+  // Form state is now managed by IntakeForm component
 
   return (
     <div className="min-h-screen bg-black text-white antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif" }}>
