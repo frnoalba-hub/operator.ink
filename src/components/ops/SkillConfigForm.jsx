@@ -20,6 +20,7 @@ export default function SkillConfigForm({ skill, existingConfig = {}, onSave, on
   const [revealedKeys, setRevealedKeys] = useState({});
   const [errors, setErrors] = useState({});
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState(null);
 
   function toggleReveal(key) {
     setRevealedKeys((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -38,10 +39,16 @@ export default function SkillConfigForm({ skill, existingConfig = {}, onSave, on
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setSaveError(null);
     if (!validate()) return;
-    await onSave?.(config);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    try {
+      await onSave?.(config);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      setSaveError(err?.message || String(err));
+      console.error('[SkillConfigForm] Save failed:', err);
+    }
   }
 
   function renderKeyField(keyDef, required) {
@@ -122,7 +129,7 @@ export default function SkillConfigForm({ skill, existingConfig = {}, onSave, on
       {skill.slug === 'ai-receptionist' && (
         <div className="retro-card rounded-[24px] p-4 space-y-1" style={{ borderColor: 'var(--retro-rgb, rgba(6,182,212,0.3))', borderWidth: 1 }}>
           <p className="text-sm text-[var(--retro-text-muted)]">
-            <strong className="text-[var(--retro-text)]">Quick test:</strong> Click <strong>Use Outright Demo (888)</strong> below to pre-fill the demo number and persona. Add your Twilio SID + Auth Token, save, then call the 888 number to test.
+            <strong className="text-[var(--retro-text)]">Quick test:</strong> Click <strong>Use Outright Demo (888)</strong> below to pre-fill the demo number and persona. Save, then call the 888 number to test (Twilio SID/Auth optional).
           </p>
         </div>
       )}
@@ -202,6 +209,16 @@ export default function SkillConfigForm({ skill, existingConfig = {}, onSave, on
             <Phone className="w-5 h-5" />
             {config.twilio_phone_number}
           </a>
+        </div>
+      )}
+
+      {saveError && (
+        <div className="rounded-xl p-4 flex items-start gap-2" style={{ background: 'rgba(244,63,94,0.15)', border: '1px solid rgba(244,63,94,0.4)' }}>
+          <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#f43f5e' }} />
+          <div>
+            <p className="font-medium text-sm" style={{ color: '#f43f5e' }}>Save failed</p>
+            <p className="text-sm text-[var(--retro-text-muted)] mt-0.5">{saveError}</p>
+          </div>
         </div>
       )}
 

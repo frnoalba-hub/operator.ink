@@ -23,19 +23,24 @@ export default function SkillConfig() {
 
   const saveMutation = useMutation({
     mutationFn: async (configData) => {
-      if (existing) {
-        return base44.entities.ActivatedSkill.update(existing.id, {
-          config: configData,
+      try {
+        const payload = {
+          config: typeof configData === 'string' ? configData : JSON.stringify(configData),
           status: 'active',
+          activated_at: new Date().toISOString(),
+        };
+        if (existing) {
+          return await base44.entities.ActivatedSkill.update(existing.id, payload);
+        }
+        return await base44.entities.ActivatedSkill.create({
+          name: skill.name,
+          skill_slug: slug,
+          ...payload,
         });
+      } catch (err) {
+        const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || String(err);
+        throw new Error(msg);
       }
-      return base44.entities.ActivatedSkill.create({
-        name: skill.name,
-        skill_slug: slug,
-        config: configData,
-        status: 'active',
-        activated_at: new Date().toISOString(),
-      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activated-skills'] });

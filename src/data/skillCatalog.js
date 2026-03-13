@@ -11,11 +11,11 @@ export const SKILL_CATALOG = [
     priceCents: 4900,
     priceLabel: '$49/mo',
     requiredKeys: [
-      { key: 'twilio_account_sid', label: 'Twilio Account SID', placeholder: 'ACxxxxxxxx...' },
-      { key: 'twilio_auth_token', label: 'Twilio Auth Token', placeholder: 'Your auth token', secret: true },
       { key: 'twilio_phone_number', label: 'Twilio Phone Number', placeholder: '+18001234567' },
     ],
     optionalKeys: [
+      { key: 'twilio_account_sid', label: 'Twilio Account SID (for Twilio webhook config)', placeholder: 'ACxxxxxxxx...' },
+      { key: 'twilio_auth_token', label: 'Twilio Auth Token', placeholder: 'Your auth token', secret: true },
       { key: 'telegram_bot_token', label: 'Telegram Bot Token (for booking alerts)', placeholder: '123456:ABC-DEF...', secret: true },
       { key: 'telegram_chat_id', label: 'Telegram Chat ID', placeholder: '-100123456789' },
     ],
