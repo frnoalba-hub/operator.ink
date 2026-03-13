@@ -61,7 +61,11 @@ export default function SkillConfig() {
 
   let parsedConfig = {};
   if (existing?.config) {
-    try { parsedConfig = JSON.parse(existing.config); } catch { /* ignore */ }
+    if (typeof existing.config === 'string') {
+      try { parsedConfig = JSON.parse(existing.config); } catch { /* ignore */ }
+    } else {
+      parsedConfig = existing.config;
+    }
   }
 
   return (
