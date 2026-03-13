@@ -54,11 +54,13 @@ import OpsBoard from './pages/OpsBoard';
 import SkillConfig from './pages/SkillConfig';
 import Dashboard from './pages/Dashboard';
 import Pricing from './pages/Pricing';
+import Calls from './pages/Calls';
 
 
 export const PAGES = {
     "Home": Home,
     "Leads": Leads,
+    "Calls": Calls,
     "Services": Services,
     "OpsBoard": OpsBoard,
     "SkillConfig": SkillConfig,

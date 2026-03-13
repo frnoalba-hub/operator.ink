@@ -179,6 +179,60 @@ async function sendTelegram(botToken: string, chatId: string, text: string) {
   } catch (_) {}
 }
 
+function formatTranscript(messages: { role: string; content: string }[]): string {
+  return messages
+    .map((m) => {
+      const label = m.role === "user" ? "Caller" : "Assistant";
+      return `${label}: ${(m.content || "").trim()}`;
+    })
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+async function saveCallLog(
+  baseUrl: string,
+  env: Env,
+  data: { call_sid: string; from_number: string; to_number: string; skill_id?: string; transcript: string; duration_seconds?: string }
+) {
+  if (!baseUrl) return;
+  const url = `${baseUrl.replace(/\/$/, "")}/functions/v1/saveCallLog`;
+  const serviceKey = env.BASE44_SERVICE_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (serviceKey) headers["Authorization"] = `Bearer ${serviceKey}`;
+  try {
+    await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(data),
+      signal: AbortSignal.timeout(3000),
+    });
+  } catch (e) {
+    console.error("[twilioVoice] saveCallLog failed:", e);
+  }
+}
+
+async function saveLeadFromBooking(
+  baseUrl: string,
+  env: Env,
+  data: { booking: object; from_number: string; call_sid: string }
+) {
+  if (!baseUrl) return;
+  const url = `${baseUrl.replace(/\/$/, "")}/functions/v1/saveLeadFromBooking`;
+  const serviceKey = env.BASE44_SERVICE_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (serviceKey) headers["Authorization"] = `Bearer ${serviceKey}`;
+  try {
+    await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(data),
+      signal: AbortSignal.timeout(3000),
+    });
+  } catch (e) {
+    console.error("[twilioVoice] saveLeadFromBooking failed:", e);
+  }
+}
+
 async function handleTwilioVoice(req: Request, env: Env): Promise<Response> {
   const groqKey = env.GROQ_API_KEY;
   const openaiKey = env.OPENAI_API_KEY;
@@ -240,7 +294,15 @@ async function handleTwilioVoice(req: Request, env: Env): Promise<Response> {
         `📞 Incoming call from ${fromNumber || "unknown"} to ${toNumber}`
       );
     }
-    const nextUrl = `${basePath}?h=${encodeURIComponent(encodeHistory([{ role: "assistant", content: greeting }]))}`;
+    const initialHistory = [{ role: "assistant", content: greeting }];
+    await saveCallLog(requestOrigin, env, {
+      call_sid: callSid,
+      from_number: fromNumber,
+      to_number: toNumber,
+      skill_id: (tenant as any)?.skillId,
+      transcript: formatTranscript(initialHistory),
+    });
+    const nextUrl = `${basePath}?h=${encodeURIComponent(encodeHistory(initialHistory))}`;
     const twi = buildTwiML(gather(nextUrl, greeting), hangup());
     return new Response(twi, { headers: { "Content-Type": "text/xml" } });
   }
@@ -284,6 +346,22 @@ async function handleTwilioVoice(req: Request, env: Env): Promise<Response> {
       `Ref: ${callSid}`,
     ];
     await sendTelegram(tenant.telegram_bot_token, tenant.telegram_chat_id, lines.join("\n"));
+  }
+
+  await saveCallLog(requestOrigin, env, {
+    call_sid: callSid,
+    from_number: fromNumber,
+    to_number: toNumber,
+    skill_id: (tenant as any)?.skillId,
+    transcript: formatTranscript(newHistory),
+  });
+
+  if (booking) {
+    await saveLeadFromBooking(requestOrigin, env, {
+      booking: (booking as any).booking || booking,
+      from_number: fromNumber,
+      call_sid: callSid,
+    });
   }
 
   const endPhrases = ["goodbye", "thank you for calling", "have a great day", "take care"];

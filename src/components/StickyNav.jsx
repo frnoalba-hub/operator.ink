@@ -61,6 +61,12 @@ export default function StickyNav({ currentPage = 'home' }) {
             Dashboard
           </a>
           <a
+            href={createPageUrl('Calls')}
+            className={`retro-link text-sm font-semibold ${currentPage === 'calls' ? 'border-b-[#00ccff]' : ''}`}
+          >
+            Calls
+          </a>
+          <a
             href={LINKEDIN_URL}
             target="_blank"
             rel="noopener noreferrer"
