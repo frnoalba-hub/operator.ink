@@ -1,0 +1,8 @@
+name = "operator-ink-voice"
+main = "index.ts"
+compatibility_date = "2024-12-01"
+
+# Secrets (set via: wrangler secret put GROQ_API_KEY, etc.):
+# - GROQ_API_KEY (required for free LLM)
+# - TENANT_CONFIG_JSON or TENANT_PHONE + TENANT_PERSONA + TENANT_TELEGRAM_*
+# - Optional: OPENAI_API_KEY, BASE44_APP_URL, BASE44_SERVICE_KEY

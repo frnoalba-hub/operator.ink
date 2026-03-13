@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Save, ArrowLeft, Check, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Save, ArrowLeft, Check, AlertCircle, Phone } from 'lucide-react';
+import { PERSONA_PRESETS } from '@/data/skillCatalog';
 
 export default function SkillConfigForm({ skill, existingConfig = {}, onSave, onBack, saving = false }) {
   const Icon = skill.icon;
@@ -118,6 +119,14 @@ export default function SkillConfigForm({ skill, existingConfig = {}, onSave, on
         </div>
       </div>
 
+      {skill.slug === 'ai-receptionist' && (
+        <div className="retro-card rounded-[24px] p-4 space-y-1" style={{ borderColor: 'var(--retro-rgb, rgba(6,182,212,0.3))', borderWidth: 1 }}>
+          <p className="text-sm text-[var(--retro-text-muted)]">
+            <strong className="text-[var(--retro-text)]">Quick test:</strong> Click <strong>Use Outright Demo (888)</strong> below to pre-fill the demo number and persona. Add your Twilio SID + Auth Token, save, then call the 888 number to test.
+          </p>
+        </div>
+      )}
+
       {skill.requiredKeys.length > 0 && (
         <div className="retro-card rounded-[24px] p-6 space-y-4">
           <h3 className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">Required API Keys</h3>
@@ -136,6 +145,25 @@ export default function SkillConfigForm({ skill, existingConfig = {}, onSave, on
         <div className="retro-card rounded-[24px] p-6 space-y-4">
           <h3 className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">Agent Persona</h3>
           <p className="text-sm text-[var(--retro-text-muted)]">Define how your AI agent speaks and behaves.</p>
+          {skill.slug === 'ai-receptionist' && Object.keys(PERSONA_PRESETS).length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-2">
+              {Object.entries(PERSONA_PRESETS).map(([key, preset]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() =>
+                    setConfig((prev) =>
+                      preset.config ? { ...prev, ...preset.config } : { ...prev, _persona: preset.persona }
+                    )
+                  }
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors"
+                  style={{ borderColor: 'var(--retro-border)', color: 'var(--retro-text)' }}
+                >
+                  Use {preset.label}
+                </button>
+              ))}
+            </div>
+          )}
           <textarea
             value={config._persona || ''}
             onChange={(e) => setConfig((prev) => ({ ...prev, _persona: e.target.value }))}
@@ -148,6 +176,32 @@ export default function SkillConfigForm({ skill, existingConfig = {}, onSave, on
               color: 'var(--retro-text)',
             }}
           />
+        </div>
+      )}
+
+      {skill.slug === 'ai-receptionist' && config.twilio_phone_number?.trim() && (
+        <div
+          className="retro-card rounded-[24px] p-6 space-y-3"
+          style={{ borderColor: 'var(--retro-rgb, rgba(6,182,212,0.4))', borderWidth: 1 }}
+        >
+          <h3 className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold flex items-center gap-2">
+            <Phone className="w-4 h-4" /> Test Your Receptionist
+          </h3>
+          <p className="text-sm text-[var(--retro-text-muted)]">
+            Call this number to test the AI. Ensure Twilio voice webhook points to your deployed webhook URL (base44 or Cloudflare).
+          </p>
+          <a
+            href={`tel:${config.twilio_phone_number.replace(/\D/g, '')}`}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-lg font-bold transition-colors"
+            style={{
+              background: 'var(--retro-bg-elevated)',
+              border: '1px solid var(--retro-border)',
+              color: 'var(--retro-text)',
+            }}
+          >
+            <Phone className="w-5 h-5" />
+            {config.twilio_phone_number}
+          </a>
         </div>
       )}
 
