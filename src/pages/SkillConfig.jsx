@@ -25,13 +25,14 @@ export default function SkillConfig() {
     mutationFn: async (configData) => {
       if (existing) {
         return base44.entities.ActivatedSkill.update(existing.id, {
-          config: JSON.stringify(configData),
+          config: configData,
           status: 'active',
         });
       }
       return base44.entities.ActivatedSkill.create({
+        name: skill.name,
         skill_slug: slug,
-        config: JSON.stringify(configData),
+        config: configData,
         status: 'active',
         activated_at: new Date().toISOString(),
       });
