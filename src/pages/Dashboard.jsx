@@ -108,7 +108,6 @@ export default function Dashboard() {
               {activatedSkills.map((activated) => {
                 const meta = getSkillMeta(activated.skill_slug);
                 if (!meta) return null;
-                const c = COLOR_MAP[meta.color] || COLOR_MAP.cyan;
                 const Icon = meta.icon;
                 const isPaused = activated.status === 'paused';
 
