@@ -50,12 +50,20 @@
 import Home from './pages/Home';
 import Leads from './pages/Leads';
 import Services from './pages/Services';
+import OpsBoard from './pages/OpsBoard';
+import SkillConfig from './pages/SkillConfig';
+import Dashboard from './pages/Dashboard';
+import Pricing from './pages/Pricing';
 
 
 export const PAGES = {
     "Home": Home,
     "Leads": Leads,
     "Services": Services,
+    "OpsBoard": OpsBoard,
+    "SkillConfig": SkillConfig,
+    "Dashboard": Dashboard,
+    "Pricing": Pricing,
 }
 
 export const pagesConfig = {

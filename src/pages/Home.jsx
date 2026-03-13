@@ -39,7 +39,7 @@ export default function Home() {
   // Form state is now managed by IntakeForm component
 
   return (
-    <div className="min-h-screen bg-black text-white antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif" }}>
+    <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
 
       {/* Tech grid overlay */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-20"
@@ -70,44 +70,41 @@ export default function Home() {
           <div className="lg:col-span-7">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight">
               Digital Operations<br />
-              <span className="text-cyan-400">&amp; Growth Systems.</span>
+              <span className="retro-link-accent">&amp; Growth Systems.</span>
             </h1>
-            <p className="mt-6 text-lg text-zinc-400 max-w-xl leading-relaxed">
+            <p className="mt-6 text-lg text-[var(--retro-text-muted)] max-w-xl leading-relaxed">
               We design operational websites, engineer GEO/AEO search dominance, build workflow automation, and deploy custom AI agents that scale your business.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <a
                 href="#intake"
-                className="inline-flex items-center justify-center gap-2 px-8 rounded-2xl bg-white text-black font-extrabold text-base hover:bg-zinc-200 transition-colors"
+                className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-8 rounded-2xl text-base hover:opacity-95 transition-opacity"
                 style={{ minHeight: '56px' }}
               >
                 Deploy Request <ArrowRight className="w-4 h-4" />
               </a>
               <a
                 href={createPageUrl('Services')}
-                className="inline-flex items-center justify-center gap-2 px-8 rounded-2xl border border-zinc-800 text-white font-semibold text-base hover:border-zinc-500 transition-colors"
+                className="retro-link inline-flex items-center justify-center gap-2 px-8 rounded-2xl border border-[var(--retro-border)] font-semibold text-base hover:border-[var(--retro-border-bright)] transition-colors"
                 style={{ minHeight: '56px' }}
               >
-                View Services <ArrowRight className="w-4 h-4 text-zinc-400" />
+                View Services <ArrowRight className="w-4 h-4 opacity-70" />
               </a>
               <a
                 href="mailto:orders@operator.ink"
-                className="inline-flex items-center justify-center gap-2 px-8 rounded-2xl border border-zinc-800 text-white font-semibold text-base hover:border-zinc-500 transition-colors"
+                className="retro-link inline-flex items-center justify-center gap-2 px-8 rounded-2xl border border-[var(--retro-border)] font-semibold text-base hover:border-[var(--retro-border-bright)] transition-colors"
                 style={{ minHeight: '56px' }}
               >
-                <Mail className="w-4 h-4 text-zinc-400" /> orders@operator.ink
+                <Mail className="w-4 h-4 opacity-70" /> orders@operator.ink
               </a>
             </div>
           </div>
 
           {/* Value Panel */}
           <div className="lg:col-span-5">
-            <div
-              className="rounded-[32px] border border-zinc-800 p-7 lg:p-8"
-              style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0))' }}
-            >
+            <div className="retro-card rounded-[32px] p-7 lg:p-8">
               <h3 className="text-xl font-bold mb-4">Why Operator.ink</h3>
-              <ul className="space-y-3 text-sm text-zinc-400">
+              <ul className="space-y-3 text-sm text-[var(--retro-text-muted)]">
                 {[
                   "Conversion-focused operational websites.",
                   "Localized GEO + AEO strategies for high-intent traffic.",
@@ -115,14 +112,14 @@ export default function Home() {
                   "Precision ad campaigns for scalable acquisition."
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <span className="mt-1 w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
+                    <span className="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--rgb-gradient)' }} />
                     {item}
                   </li>
                 ))}
               </ul>
               <a
                 href="#intake"
-                className="mt-6 inline-flex items-center justify-center w-full rounded-xl bg-cyan-500 text-black font-bold text-sm hover:bg-cyan-400 transition-colors"
+                className="retro-rgb-btn mt-6 inline-flex items-center justify-center w-full rounded-xl text-sm"
                 style={{ minHeight: '52px' }}
               >
                 Start Initialization
@@ -140,8 +137,8 @@ export default function Home() {
           aria-labelledby="capabilities-heading"
         >
           <div className="flex items-center gap-3 mb-6">
-            <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
-            <h2 id="capabilities-heading" className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Core Capabilities</h2>
+            <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--rgb-gradient)' }} />
+            <h2 id="capabilities-heading" className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">Core Capabilities</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {capabilities.map((cap, idx) => {
@@ -152,14 +149,13 @@ export default function Home() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 + idx * 0.08 }}
-                  className={`rounded-[32px] border border-zinc-800 p-7 lg:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-zinc-600 hover:shadow-[0_18px_40px_rgba(6,182,212,0.05)] ${cap.wide ? 'md:col-span-2' : ''}`}
-                  style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0))' }}
+                  className={`retro-card rounded-[32px] p-7 lg:p-8 ${cap.wide ? 'md:col-span-2' : ''}`}
                 >
-                  <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center mb-5">
-                    <Icon className="w-5 h-5 text-cyan-400" />
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 retro-rgb-border" style={{ background: 'var(--retro-bg-elevated)' }}>
+                    <Icon className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
                   </div>
                   <h3 className="text-xl font-bold mb-2 tracking-tight">{cap.title}</h3>
-                  <p className="text-sm text-zinc-400 leading-relaxed">{cap.description}</p>
+                  <p className="text-sm text-[var(--retro-text-muted)] leading-relaxed">{cap.description}</p>
                 </motion.article>
               );
             })}
@@ -172,23 +168,20 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start border-t border-zinc-900 pt-14 pb-14"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start border-t border-[var(--retro-border)] pt-14 pb-14"
           aria-labelledby="intake-heading"
         >
           <div>
             <h2 id="intake-heading" className="text-4xl lg:text-5xl font-extrabold mb-4 tracking-tight">System Initialization.</h2>
-            <p className="text-zinc-400 mb-8 leading-relaxed">
+            <p className="text-[var(--retro-text-muted)] mb-8 leading-relaxed">
               Describe your scope and we'll return a custom deployment plan with timeline and next steps.
             </p>
-            <div
-              className="rounded-[28px] border border-zinc-800 p-6"
-              style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0))' }}
-            >
-              <p className="text-xs uppercase tracking-widest text-zinc-500 font-bold mb-4">Direct Contact</p>
-              <a href="mailto:orders@operator.ink" className="flex items-center gap-2 text-white font-semibold hover:text-cyan-400 transition-colors mb-3" style={{ minHeight: '44px' }}>
-                <Mail className="w-4 h-4 text-zinc-500" /> orders@operator.ink
+            <div className="retro-card rounded-[28px] p-6">
+              <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-4">Direct Contact</p>
+              <a href="mailto:orders@operator.ink" className="retro-link flex items-center gap-2 font-semibold mb-3" style={{ minHeight: '44px' }}>
+                <Mail className="w-4 h-4 opacity-60" /> orders@operator.ink
               </a>
-              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white font-semibold hover:text-cyan-400 transition-colors" style={{ minHeight: '44px' }}>
+              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="retro-link flex items-center gap-2 font-semibold" style={{ minHeight: '44px' }}>
                 <svg className="w-4 h-4 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
@@ -205,12 +198,12 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-zinc-600 border-t border-zinc-900 py-8"
+          className="flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-[var(--retro-text-dim)] border-t border-[var(--retro-border)] py-8"
         >
           <span>© {new Date().getFullYear()} Operator.ink — Systems Active.</span>
           <div className="flex items-center gap-4">
-            <a href="mailto:orders@operator.ink" className="hover:text-zinc-400 transition-colors">orders@operator.ink</a>
-            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="hover:text-zinc-400 transition-colors">LinkedIn</a>
+            <a href="mailto:orders@operator.ink" className="retro-link">orders@operator.ink</a>
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="retro-link">LinkedIn</a>
           </div>
         </motion.footer>
 

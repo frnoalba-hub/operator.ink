@@ -1,0 +1,158 @@
+/**
+ * Operator.ink — Retro Modular Theme
+ * Inspired by: N64, Game Boy, Atari 2600+
+ * Black/white base, RGB accents, cartridge/module feel
+ */
+
+:root {
+  /* Base — mostly black */
+  --retro-bg: #050505;
+  --retro-bg-elevated: #0d0d0d;
+  --retro-bg-card: #0a0a0a;
+  --retro-border: #1a1a1a;
+  --retro-border-bright: #2a2a2a;
+  
+  /* Text */
+  --retro-text: #f5f5f5;
+  --retro-text-muted: #737373;
+  --retro-text-dim: #525252;
+  
+  /* RGB gradient — for buttons, links, accents */
+  --rgb-gradient: linear-gradient(
+    90deg,
+    #ff3366 0%,
+    #ff6b35 15%,
+    #ffcc00 30%,
+    #66ff66 50%,
+    #00ccff 70%,
+    #9966ff 85%,
+    #ff3366 100%
+  );
+  --rgb-gradient-vertical: linear-gradient(
+    180deg,
+    #ff3366 0%,
+    #ff6b35 20%,
+    #ffcc00 40%,
+    #66ff66 60%,
+    #00ccff 80%,
+    #9966ff 100%
+  );
+  
+  /* Cartridge / module slot feel */
+  --slot-shadow: inset 0 0 0 1px var(--retro-border), 0 4px 0 var(--retro-border);
+  --slot-hover: inset 0 0 0 2px var(--retro-border-bright);
+}
+
+/* RGB animated border — cycling gradient */
+@keyframes rgb-border {
+  0%, 100% { border-color: #ff3366; box-shadow: 0 0 12px rgba(255, 51, 102, 0.4); }
+  16% { border-color: #ff6b35; box-shadow: 0 0 12px rgba(255, 107, 53, 0.4); }
+  33% { border-color: #ffcc00; box-shadow: 0 0 12px rgba(255, 204, 0, 0.4); }
+  50% { border-color: #66ff66; box-shadow: 0 0 12px rgba(102, 255, 102, 0.4); }
+  66% { border-color: #00ccff; box-shadow: 0 0 12px rgba(0, 204, 255, 0.4); }
+  83% { border-color: #9966ff; box-shadow: 0 0 12px rgba(153, 102, 255, 0.4); }
+}
+
+@keyframes rgb-glow {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(255, 51, 102, 0.6)); }
+  20% { filter: drop-shadow(0 0 6px rgba(255, 204, 0, 0.6)); }
+  40% { filter: drop-shadow(0 0 6px rgba(102, 255, 102, 0.6)); }
+  60% { filter: drop-shadow(0 0 6px rgba(0, 204, 255, 0.6)); }
+  80% { filter: drop-shadow(0 0 6px rgba(153, 102, 255, 0.6)); }
+}
+
+@keyframes rgb-bg-slide {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Utility classes */
+.retro-rgb-border {
+  animation: rgb-border 4s ease-in-out infinite;
+}
+
+.retro-rgb-glow {
+  animation: rgb-glow 4s ease-in-out infinite;
+}
+
+.retro-rgb-btn {
+  background: var(--rgb-gradient);
+  background-size: 200% 200%;
+  animation: rgb-bg-slide 6s ease infinite;
+  color: #050505;
+  font-weight: 700;
+}
+
+/* Links — distinct from body text, RGB underline on hover */
+.retro-link {
+  color: var(--retro-text);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.retro-link:hover {
+  color: #fff;
+  border-bottom-color: #00ccff;
+  filter: drop-shadow(0 0 4px rgba(0, 204, 255, 0.5));
+}
+
+.retro-link-accent {
+  background: var(--rgb-gradient);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.retro-link-accent:hover {
+  animation: rgb-bg-slide 3s ease infinite;
+}
+
+/* Cartridge / module card */
+.retro-card {
+  background: var(--retro-bg-card);
+  border: 1px solid var(--retro-border);
+  box-shadow: var(--slot-shadow);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.retro-card:hover {
+  border-color: var(--retro-border-bright);
+  box-shadow: 0 6px 0 var(--retro-border), 0 0 20px rgba(255, 255, 255, 0.03);
+  transform: translateY(-2px);
+}
+
+/* Pixel-ish font option — use a monospace or retro font */
+.font-retro {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* Base — apply to body when using retro theme */
+body.retro-theme,
+.retro-theme {
+  background: var(--retro-bg);
+  color: var(--retro-text);
+}
+
+/* Optional: subtle scanline / cartridge texture overlay */
+.retro-scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+}
+
+/* Cartridge label strip — top bar on module cards (N64/Game Boy slot feel) */
+.retro-card .retro-label-strip {
+  height: 6px;
+  background: var(--rgb-gradient);
+  background-size: 200% 100%;
+  animation: rgb-bg-slide 8s ease infinite;
+  margin: -1px -1px 0 -1px;
+  border-radius: 28px 28px 0 0;
+}
