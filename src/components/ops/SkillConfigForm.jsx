@@ -215,9 +215,9 @@ export default function SkillConfigForm({ skill, existingConfig = {}, onSave, on
       {saveError && (
         <div className="rounded-xl p-4 flex items-start gap-2" style={{ background: 'rgba(244,63,94,0.15)', border: '1px solid rgba(244,63,94,0.4)' }}>
           <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#f43f5e' }} />
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="font-medium text-sm" style={{ color: '#f43f5e' }}>Save failed</p>
-            <p className="text-sm text-[var(--retro-text-muted)] mt-0.5">{saveError}</p>
+            <p className="text-sm text-[var(--retro-text-muted)] mt-0.5 break-words max-h-24 overflow-y-auto">{saveError}</p>
           </div>
         </div>
       )}

@@ -24,8 +24,9 @@ export default function SkillConfig() {
   const saveMutation = useMutation({
     mutationFn: async (configData) => {
       try {
+        const configVal = typeof configData === 'string' ? configData : JSON.stringify(configData);
         const payload = {
-          config: typeof configData === 'string' ? configData : JSON.stringify(configData),
+          config: configVal,
           status: 'active',
           activated_at: new Date().toISOString(),
         };
@@ -38,7 +39,14 @@ export default function SkillConfig() {
           ...payload,
         });
       } catch (err) {
-        const msg = err?.response?.data?.error || err?.response?.data?.message || err?.message || String(err);
+        const msg =
+          err?.message ||
+          err?.response?.data?.error ||
+          err?.response?.data?.message ||
+          err?.data?.message ||
+          err?.data?.error ||
+          (err?.response?.data && JSON.stringify(err.response.data)) ||
+          String(err);
         throw new Error(msg);
       }
     },
