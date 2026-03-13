@@ -2,7 +2,7 @@
  * One-time seed: Creates an ActivatedSkill for Outright Landscape demo
  * with the 888 number (+18882738659).
  *
- * Call with POST body containing your Manos/Call Handler credentials:
+ * Call with POST body containing Twilio + Telegram credentials:
  * {
  *   "twilio_account_sid": "ACxxxxxxxx...",
  *   "twilio_auth_token": "your_token",
@@ -47,7 +47,7 @@ Deno.serve(async (req) => {
       body = {};
     }
 
-    // Prefer Manos creds from env (same as 05_VOICE_CALL_HANDLER/.env), fallback to request body
+    // Prefer env vars, fallback to request body
     const twilioAccountSid = (
       body.twilio_account_sid ||
       Deno.env.get('TWILIO_ACCOUNT_SID') ||
@@ -79,7 +79,7 @@ Deno.serve(async (req) => {
         {
           ok: false,
           error: 'twilio_account_sid and twilio_auth_token required',
-          hint: 'Set TWILIO_ACCOUNT_SID + TWILIO_AUTH_TOKEN in base44 env (Manos creds) or pass in request body',
+          hint: 'Set TWILIO_ACCOUNT_SID + TWILIO_AUTH_TOKEN in base44 Secrets or pass in request body',
         },
         { status: 400 }
       );

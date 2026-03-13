@@ -182,7 +182,7 @@ export function getSkillBySlug(slug) {
   return SKILL_CATALOG.find((s) => s.slug === slug) || null;
 }
 
-/** Outright Landscape phone persona — use for 888 demo / Manos setup */
+/** Outright Landscape phone persona — use for 888 demo */
 export const OUTRIGHT_LANDSCAPE_PERSONA = `You are the phone scheduling assistant for Outright Landscape, a professional landscaping and irrigation company in the San Gabriel Valley and San Diego area.
 
 Your job on this call:

@@ -1,10 +1,11 @@
 /**
- * AI Receptionist — serverless Twilio voice webhook (no server to run).
- * Uses Groq (free) or OpenAI for replies. Tenant from static env or base44.
+ * AI Receptionist — base44 + Twilio only. No Manos, no Call Handler.
+ * Twilio → base44 twilioVoice → Groq for AI. Tenant from base44 ActivatedSkill (Ops Board).
  *
- * Set Twilio voice webhook to: https://YOUR_DEPLOY_URL/twilioVoice
+ * Twilio voice webhook: https://YOUR_APP.base44.app/functions/v1/twilioVoice
  *
- * Env: GROQ_API_KEY (free) or OPENAI_API_KEY, TENANT_CONFIG_JSON or TENANT_PHONE+TENANT_PERSONA, BASE44_APP_URL (optional)
+ * base44 Secrets: GROQ_API_KEY (required), optional OPENAI_API_KEY
+ * Tenant config comes from Operator.ink Ops Board (ActivatedSkill) — no static env needed when on base44.
  */
 const VOICE = "Polly.Joanna";
 const GROQ_MODEL = "llama-3.1-8b-instant";
@@ -93,11 +94,14 @@ async function getTenantFromBase44(baseUrl: string, phone: string, env: Env) {
   }
 }
 
-async function resolveTenant(env: Env, phone: string) {
+async function resolveTenant(env: Env, phone: string, requestOrigin?: string) {
+  const base44Url = env.BASE44_APP_URL || env.VITE_BASE44_APP_BASE_URL || requestOrigin;
+  if (base44Url) {
+    const tenant = await getTenantFromBase44(base44Url, phone, env);
+    if (tenant) return tenant;
+  }
   const staticTenant = getStaticTenant(env, phone);
-  if (staticTenant) return { persona: staticTenant.persona || undefined, telegram_bot_token: staticTenant.telegram_bot_token, telegram_chat_id: staticTenant.telegram_chat_id };
-  const base44Url = env.BASE44_APP_URL || env.VITE_BASE44_APP_BASE_URL;
-  return base44Url ? await getTenantFromBase44(base44Url, phone, env) : null;
+  return staticTenant ? { persona: staticTenant.persona || undefined, telegram_bot_token: staticTenant.telegram_bot_token, telegram_chat_id: staticTenant.telegram_chat_id } : null;
 }
 
 async function callLLM(
@@ -207,12 +211,13 @@ async function handleTwilioVoice(req: Request, env: Env): Promise<Response> {
 
   const url = new URL(req.url);
   const basePath = url.origin + url.pathname;
+  const requestOrigin = url.origin;
   const histParam = url.searchParams.get("h") || "";
   const history = parseHistory(histParam);
 
   if (callStatus === "completed" || callStatus === "failed" || callStatus === "busy" || callStatus === "no-answer") {
     const duration = body.CallDuration || "0";
-    const tenant = await resolveTenant(env, toNumber);
+    const tenant = await resolveTenant(env, toNumber, requestOrigin);
     if (tenant?.telegram_bot_token && tenant?.telegram_chat_id && duration !== "0") {
       await sendTelegram(
         tenant.telegram_bot_token,
@@ -226,7 +231,7 @@ async function handleTwilioVoice(req: Request, env: Env): Promise<Response> {
   }
 
   if (!speechResult) {
-    const tenant = await resolveTenant(env, toNumber);
+    const tenant = await resolveTenant(env, toNumber, requestOrigin);
     const greeting = "Thank you for calling. How can we help you today?";
     if (tenant?.telegram_bot_token && tenant?.telegram_chat_id) {
       await sendTelegram(
@@ -240,7 +245,7 @@ async function handleTwilioVoice(req: Request, env: Env): Promise<Response> {
     return new Response(twi, { headers: { "Content-Type": "text/xml" } });
   }
 
-  const tenant = await resolveTenant(env, toNumber);
+  const tenant = await resolveTenant(env, toNumber, requestOrigin);
   const persona = tenant?.persona || DEFAULT_PERSONA;
 
   const userMsg = { role: "user", content: speechResult };
