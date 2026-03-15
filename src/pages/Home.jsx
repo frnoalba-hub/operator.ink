@@ -5,6 +5,7 @@ import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 import IntakeForm from '../components/intake/IntakeForm';
 
+const LOGO_URL = "/operator-logo.png";
 const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
 
 const capabilities = [
@@ -78,15 +79,33 @@ export default function Home() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-14 lg:mb-16"
+          className="mb-16 lg:mb-24 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center"
         >
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight text-white">
-            Digital Operations<br />
-            <span className="retro-link-accent">&amp; Growth Systems.</span>
-          </h1>
-          <p className="mt-4 text-base sm:text-lg text-[var(--retro-text-muted)] max-w-2xl">
-            Premium website design, blazing-fast managed hosting, GEO/AEO search optimization, custom workflows, and intelligent AI agents. We build and maintain the digital infrastructure that scales your operations.
-          </p>
+          <div className="flex justify-center lg:justify-start">
+            <div className="relative w-full max-w-[400px] xl:max-w-[480px]">
+              {/* Subtle premium glow behind the logo */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#ff3366]/10 to-[#00ccff]/10 blur-3xl rounded-full" />
+              <img
+                src={LOGO_URL}
+                alt="Operator.ink"
+                className="relative w-full h-auto object-contain drop-shadow-2xl"
+              />
+            </div>
+          </div>
+          <div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight text-white mb-6">
+              Digital Operations<br />
+              <span className="retro-link-accent">&amp; Growth Systems.</span>
+            </h1>
+            <p className="text-base sm:text-lg text-[var(--retro-text-muted)] max-w-xl">
+              Premium website design, blazing-fast managed hosting, GEO/AEO search optimization, custom workflows, and intelligent AI agents. We build and maintain the digital infrastructure that scales your operations.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+               <a href="#intake" className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto">
+                 System Initialization <ArrowRight className="w-4 h-4 ml-2" />
+               </a>
+            </div>
+          </div>
         </motion.header>
 
         {/* FEATURED DEMO — clearly labeled */}
