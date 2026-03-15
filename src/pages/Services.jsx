@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Globe, Search, Zap, BarChart2, ArrowRight, Check, Mail, Shield, Lock, FileCheck } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
+import GridOverlay from '../components/GridOverlay';
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
 
@@ -109,13 +110,7 @@ export default function Services() {
   return (
     <div className="min-h-screen retro-theme antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
 
-      {/* Grid overlay */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-20"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1h38v38H1z' stroke='%23ffffff' stroke-opacity='0.06' stroke-width='1' fill='none'/%3E%3C/svg%3E")`,
-          backgroundSize: '40px 40px'
-        }}
-      />
+      <GridOverlay />
 
       <StickyNav currentPage="services" />
 

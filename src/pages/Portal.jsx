@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Upload, X, FileText, Image as ImageIcon, Check, AlertCircle } from 'lucide-react';
+import { Upload, X, FileText, Image as ImageIcon, Check, AlertCircle } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
+import GridOverlay from '../components/GridOverlay';
+import BackToHome from '../components/BackToHome';
 import { base44 } from '@/api/base44Client';
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
@@ -130,22 +132,10 @@ export default function Portal() {
 
   return (
     <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif", background: 'var(--retro-bg)' }}>
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-20"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1h38v38H1z' stroke='%23ffffff' stroke-opacity='0.06' stroke-width='1' fill='none'/%3E%3C/svg%3E")`,
-          backgroundSize: '40px 40px'
-        }}
-      />
+      <GridOverlay />
       <StickyNav currentPage="portal" />
       <main className="relative z-10 max-w-3xl mx-auto px-5 sm:px-8 lg:px-12 pt-24 pb-16">
-        <motion.a
-          href={createPageUrl('Home')}
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="inline-flex items-center gap-2 text-sm text-[var(--retro-text-muted)] hover:text-[var(--retro-text)] mb-8 retro-link"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back to Home
-        </motion.a>
+        <BackToHome />
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -302,7 +292,7 @@ export default function Portal() {
               {submitting ? 'Submitting…' : 'Submit & create project'} <Check className="w-4 h-4" />
             </button>
             <p className="text-xs text-[var(--retro-text-dim)] mt-3 text-center">
-              We&apos;ll create your account and workspace, then email you a link to add more files and notes as we go.
+              We&apos;ll create your account and workspace. Need service, budget & timeline? <a href={`${createPageUrl('Home')}#intake`} className="retro-link">System Initialization</a>
             </p>
           </div>
         </motion.form>

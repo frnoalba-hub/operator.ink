@@ -169,7 +169,7 @@ export default function Home() {
           <div className="flex items-center gap-2 mb-3">
             <span className="w-2 h-2 rounded-full" style={{ background: 'var(--rgb-gradient)' }} />
             <h2 id="demo-heading" className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">
-              Featured Demo
+              Featured Project
             </h2>
           </div>
           <p className="text-sm text-[var(--retro-text-muted)] mb-4 max-w-xl">
