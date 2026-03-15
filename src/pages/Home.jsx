@@ -145,15 +145,15 @@ export default function Home() {
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-[var(--retro-border)]" style={{ background: 'var(--retro-bg-elevated)' }}>
                       <Icon className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
                     </div>
-                    <span className="text-[10px] font-mono text-[var(--retro-text-dim)]">{item.step}</span>
+                    <span className="text-xs font-mono text-[var(--retro-text-dim)]">{item.step}</span>
                   </div>
-                  <h3 className="text-sm font-bold mb-1.5">{item.title}</h3>
-                  <p className="text-xs text-[var(--retro-text-muted)] leading-relaxed">{item.desc}</p>
+                  <h3 className="text-base font-bold mb-1.5">{item.title}</h3>
+                  <p className="text-sm text-[var(--retro-text-muted)] leading-relaxed">{item.desc}</p>
                 </motion.div>
               );
             })}
           </div>
-          <p className="text-xs text-[var(--retro-text-dim)] mt-4">
+          <p className="text-sm text-[var(--retro-text-dim)] mt-4">
             No endless discovery. No scope creep. We start with a Phase-0 Pilot when it fits — validate fast, then scale.
           </p>
         </motion.section>
@@ -181,16 +181,16 @@ export default function Home() {
           >
             <div className="p-4 sm:p-5">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <h3 className="text-sm font-bold group-hover:text-[#00ccff] transition-colors">Admissions &amp; Bed Tracking Dashboard</h3>
+                <h3 className="text-base font-bold group-hover:text-[#00ccff] transition-colors">Admissions &amp; Bed Tracking Dashboard</h3>
                 <div className="flex items-center gap-2">
-                  <span className="text-[9px] text-white/50 bg-white/5 rounded px-1.5 py-0.5">Coordinator: my pipeline</span>
-                  <span className="text-[9px] text-[#00ccff]/90 bg-[#00ccff]/10 rounded px-1.5 py-0.5 border border-[#00ccff]/30">Admin: view all + metrics</span>
+                  <span className="text-xs text-white/50 bg-white/5 rounded px-2 py-0.5">Coordinator: my pipeline</span>
+                  <span className="text-xs text-[#00ccff]/90 bg-[#00ccff]/10 rounded px-2 py-0.5 border border-[#00ccff]/30">Admin: view all + metrics</span>
                 </div>
               </div>
-              <p className="text-[9px] text-white/40 mb-2">View all administrators:</p>
-              <div className="flex flex-wrap gap-1 mb-3">
+              <p className="text-xs text-white/40 mb-2 font-semibold">View all administrators:</p>
+              <div className="flex flex-wrap gap-1.5 mb-4">
                 {['K. Smith', 'J. Lee', 'M. Chen', 'R. Davis', 'T. Park', '+5'].map((name) => (
-                  <span key={name} className="text-[8px] text-white/60 bg-white/5 rounded px-1.5 py-0.5 border border-white/5">
+                  <span key={name} className="text-[11px] text-white/60 bg-white/5 rounded px-2 py-1 border border-white/10">
                     {name}
                   </span>
                 ))}
@@ -198,14 +198,14 @@ export default function Home() {
               <div className="flex gap-2 min-h-[72px]">
                 {PIPELINE_STAGES.map((col, i) => (
                   <div key={col.id} className="flex-1 min-w-0 rounded-lg bg-black/40 border border-white/5 p-2">
-                    <p className="text-[9px] text-white/40 truncate mb-1">{col.label}</p>
-                    <div className="space-y-0.5">
+                    <p className="text-xs text-white/40 font-bold truncate mb-1.5 border-b border-white/10 pb-1">{col.label}</p>
+                    <div className="space-y-1">
                       {col.patients.map((p) => (
-                        <div key={p.name} className="text-[10px] py-0.5 px-1 rounded bg-white/5">
-                          <span className="text-white/80 truncate block">{p.name}</span>
-                          <span className="text-[8px] text-white/50 block">{p.payer}</span>
+                        <div key={p.name} className="text-xs py-1 px-1.5 rounded bg-white/5">
+                          <span className="text-white/80 font-medium truncate block">{p.name}</span>
+                          <span className="text-[10px] text-white/50 block">{p.payer}</span>
                           {p.flag && (
-                            <span className={`text-[7px] mt-0.5 inline-block rounded px-1 ${p.flag === 'Complete' ? 'bg-green-500/20 text-green-400' : p.flag === 'Prior Auth' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/10 text-white/60'}`}>
+                            <span className={`text-[9px] mt-0.5 inline-block rounded px-1 font-bold ${p.flag === 'Complete' ? 'bg-green-500/20 text-green-400' : p.flag === 'Prior Auth' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/10 text-white/60'}`}>
                               {p.flag}
                             </span>
                           )}
@@ -217,21 +217,21 @@ export default function Home() {
                           initial={{ opacity: 0, y: 4 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.25 }}
-                          className="text-[10px] py-0.5 px-1 rounded bg-[#00ccff]/10 border border-[#00ccff]/30"
+                          className="text-xs py-1 px-1.5 rounded bg-[#00ccff]/10 border border-[#00ccff]/30 shadow-lg shadow-[#00ccff]/10"
                         >
-                          <span className="text-[#00ccff] block">R. Davis</span>
-                          <span className="text-[8px] text-[#00ccff]/80 block">HMO</span>
-                          <span className="text-[7px] mt-0.5 inline-block rounded px-1 bg-amber-500/20 text-amber-400">Prior Auth</span>
+                          <span className="text-[#00ccff] font-bold block">R. Davis</span>
+                          <span className="text-[10px] text-[#00ccff]/80 block">HMO</span>
+                          <span className="text-[9px] mt-0.5 inline-block rounded px-1 bg-amber-500/20 text-amber-400 font-bold">Prior Auth</span>
                         </motion.div>
                       )}
                       {col.patients.length === 0 && i !== movingCardStage && (
-                        <span className="text-[9px] text-white/25">—</span>
+                        <span className="text-xs text-white/20 px-1">—</span>
                       )}
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="text-[10px] text-[var(--retro-text-dim)] mt-2">
+              <p className="text-xs text-[var(--retro-text-dim)] mt-3">
                 Flags: New, Prior Auth, Urgent, Complete • Finish & clear patients • Coordinators see who has beds, message each other
               </p>
               <span className="text-xs font-semibold retro-link inline-flex items-center gap-1 mt-2">
