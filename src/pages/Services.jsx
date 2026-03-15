@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Search, Zap, BarChart2, ArrowRight, Check, Mail } from 'lucide-react';
+import { Globe, Search, Zap, BarChart2, ArrowRight, Check, Mail, Shield, Lock, FileCheck } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 
@@ -136,8 +136,50 @@ export default function Services() {
             What We<br /><span className="retro-link-accent">Deploy.</span>
           </h1>
           <p className="text-lg text-[var(--retro-text-muted)] leading-relaxed max-w-2xl">
-            Four integrated service lines engineered to capture demand, automate operations, and grow revenue. Built for businesses that are serious about scalable, systematic growth.
+            Four integrated service lines engineered to capture demand, automate operations, and grow revenue. Built for businesses that are serious about scalable, systematic growth. <strong className="text-[var(--retro-text)]">Compliance-aware and safe for healthcare.</strong>
           </p>
+        </motion.div>
+
+        {/* Compliance & Security — safe to use */}
+        <motion.div
+          id="compliance"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.08 }}
+          className="mb-16"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <Shield className="w-5 h-5" style={{ color: 'var(--retro-border-bright)' }} />
+            <h2 className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">Compliance &amp; Security</h2>
+          </div>
+          <div className="retro-card rounded-2xl p-6 lg:p-8 space-y-6">
+            <p className="text-sm text-[var(--retro-text-muted)] leading-relaxed max-w-3xl">
+              <strong className="text-[var(--retro-text)]">Safe for healthcare and regulated industries.</strong> Here&apos;s how we keep your data and operations secure:
+            </p>
+            <ul className="space-y-4 text-sm text-[var(--retro-text-muted)]">
+              <li className="flex gap-3">
+                <Lock className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--retro-border-bright)' }} />
+                <div>
+                  <strong className="text-[var(--retro-text)]">Demos &amp; pilots use synthetic data only.</strong> No real PHI, no real patient names, no sensitive information. You can evaluate our work with zero risk to your data.
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <FileCheck className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--retro-border-bright)' }} />
+                <div>
+                  <strong className="text-[var(--retro-text)]">Client data is handled with care.</strong> When you provide data for build or integration: encrypted in transit and at rest, access-controlled, and only used for the agreed scope.
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <Shield className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--retro-border-bright)' }} />
+                <div>
+                  <strong className="text-[var(--retro-text)]">HIPAA-aware workflows.</strong> For healthcare clients: we design for HIPAA considerations from the start. Phase-0 pilots stay in synthetic data; production deployments follow your BAA and security requirements.
+                </div>
+              </li>
+            </ul>
+            <p className="text-xs text-[var(--retro-text-dim)] pt-2 border-t border-[var(--retro-border)]">
+              <strong>Bottom line:</strong> You can safely try our demos and pilots. When you&apos;re ready to deploy with real data, we work within your compliance framework.
+            </p>
+          </div>
         </motion.div>
 
         {/* Service Cards */}

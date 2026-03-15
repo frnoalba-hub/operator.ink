@@ -101,8 +101,11 @@ export default function Home() {
               Premium website design, blazing-fast managed hosting, GEO/AEO search optimization, custom workflows, and intelligent AI agents. We build and maintain the digital infrastructure that scales your operations.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-               <a href="#intake" className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto">
-                 System Initialization <ArrowRight className="w-4 h-4 ml-2" />
+               <a href={createPageUrl('Portal')} className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto">
+                 Client Portal <ArrowRight className="w-4 h-4 ml-2" />
+               </a>
+               <a href="#intake" className="retro-link inline-flex items-center justify-center px-6 h-12 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)] w-full sm:w-auto">
+                 System Initialization
                </a>
             </div>
           </div>
@@ -261,8 +264,8 @@ export default function Home() {
           <div className="lg:col-span-5">
             <div className="retro-card rounded-2xl p-6">
               <h3 className="text-base font-bold mb-3">Why Operator.ink</h3>
-              <ul className="space-y-2 text-sm text-[var(--retro-text-muted)]">
-                {["Premium website design.", "Managed fast hosting.", "Conversion-focused sites.", "GEO + AEO search.", "Agents & workflows.", "Precision ads."].map((item, i) => (
+              <ul className="space-y-2 text-sm text-[var(--retro-text)]">
+                {["Premium website design.", "Managed fast hosting.", "Conversion-focused sites.", "GEO + AEO search.", "Agents & workflows.", "Precision ads.", "Client Portal — upload assets & notes.", "Compliance-aware & safe for healthcare."].map((item, i) => (
                   <li key={i} className="flex items-center gap-2">
                     <span className="w-1 h-1 rounded-full" style={{ background: 'var(--rgb-gradient)' }} />
                     {item}
@@ -272,7 +275,7 @@ export default function Home() {
               <a href="#intake" className="retro-rgb-btn mt-4 inline-flex items-center justify-center w-full rounded-lg text-sm py-3">
                 Start Initialization
               </a>
-              <p className="text-[10px] text-[var(--retro-text-dim)] mt-3 pt-3 border-t border-[var(--retro-border)]">
+              <p className="text-xs text-[var(--retro-text-muted)] mt-3 pt-3 border-t border-[var(--retro-border)]">
                 Phase-0 Pilot $3,999 → <a href={createPageUrl('Pilot')} className="retro-link">Pilot</a>
               </p>
             </div>

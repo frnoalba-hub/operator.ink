@@ -50,6 +50,7 @@
 import Home from './pages/Home';
 import Demos from './pages/Demos';
 import Pilot from './pages/Pilot';
+import Portal from './pages/Portal';
 import Leads from './pages/Leads';
 import Services from './pages/Services';
 import OpsBoard from './pages/OpsBoard';
@@ -63,6 +64,7 @@ export const PAGES = {
     "Home": Home,
     "Demos": Demos,
     "Pilot": Pilot,
+    "Portal": Portal,
     "Leads": Leads,
     "Calls": Calls,
     "Services": Services,

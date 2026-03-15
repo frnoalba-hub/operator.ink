@@ -56,6 +56,9 @@ export default function StickyNav({ currentPage = 'home' }) {
           <a href={createPageUrl('Pilot')} className={navLinkClass(currentPage === 'pilot')}>
             Pilot
           </a>
+          <a href={createPageUrl('Portal')} className={navLinkClass(currentPage === 'portal')}>
+            Portal
+          </a>
           <div className="w-px h-6 bg-white/10 mx-1 hidden sm:block" aria-hidden />
           <a
             href={LINKEDIN_URL}

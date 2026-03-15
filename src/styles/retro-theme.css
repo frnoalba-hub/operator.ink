@@ -12,10 +12,10 @@
   --retro-border: #1a1a1a;
   --retro-border-bright: #2a2a2a;
   
-  /* Text */
-  --retro-text: #f5f5f5;
-  --retro-text-muted: #737373;
-  --retro-text-dim: #525252;
+  /* Text — brighter for readability */
+  --retro-text: #ffffff;
+  --retro-text-muted: #d4d4d4;
+  --retro-text-dim: #a3a3a3;
   
   /* RGB gradient — for buttons, links, accents */
   --rgb-gradient: linear-gradient(
