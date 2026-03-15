@@ -119,6 +119,14 @@ export default function Home() {
                   <span className="text-[9px] text-[#00ccff]/90 bg-[#00ccff]/10 rounded px-1.5 py-0.5 border border-[#00ccff]/30">Admin: view all + metrics</span>
                 </div>
               </div>
+              <p className="text-[9px] text-white/40 mb-2">View all administrators:</p>
+              <div className="flex flex-wrap gap-1 mb-3">
+                {['K. Smith', 'J. Lee', 'M. Chen', 'R. Davis', 'T. Park', '+5'].map((name) => (
+                  <span key={name} className="text-[8px] text-white/60 bg-white/5 rounded px-1.5 py-0.5 border border-white/5">
+                    {name}
+                  </span>
+                ))}
+              </div>
               <div className="flex gap-2 min-h-[72px]">
                 {PIPELINE_STAGES.map((col, i) => (
                   <div key={col.id} className="flex-1 min-w-0 rounded-lg bg-black/40 border border-white/5 p-2">
