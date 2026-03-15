@@ -31,8 +31,9 @@ Build a modern, interactive web dashboard for managing patient admissions and be
    - Five stages: Referral Received, Clinical Review, Bed Offer / Financial, Admitted, Denied / Discharged
    - Drag-and-drop patient cards between stages
 
-2. **Patient Cards** (must show **name** + admission context)
+2. **Patient Cards** (must show **name** + **payer** + admission context)
    - Required: **Patient Name** (primary identifier)
+   - **Payer selection & tracking:** Pick Medicare, HMO, or Private per patient. Display and track on card.
    - Display: Facility (Building A/B/C), Payer (Medicare/HMO/Private), Task Progress (e.g., 2/4 checklist done)
    - Click to open side panel for:
      * Facility assignment
@@ -54,9 +55,13 @@ Build a modern, interactive web dashboard for managing patient admissions and be
 6. **New Referral Input**
    - Quick-add to insert a patient (with **name**) into Referral Received
 
+**User roles & multi-administrator:**
+- **Coordinators (e.g. 10):** Each uses the dashboard for their own pipeline. They see only their patients.
+- **Admin account:** Views all coordinators, all pipelines, and metrics (totals, conversion, by admin). One admin can oversee 10+ coordinators.
+
 **Additional Requirements:**
-- View all administrators — admin dashboard or toggle to see all coordinators' pipelines
-- Clearer data — better visibility: filters, drill-down, export
+- Payer selection & tracking — Medicare, HMO, Private per patient, visible on card
+- Clearer data — filters, drill-down, export
 - Fully responsive SPA
 - Clean, modular, production-ready code
 - Side panel / drawer for managing patient details

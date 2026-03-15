@@ -36,10 +36,10 @@ const capabilities = [
 ];
 
 const PIPELINE_STAGES = [
-  { id: 'referral', label: 'Referral', patients: ['M. Johnson'] },
+  { id: 'referral', label: 'Referral', patients: [{ name: 'M. Johnson', payer: 'Medicare' }] },
   { id: 'clinical', label: 'Clinical', patients: [] },
-  { id: 'bed', label: 'Bed Offer', patients: ['L. Martinez'] },
-  { id: 'admitted', label: 'Admitted', patients: ['J. Williams'] },
+  { id: 'bed', label: 'Bed Offer', patients: [{ name: 'L. Martinez', payer: 'HMO' }] },
+  { id: 'admitted', label: 'Admitted', patients: [{ name: 'J. Williams', payer: 'Private' }] },
   { id: 'denied', label: 'Denied', patients: [] },
 ];
 
@@ -105,26 +105,30 @@ export default function Home() {
             </h2>
           </div>
           <p className="text-sm text-[var(--retro-text-muted)] mb-4 max-w-xl">
-            An admissions dashboard for skilled nursing facilities. Drag patient cards through stages, view all administrators, get clearer data. Pipeline, notifications, $3k pilot.
+            Admissions dashboard for skilled nursing. Pick payer (Medicare, HMO, Private) per patient and track. Coordinators use their own pipeline; admins view all 10+ and see metrics.
           </p>
           <a
             href={createPageUrl('Demos')}
             className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
           >
             <div className="p-4 sm:p-5">
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <h3 className="text-sm font-bold group-hover:text-[#00ccff] transition-colors">Admissions &amp; Bed Tracking Dashboard</h3>
-                <span className="text-xs font-semibold retro-link inline-flex items-center gap-1">
-                  View full brief <ArrowRight className="w-3.5 h-3.5" />
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] text-white/50 bg-white/5 rounded px-1.5 py-0.5">Coordinator: my pipeline</span>
+                  <span className="text-[9px] text-[#00ccff]/90 bg-[#00ccff]/10 rounded px-1.5 py-0.5 border border-[#00ccff]/30">Admin: view all + metrics</span>
+                </div>
               </div>
-              <div className="flex gap-2 min-h-[64px]">
+              <div className="flex gap-2 min-h-[72px]">
                 {PIPELINE_STAGES.map((col, i) => (
                   <div key={col.id} className="flex-1 min-w-0 rounded-lg bg-black/40 border border-white/5 p-2">
                     <p className="text-[9px] text-white/40 truncate mb-1">{col.label}</p>
                     <div className="space-y-0.5">
-                      {col.patients.map((name) => (
-                        <div key={name} className="text-[10px] text-white/80 truncate py-0.5 px-1 rounded bg-white/5">{name}</div>
+                      {col.patients.map((p) => (
+                        <div key={p.name} className="text-[10px] py-0.5 px-1 rounded bg-white/5">
+                          <span className="text-white/80 truncate block">{p.name}</span>
+                          <span className="text-[8px] text-white/50">{p.payer}</span>
+                        </div>
                       ))}
                       {i === movingCardStage && (
                         <motion.div
@@ -132,9 +136,10 @@ export default function Home() {
                           initial={{ opacity: 0, y: 4 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.25 }}
-                          className="text-[10px] text-[#00ccff] truncate py-0.5 px-1 rounded bg-[#00ccff]/10 border border-[#00ccff]/30"
+                          className="text-[10px] py-0.5 px-1 rounded bg-[#00ccff]/10 border border-[#00ccff]/30"
                         >
-                          R. Davis
+                          <span className="text-[#00ccff] block">R. Davis</span>
+                          <span className="text-[8px] text-[#00ccff]/80">HMO</span>
                         </motion.div>
                       )}
                       {col.patients.length === 0 && i !== movingCardStage && (
@@ -144,7 +149,10 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <p className="text-[10px] text-[var(--retro-text-dim)] mt-2">Drag cards between stages • View all admins • Clearer data</p>
+              <p className="text-[10px] text-[var(--retro-text-dim)] mt-2">Pick payer (Medicare/HMO/Private) • Track per patient • Admin sees all coordinators + metrics</p>
+              <span className="text-xs font-semibold retro-link inline-flex items-center gap-1 mt-2">
+                View full brief <ArrowRight className="w-3.5 h-3.5" />
+              </span>
             </div>
           </a>
         </motion.section>

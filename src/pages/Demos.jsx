@@ -60,7 +60,7 @@ export default function Demos() {
           </div>
           <div className="prose prose-invert max-w-none text-sm text-[var(--retro-text-muted)] space-y-4">
             <p><strong>Objective:</strong> Build a dashboard for managing patient admissions in skilled nursing facilities. Each card tracks <strong>patient name</strong> + admission status.</p>
-            <p><strong>How admissions work:</strong> Referral (name, source) → Clinical Review (PASRR, meds, diagnosis) → Bed Offer / Financial (insurance, prior auth, bed) → Admitted or Denied.</p>
+            <p><strong>How admissions work:</strong> Referral (name, source) → Clinical Review (PASRR, meds) → Bed Offer (pick payer: Medicare/HMO/Private, track per patient) → Admitted or Denied.</p>
             <p><strong>Design:</strong> Dark command-center aesthetic. Vercel, Linear inspiration. Grid-based, responsive, minimalistic.</p>
             <p><strong>Tech:</strong> React + Vite, Tailwind CSS, Framer Motion, Lucide icons.</p>
             <p><strong>Core features:</strong></p>
@@ -69,7 +69,8 @@ export default function Demos() {
               <li><strong>Patient cards: Name</strong> (required), Facility, Payer, Task progress. Click for side panel</li>
               <li>Stage checklist: Medication List, PASRR Level 1, Face-to-face scheduled, Financial clearance</li>
               <li><strong>Notifications:</strong> New referral alerts, stage-change alerts, pending-item reminders</li>
-              <li><strong>View all administrators</strong> — see all coordinators' pipelines</li>
+              <li><strong>Payer selection</strong> — Medicare, HMO, or Private per patient, tracked on card</li>
+              <li><strong>Multi-admin:</strong> Coordinators (10+) use their own pipeline; admin account views all + metrics</li>
               <li><strong>Clearer data</strong> — filters, drill-down, export</li>
               <li>Analytics: Referrals, Admitted/Denied counts, bed forecast</li>
               <li>Quick-add new referral with patient name</li>
