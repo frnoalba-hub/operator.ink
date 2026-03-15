@@ -5,7 +5,6 @@ import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 import IntakeForm from '../components/intake/IntakeForm';
 
-const LOGO_URL = "/operator-logo.png";
 const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
 
 const capabilities = [
@@ -79,18 +78,13 @@ export default function Home() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-16 lg:mb-24 flex flex-col items-center text-center max-w-4xl mx-auto pt-8"
+          className="mb-14 lg:mb-16"
         >
-          <img
-            src={LOGO_URL}
-            alt="Operator.ink"
-            className="w-full max-w-[500px] h-auto object-contain mb-10"
-          />
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight text-white">
             Digital Operations<br />
             <span className="retro-link-accent">&amp; Growth Systems.</span>
           </h1>
-          <p className="mt-6 text-base sm:text-lg lg:text-xl text-[var(--retro-text-muted)] max-w-2xl">
+          <p className="mt-4 text-base text-[var(--retro-text-muted)] max-w-lg">
             Operational websites, GEO/AEO search, workflows, AI agents.
           </p>
         </motion.header>
