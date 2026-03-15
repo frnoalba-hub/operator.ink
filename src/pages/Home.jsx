@@ -113,7 +113,7 @@ export default function Home() {
               <div>
                 <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-1">Featured Demo</p>
                 <h3 className="text-lg font-bold mb-1 group-hover:text-[var(--retro-border-bright)] transition-colors">Admissions &amp; Bed Tracking Dashboard</h3>
-                <p className="text-sm text-[var(--retro-text-muted)] mb-3">For admissions coordinators &amp; skilled nursing facilities. Pipeline, patient cards, analytics.</p>
+                <p className="text-sm text-[var(--retro-text-muted)] mb-3">For admissions coordinators &amp; skilled nursing facilities. Pipeline, patient cards, notifications, analytics.</p>
                 <span className="text-sm font-semibold retro-link inline-flex items-center gap-2">
                   View Demo Brief <ArrowRight className="w-3.5 h-3.5" />
                 </span>
@@ -141,6 +141,7 @@ export default function Home() {
               >
                 Start Initialization
               </a>
+              <p className="text-[11px] text-[var(--retro-text-dim)] mt-4 pt-4 border-t border-[var(--retro-border)]">Phase-0 Pilot: $3,000. Discovery → deployment → demo → report. <a href={createPageUrl('Demos')} className="retro-link">See demos</a>.</p>
             </div>
           </div>
         </motion.header>
@@ -173,7 +174,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <p className="text-[10px] text-[var(--retro-text-dim)] mt-2 px-2 group-hover:text-[var(--retro-border-bright)] transition-colors">Patient cards • Name + Payer + Admission stage →</p>
+            <p className="text-[10px] text-[var(--retro-text-dim)] mt-2 px-2 group-hover:text-[var(--retro-border-bright)] transition-colors">Patient cards • Notifications • Name + Admission stage →</p>
           </div>
         </motion.a>
 

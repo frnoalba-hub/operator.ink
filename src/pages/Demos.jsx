@@ -68,10 +68,15 @@ export default function Demos() {
               <li>Pipeline (5 stages), drag-and-drop patient cards</li>
               <li><strong>Patient cards: Name</strong> (required), Facility, Payer, Task progress. Click for side panel</li>
               <li>Stage checklist: Medication List, PASRR Level 1, Face-to-face scheduled, Financial clearance</li>
+              <li><strong>Notifications:</strong> New referral alerts, stage-change alerts, pending-item reminders</li>
               <li>Analytics: Referrals, Admitted/Denied counts, bed forecast</li>
               <li>Quick-add new referral with patient name</li>
             </ul>
-            <p><strong>Deliverable:</strong> Interactive demo with pipeline, name-based patient cards, side panel, analytics.</p>
+            <p><strong>Deliverable:</strong> Interactive demo with pipeline, name-based patient cards, notifications, side panel, analytics.</p>
+          </div>
+          <div className="mt-8 pt-6 border-t border-[var(--retro-border)]">
+            <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-2">Phase-0 Pilot — $3,000</p>
+            <p className="text-sm text-[var(--retro-text-muted)] mb-3">Discovery → tailored deployment → working demo → observation → report. Proven framework, measurable outcomes. Limited slots.</p>
           </div>
           <a
             href="mailto:orders@operator.ink?subject=Demo Request: Admissions Dashboard"

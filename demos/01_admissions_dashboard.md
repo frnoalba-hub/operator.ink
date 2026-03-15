@@ -45,10 +45,13 @@ Build a modern, interactive web dashboard for managing patient admissions and be
    - Admitted / Denied counts
    - 7-day bed forecast or referral conversion rate
 
-4. **Agent Activity Log**
+4. **Notifications**
+   - Alerts when new referrals arrive, when a patient moves stages, or when items need attention (e.g., prior auth pending)
+
+5. **Agent Activity Log**
    - Auto-scrolling simulated log (e.g., "[AGENT] Verifying HMO Eligibility… Done")
 
-5. **New Referral Input**
+6. **New Referral Input**
    - Quick-add to insert a patient (with **name**) into Referral Received
 
 **Additional Requirements:**
