@@ -188,9 +188,9 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-xs text-white/40 mb-2 font-semibold">View all administrators:</p>
-              <div className="flex flex-wrap gap-1.5 mb-4">
+              <div className="flex flex-wrap gap-2 mb-4">
                 {['K. Smith', 'J. Lee', 'M. Chen', 'R. Davis', 'T. Park', '+5'].map((name) => (
-                  <span key={name} className="text-[11px] text-white/60 bg-white/5 rounded px-2 py-1 border border-white/10">
+                  <span key={name} className="text-xs font-bold text-white/70 bg-white/5 rounded px-2.5 py-1.5 border border-white/10 uppercase tracking-tight">
                     {name}
                   </span>
                 ))}
@@ -201,11 +201,11 @@ export default function Home() {
                     <p className="text-xs text-white/40 font-bold truncate mb-1.5 border-b border-white/10 pb-1">{col.label}</p>
                     <div className="space-y-1">
                       {col.patients.map((p) => (
-                        <div key={p.name} className="text-xs py-1 px-1.5 rounded bg-white/5">
-                          <span className="text-white/80 font-medium truncate block">{p.name}</span>
-                          <span className="text-[10px] text-white/50 block">{p.payer}</span>
+                        <div key={p.name} className="text-sm py-1.5 px-2 rounded bg-white/5 border border-white/5 shadow-sm">
+                          <span className="text-white font-bold truncate block">{p.name}</span>
+                          <span className="text-xs text-white/50 block font-medium uppercase tracking-tight">{p.payer}</span>
                           {p.flag && (
-                            <span className={`text-[9px] mt-0.5 inline-block rounded px-1 font-bold ${p.flag === 'Complete' ? 'bg-green-500/20 text-green-400' : p.flag === 'Prior Auth' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/10 text-white/60'}`}>
+                            <span className={`text-[10px] mt-1 inline-block rounded px-1.5 py-0.5 font-black uppercase tracking-wider ${p.flag === 'Complete' ? 'bg-green-500/20 text-green-400' : p.flag === 'Prior Auth' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/10 text-white/60'}`}>
                               {p.flag}
                             </span>
                           )}
@@ -217,11 +217,11 @@ export default function Home() {
                           initial={{ opacity: 0, y: 4 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.25 }}
-                          className="text-xs py-1 px-1.5 rounded bg-[#00ccff]/10 border border-[#00ccff]/30 shadow-lg shadow-[#00ccff]/10"
+                          className="text-sm py-1.5 px-2 rounded bg-[#00ccff]/10 border border-[#00ccff]/40 shadow-xl shadow-[#00ccff]/20"
                         >
-                          <span className="text-[#00ccff] font-bold block">R. Davis</span>
-                          <span className="text-[10px] text-[#00ccff]/80 block">HMO</span>
-                          <span className="text-[9px] mt-0.5 inline-block rounded px-1 bg-amber-500/20 text-amber-400 font-bold">Prior Auth</span>
+                          <span className="text-[#00ccff] font-black block">R. Davis</span>
+                          <span className="text-xs text-[#00ccff]/80 block font-bold uppercase tracking-tight">HMO</span>
+                          <span className="text-[10px] mt-1 inline-block rounded px-1.5 py-0.5 bg-amber-500/30 text-amber-400 font-black uppercase tracking-wider">Prior Auth</span>
                         </motion.div>
                       )}
                       {col.patients.length === 0 && i !== movingCardStage && (
