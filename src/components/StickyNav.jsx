@@ -26,7 +26,7 @@ export default function StickyNav({ currentPage = 'home' }) {
         borderBottom: scrolled ? '1px solid var(--retro-border)' : '1px solid transparent',
       }}
     >
-      <div className="w-full mx-auto px-5 sm:px-8 lg:px-12 flex items-center h-16 relative">
+      <div className="w-full mx-auto px-5 sm:px-8 lg:px-12 flex items-center h-32 sm:h-40 relative">
         <div className="flex-1 flex items-center">
           {/* Left spacer to balance the flex layout */}
         </div>
@@ -34,7 +34,7 @@ export default function StickyNav({ currentPage = 'home' }) {
           <img
             src={LOGO_URL}
             alt="Operator.ink"
-            className="h-14 sm:h-16 min-h-[48px] w-auto object-contain"
+            className="h-32 sm:h-40 md:h-52 lg:h-64 w-auto object-contain"
           />
         </a>
         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0 flex-1 justify-end">
