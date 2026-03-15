@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, ArrowRight, Search, Zap, BarChart2, Globe, LayoutDashboard, Users, BarChart3 } from 'lucide-react';
+import { Mail, ArrowRight, Search, Zap, BarChart2, Globe } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 import IntakeForm from '../components/intake/IntakeForm';
@@ -90,71 +90,61 @@ export default function Home() {
           </p>
         </motion.header>
 
-        {/* DEMOS — unified at top, animated card movement + Admission + View admins + Clear data */}
+        {/* FEATURED DEMO — clearly labeled */}
         <motion.section
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
           className="mb-14 lg:mb-20"
+          aria-labelledby="demo-heading"
         >
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-2 h-2 rounded-full" style={{ background: 'var(--rgb-gradient)' }} />
+            <h2 id="demo-heading" className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">
+              Featured Demo
+            </h2>
+          </div>
+          <p className="text-sm text-[var(--retro-text-muted)] mb-4 max-w-xl">
+            An admissions dashboard for skilled nursing facilities. Drag patient cards through stages, view all administrators, get clearer data. Pipeline, notifications, $3k pilot.
+          </p>
           <a
             href={createPageUrl('Demos')}
             className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
           >
-            <div className="p-4 sm:p-5 flex flex-col gap-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center retro-rgb-border" style={{ background: 'var(--retro-bg-elevated)' }}>
-                    <LayoutDashboard className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">Admissions</p>
-                    <h3 className="text-base font-bold group-hover:text-[#00ccff] transition-colors">Bed Tracking Dashboard</h3>
-                  </div>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-[10px] text-[var(--retro-text-dim)] bg-white/5 rounded-lg px-2 py-1 border border-white/5">
-                    <Users className="w-3 h-3" /> View all administrators
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 text-[10px] text-[var(--retro-text-dim)] bg-white/5 rounded-lg px-2 py-1 border border-white/5">
-                    <BarChart3 className="w-3 h-3" /> Clearer data
-                  </span>
-                </div>
+            <div className="p-4 sm:p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-bold group-hover:text-[#00ccff] transition-colors">Admissions &amp; Bed Tracking Dashboard</h3>
+                <span className="text-xs font-semibold retro-link inline-flex items-center gap-1">
+                  View full brief <ArrowRight className="w-3.5 h-3.5" />
+                </span>
               </div>
-              <div className="flex gap-1.5 sm:gap-2 min-h-[72px]">
+              <div className="flex gap-2 min-h-[64px]">
                 {PIPELINE_STAGES.map((col, i) => (
-                  <div key={col.id} className="flex-1 min-w-0 rounded-lg bg-black/40 border border-white/5 p-1.5 sm:p-2 relative">
-                    <p className="text-[8px] sm:text-[9px] text-white/40 truncate mb-1">{col.label}</p>
+                  <div key={col.id} className="flex-1 min-w-0 rounded-lg bg-black/40 border border-white/5 p-2">
+                    <p className="text-[9px] text-white/40 truncate mb-1">{col.label}</p>
                     <div className="space-y-0.5">
                       {col.patients.map((name) => (
-                        <div key={name} className="text-[9px] sm:text-[10px] text-white/80 truncate py-0.5 px-1 rounded bg-white/5">{name}</div>
+                        <div key={name} className="text-[10px] text-white/80 truncate py-0.5 px-1 rounded bg-white/5">{name}</div>
                       ))}
                       {i === movingCardStage && (
                         <motion.div
                           key="moving"
-                          initial={{ opacity: 0, scale: 0.9, y: 4 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.3 }}
-                          className="text-[9px] sm:text-[10px] text-[#00ccff] truncate py-0.5 px-1 rounded bg-[#00ccff]/10 border border-[#00ccff]/30"
+                          initial={{ opacity: 0, y: 4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.25 }}
+                          className="text-[10px] text-[#00ccff] truncate py-0.5 px-1 rounded bg-[#00ccff]/10 border border-[#00ccff]/30"
                         >
-                          R. Davis →
+                          R. Davis
                         </motion.div>
                       )}
                       {col.patients.length === 0 && i !== movingCardStage && (
-                        <p className="text-[8px] text-white/25 italic">—</p>
+                        <span className="text-[9px] text-white/25">—</span>
                       )}
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="text-[9px] text-[var(--retro-text-dim)]">Drag cards between stages • Admission workflow</p>
-              <div className="flex items-center justify-between pt-1 border-t border-[var(--retro-border)]">
-                <span className="text-[10px] text-[var(--retro-text-dim)]">Pipeline • Notifications • $3k pilot</span>
-                <span className="text-sm font-semibold retro-link inline-flex items-center gap-1">
-                  View brief <ArrowRight className="w-3.5 h-3.5" />
-                </span>
-              </div>
+              <p className="text-[10px] text-[var(--retro-text-dim)] mt-2">Drag cards between stages • View all admins • Clearer data</p>
             </div>
           </a>
         </motion.section>
