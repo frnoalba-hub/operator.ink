@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Mail, ArrowRight, Search, Zap, BarChart2, Globe, LayoutDashboard } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Mail, ArrowRight, Search, Zap, BarChart2, Globe, LayoutDashboard } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 import IntakeForm from '../components/intake/IntakeForm';
@@ -60,123 +60,111 @@ export default function Home() {
 
       <main id="main" className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-24 pb-10 lg:pb-16">
 
-        {/* HERO */}
+        {/* HERO — Demos at top */}
         <motion.header
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mb-16 lg:mb-20"
+          transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-14 lg:mb-16"
+        >
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight text-white">
+            Digital Operations<br />
+            <span className="retro-link-accent">&amp; Growth Systems.</span>
+          </h1>
+          <p className="mt-4 text-base text-[var(--retro-text-muted)] max-w-lg">
+            Operational websites, GEO/AEO search, workflows, AI agents.
+          </p>
+        </motion.header>
+
+        {/* DEMOS — unified at top */}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="mb-14 lg:mb-20"
+        >
+          <a
+            href={createPageUrl('Demos')}
+            className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
+          >
+            <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex items-center gap-3 flex-shrink-0">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center retro-rgb-border" style={{ background: 'var(--retro-bg-elevated)' }}>
+                  <LayoutDashboard className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">Demo</p>
+                  <h3 className="text-base font-bold group-hover:text-[#00ccff] transition-colors">Admissions &amp; Bed Tracking Dashboard</h3>
+                </div>
+              </div>
+              <div className="flex-1 min-w-0 flex gap-1.5 sm:gap-2">
+                {[
+                  { stage: 'Referral', patients: ['M. Johnson', 'R. Davis'] },
+                  { stage: 'Clinical', patients: ['T. Chen'] },
+                  { stage: 'Bed Offer', patients: ['L. Martinez'] },
+                  { stage: 'Admitted', patients: ['J. Williams'] },
+                  { stage: 'Denied', patients: [] },
+                ].map((col, i) => (
+                  <div key={i} className="flex-1 min-w-0 rounded-lg bg-black/40 border border-white/5 p-1.5 sm:p-2">
+                    <p className="text-[8px] sm:text-[9px] text-white/40 truncate mb-1">{col.stage}</p>
+                    {col.patients.length ? col.patients.map((name, j) => (
+                      <div key={j} className="text-[9px] sm:text-[10px] text-white/80 truncate py-0.5 px-1 rounded bg-white/5 mb-0.5">{name}</div>
+                    )) : (
+                      <p className="text-[8px] text-white/25 italic">—</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-t-0 sm:border-l border-[var(--retro-border)] pt-3 sm:pt-0 sm:pl-4">
+                <span className="text-[10px] text-[var(--retro-text-dim)]">Pipeline • Notifications • $3k pilot</span>
+                <span className="text-sm font-semibold retro-link inline-flex items-center gap-1">
+                  View brief <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </div>
+          </a>
+        </motion.section>
+
+        {/* CTAs + Why Operator.ink */}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 mb-16 lg:mb-20"
         >
           <div className="lg:col-span-7">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight">
-              Digital Operations<br />
-              <span className="retro-link-accent">&amp; Growth Systems.</span>
-            </h1>
-            <p className="mt-6 text-lg text-[var(--retro-text-muted)] max-w-xl leading-relaxed">
-              We design operational websites, engineer GEO/AEO search dominance, build workflow automation, and deploy custom AI agents that scale your business.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <a
-                href="#intake"
-                className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-8 rounded-2xl text-base hover:opacity-95 transition-opacity"
-                style={{ minHeight: '56px' }}
-              >
+            <div className="flex flex-wrap gap-3">
+              <a href="#intake" className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-6 rounded-xl text-sm hover:opacity-95" style={{ minHeight: '48px' }}>
                 Deploy Request <ArrowRight className="w-4 h-4" />
               </a>
-              <a
-                href={createPageUrl('Services')}
-                className="retro-link inline-flex items-center justify-center gap-2 px-8 rounded-2xl border border-[var(--retro-border)] font-semibold text-base hover:border-[var(--retro-border-bright)] transition-colors"
-                style={{ minHeight: '56px' }}
-              >
-                View Services <ArrowRight className="w-4 h-4 opacity-70" />
+              <a href={createPageUrl('Services')} className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }}>
+                Services
               </a>
-              <a
-                href="mailto:orders@operator.ink"
-                className="retro-link inline-flex items-center justify-center gap-2 px-8 rounded-2xl border border-[var(--retro-border)] font-semibold text-base hover:border-[var(--retro-border-bright)] transition-colors"
-                style={{ minHeight: '56px' }}
-              >
+              <a href="mailto:orders@operator.ink" className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }}>
                 <Mail className="w-4 h-4 opacity-70" /> orders@operator.ink
               </a>
             </div>
           </div>
-
-          {/* Value Panel + Featured Demo */}
-          <div className="lg:col-span-5 flex flex-col gap-5">
-            {/* Featured Demo — admissions / skilled nursing */}
-            <a
-              href={createPageUrl('Demos')}
-              className="retro-card rounded-[24px] p-5 lg:p-6 flex items-start gap-4 hover:border-[var(--retro-border-bright)] transition-colors group"
-            >
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 retro-rgb-border" style={{ background: 'var(--retro-bg-elevated)' }}>
-                <LayoutDashboard className="w-6 h-6" style={{ color: 'var(--retro-text)' }} />
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-1">Featured Demo</p>
-                <h3 className="text-lg font-bold mb-1 group-hover:text-[var(--retro-border-bright)] transition-colors">Admissions &amp; Bed Tracking Dashboard</h3>
-                <p className="text-sm text-[var(--retro-text-muted)] mb-3">For admissions coordinators &amp; skilled nursing facilities. Pipeline, patient cards, notifications, analytics.</p>
-                <span className="text-sm font-semibold retro-link inline-flex items-center gap-2">
-                  View Demo Brief <ArrowRight className="w-3.5 h-3.5" />
-                </span>
-              </div>
-            </a>
-            <div className="retro-card rounded-[32px] p-7 lg:p-8">
-              <h3 className="text-xl font-bold mb-4">Why Operator.ink</h3>
-              <ul className="space-y-3 text-sm text-[var(--retro-text-muted)]">
-                {[
-                  "Conversion-focused operational websites.",
-                  "Localized GEO + AEO strategies for high-intent traffic.",
-                  "Custom agents and workflows to remove manual work.",
-                  "Precision ad campaigns for scalable acquisition."
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--rgb-gradient)' }} />
+          <div className="lg:col-span-5">
+            <div className="retro-card rounded-2xl p-6">
+              <h3 className="text-base font-bold mb-3">Why Operator.ink</h3>
+              <ul className="space-y-2 text-sm text-[var(--retro-text-muted)]">
+                {["Conversion-focused sites.", "GEO + AEO search.", "Agents & workflows.", "Precision ads."].map((item, i) => (
+                  <li key={i} className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full" style={{ background: 'var(--rgb-gradient)' }} />
                     {item}
                   </li>
                 ))}
               </ul>
-              <a
-                href="#intake"
-                className="retro-rgb-btn mt-6 inline-flex items-center justify-center w-full rounded-xl text-sm"
-                style={{ minHeight: '52px' }}
-              >
+              <a href="#intake" className="retro-rgb-btn mt-4 inline-flex items-center justify-center w-full rounded-lg text-sm py-3">
                 Start Initialization
               </a>
-              <p className="text-[11px] text-[var(--retro-text-dim)] mt-4 pt-4 border-t border-[var(--retro-border)]">Phase-0 Pilot: $3,000. Discovery → deployment → demo → report. <a href={createPageUrl('Demos')} className="retro-link">See demos</a>.</p>
+              <p className="text-[10px] text-[var(--retro-text-dim)] mt-3 pt-3 border-t border-[var(--retro-border)]">
+                Phase-0 Pilot $3k → <a href={createPageUrl('Demos')} className="retro-link">demos</a>
+              </p>
             </div>
           </div>
-        </motion.header>
-
-        {/* Small Demo Preview — pipeline with patient names per SNF admissions workflow */}
-        <motion.a
-          href={createPageUrl('Demos')}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="block mb-16 lg:mb-20"
-        >
-          <div className="retro-card rounded-2xl overflow-hidden p-3 border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-colors group">
-            <p className="text-[10px] uppercase tracking-widest text-[var(--retro-text-dim)] px-2 py-1 mb-2">Demo — Admissions & Bed Tracking</p>
-            <div className="flex gap-2 min-h-[88px]">
-              {[
-                { stage: 'Referral', patients: ['M. Johnson', 'R. Davis'] },
-                { stage: 'Clinical Review', patients: ['T. Chen'] },
-                { stage: 'Bed Offer', patients: ['L. Martinez'] },
-                { stage: 'Admitted', patients: ['J. Williams'] },
-                { stage: 'Denied', patients: [] },
-              ].map((col, i) => (
-                <div key={i} className="flex-1 min-w-0 rounded-lg bg-black/30 border border-white/5 p-2">
-                  <p className="text-[9px] text-white/40 truncate mb-1.5">{col.stage}</p>
-                  {col.patients.length ? col.patients.map((name, j) => (
-                    <div key={j} className="text-[10px] text-white/80 truncate py-0.5 px-1.5 rounded bg-white/5 mb-1">{name}</div>
-                  )) : (
-                    <p className="text-[9px] text-white/30 italic">—</p>
-                  )}
-                </div>
-              ))}
-            </div>
-            <p className="text-[10px] text-[var(--retro-text-dim)] mt-2 px-2 group-hover:text-[var(--retro-border-bright)] transition-colors">Patient cards • Notifications • Name + Admission stage →</p>
-          </div>
-        </motion.a>
+        </motion.section>
 
         {/* CAPABILITIES BENTO GRID */}
         <motion.section
