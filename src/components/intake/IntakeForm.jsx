@@ -47,7 +47,12 @@ const CONDITIONAL_FIELDS = {
 };
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+const ALLOWED_TYPES = [
+  'image/png', 'image/jpeg', 'image/webp',
+  'image/heic', 'image/heic-sequence', // iPhone photos
+  'application/pdf',
+  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+];
 
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -69,6 +74,7 @@ export default function IntakeForm() {
   const [touched, setTouched] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error'
+  const [submitError, setSubmitError] = useState(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('intakeFormData');
@@ -138,14 +144,14 @@ export default function IntakeForm() {
     return !hasError;
   };
 
-  const handleFileAdd = (e) => {
-    const incoming = Array.from(e.target.files);
+  const processFiles = (fileList) => {
+    const incoming = Array.from(fileList);
     const newErrors = [];
     const valid = [];
 
     incoming.forEach(file => {
       if (!ALLOWED_TYPES.includes(file.type)) {
-        newErrors.push(`"${file.name}" — unsupported file type`);
+        newErrors.push(`"${file.name}" — unsupported (use PNG, JPG, WEBP, HEIC, PDF, DOCX)`);
       } else if (file.size > MAX_FILE_SIZE) {
         newErrors.push(`"${file.name}" — exceeds 10 MB limit`);
       } else if (files.length + valid.length >= 5) {
@@ -160,7 +166,24 @@ export default function IntakeForm() {
       setTimeout(() => setErrors(prev => { const n = { ...prev }; delete n.files; return n; }), 5000);
     }
     setFiles(prev => [...prev, ...valid]);
+  };
+
+  const handleFileAdd = (e) => {
+    const { files: fileList } = e.target;
+    if (fileList?.length) processFiles(fileList);
     e.target.value = '';
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer?.files?.length) processFiles(e.dataTransfer.files);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = 'copy';
   };
 
   const removeFile = (idx) => setFiles(prev => prev.filter((_, i) => i !== idx));
@@ -171,13 +194,19 @@ export default function IntakeForm() {
 
     setSubmitting(true);
     setSubmitStatus(null);
+    setSubmitError(null);
 
     try {
       // Upload files if any
       const uploadedUrls = [];
       for (const file of files) {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file });
-        uploadedUrls.push(file_url);
+        try {
+          const { file_url } = await base44.integrations.Core.UploadFile({ file });
+          uploadedUrls.push(file_url);
+        } catch (uploadErr) {
+          console.error('[IntakeForm] File upload failed:', uploadErr);
+          throw new Error(`File "${file.name}" failed to upload. Try again or email us directly.`);
+        }
       }
 
       // Save to database
@@ -199,11 +228,17 @@ export default function IntakeForm() {
       setFiles([]);
       setTouched({});
       localStorage.removeItem('intakeFormData');
-    } catch {
+    } catch (err) {
+      console.error('[IntakeForm] Submit failed:', err);
+      const msg = err?.message || err?.response?.data?.message || err?.response?.data?.error || 'Unknown error';
+      setSubmitError(typeof msg === 'string' ? msg : 'Request failed. Please try again or email orders@operator.ink.');
       setSubmitStatus('error');
     } finally {
       setSubmitting(false);
-      setTimeout(() => setSubmitStatus(null), 5000);
+      setTimeout(() => {
+        setSubmitStatus(null);
+        setSubmitError(null);
+      }, 8000);
     }
   };
 
@@ -256,7 +291,10 @@ export default function IntakeForm() {
                 <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-bold">Something went wrong</p>
-                  <p className="text-xs mt-1 opacity-80">Please try again or email us directly at orders@operator.ink</p>
+                  {submitError && <p className="text-sm mt-1 opacity-90">{submitError}</p>}
+                  <p className="text-xs mt-2 opacity-80">
+                    Please try again or <a href={`mailto:orders@operator.ink?subject=System%20Initialization%20Request&body=Name:%20${encodeURIComponent(formData.clientName)}%0AEmail:%20${encodeURIComponent(formData.clientEmail)}%0ACompany:%20${encodeURIComponent(formData.company)}%0AService:%20${encodeURIComponent(formData.service)}%0AScope:%20${encodeURIComponent(formData.clientNeeds)}`} className="underline hover:opacity-90">email us directly</a> at orders@operator.ink
+                  </p>
                 </div>
               </>
             )}
@@ -401,29 +439,31 @@ export default function IntakeForm() {
         />
         <div className="flex justify-end mt-1">
           <span className={`text-xs ${formData.clientNeeds.trim().length < 20 && touched.clientNeeds ? 'text-red-400' : 'text-zinc-600'}`}>
-            {formData.clientNeeds.trim().length}/20 min
+            {formData.clientNeeds.trim().length}/20 characters minimum
           </span>
         </div>
       </FieldWrapper>
 
       {/* File Upload */}
       <FieldWrapper label="Attachments" sublabel="Optional — max 5 files, 10 MB each" error={errors.files}>
-        <div
-          className="relative rounded-2xl border border-dashed border-zinc-700 hover:border-zinc-500 transition-colors p-5 text-center cursor-pointer"
-          onClick={() => document.getElementById('file-upload').click()}
+        <label
+          htmlFor="intake-file-upload"
+          className="block relative rounded-2xl border border-dashed border-zinc-700 hover:border-zinc-500 transition-colors p-5 text-center cursor-pointer"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
         >
           <Upload className="w-6 h-6 text-zinc-500 mx-auto mb-2" />
           <p className="text-sm text-zinc-400">Click to upload or drag files here</p>
-          <p className="text-xs text-zinc-600 mt-1">PDF, DOCX, PNG, JPG, WEBP</p>
+          <p className="text-xs text-zinc-600 mt-1">PDF, DOCX, PNG, JPG, WEBP, HEIC</p>
           <input
-            id="file-upload"
+            id="intake-file-upload"
             type="file"
             multiple
-            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.webp"
+            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.webp,.heic,image/png,image/jpeg,image/webp,image/heic,application/pdf"
             onChange={handleFileAdd}
-            className="absolute inset-0 opacity-0 cursor-pointer"
+            className="sr-only"
           />
-        </div>
+        </label>
         {files.length > 0 && (
           <div className="mt-3 space-y-2">
             {files.map((file, idx) => (
