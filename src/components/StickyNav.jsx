@@ -49,24 +49,6 @@ export default function StickyNav({ currentPage = 'home' }) {
             Services
           </a>
           <a
-            href={createPageUrl('OpsBoard')}
-            className={`retro-link text-sm font-semibold ${currentPage === 'ops-board' ? 'border-b-[#00ccff]' : ''}`}
-          >
-            Ops Board
-          </a>
-          <a
-            href={createPageUrl('Dashboard')}
-            className={`retro-link text-sm font-semibold ${currentPage === 'dashboard' ? 'border-b-[#00ccff]' : ''}`}
-          >
-            Dashboard
-          </a>
-          <a
-            href={createPageUrl('Calls')}
-            className={`retro-link text-sm font-semibold ${currentPage === 'calls' ? 'border-b-[#00ccff]' : ''}`}
-          >
-            Calls
-          </a>
-          <a
             href={LINKEDIN_URL}
             target="_blank"
             rel="noopener noreferrer"
@@ -79,7 +61,7 @@ export default function StickyNav({ currentPage = 'home' }) {
             </svg>
           </a>
           <a
-            href={createPageUrl('OpsBoard')}
+            href={`${createPageUrl('Home')}#intake`}
             className="retro-rgb-btn hidden sm:inline-flex items-center justify-center px-5 h-9 rounded-full text-sm font-bold hover:opacity-95 transition-opacity"
           >
             Get Started
