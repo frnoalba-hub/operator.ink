@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, ArrowRight, Search, Zap, BarChart2, Globe } from 'lucide-react';
+import { Mail, ArrowRight, Search, Zap, BarChart2, Globe, MessageSquare, FileSearch, Wrench, Rocket } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 import IntakeForm from '../components/intake/IntakeForm';
@@ -93,9 +93,9 @@ export default function Home() {
             </div>
           </div>
           <div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight text-white mb-6">
-              Digital Operations<br />
-              <span className="retro-link-accent">&amp; Growth Systems.</span>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.1] tracking-tight text-white mb-4">
+              Digital Operations
+              <span className="retro-link-accent"> &amp; Growth Systems.</span>
             </h1>
             <p className="text-base sm:text-lg text-[var(--retro-text-muted)] max-w-xl">
               Premium website design, blazing-fast managed hosting, GEO/AEO search optimization, custom workflows, and intelligent AI agents. We build and maintain the digital infrastructure that scales your operations.
@@ -107,6 +107,53 @@ export default function Home() {
             </div>
           </div>
         </motion.header>
+
+        {/* CREATING WITH US — process */}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="mb-14 lg:mb-20"
+          aria-labelledby="process-heading"
+        >
+          <div className="flex items-center gap-2 mb-6">
+            <span className="w-2 h-2 rounded-full" style={{ background: 'var(--rgb-gradient)' }} />
+            <h2 id="process-heading" className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">
+              Creating With Us
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { icon: MessageSquare, step: '01', title: 'Brief', desc: 'Share your scope, goals, and constraints. We align on outcomes and timeline.' },
+              { icon: FileSearch, step: '02', title: 'Discovery', desc: 'We map your ops, audience, and tech. You get a clear deployment plan.' },
+              { icon: Wrench, step: '03', title: 'Build', desc: 'Sprints, check-ins, and iterative delivery. You see progress, we ship.' },
+              { icon: Rocket, step: '04', title: 'Launch', desc: 'Handoff, docs, and ongoing support. Systems active, you stay in control.' },
+            ].map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <motion.div
+                  key={item.step}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.15 + idx * 0.06 }}
+                  className="retro-card rounded-2xl p-5 lg:p-6"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-[var(--retro-border)]" style={{ background: 'var(--retro-bg-elevated)' }}>
+                      <Icon className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
+                    </div>
+                    <span className="text-[10px] font-mono text-[var(--retro-text-dim)]">{item.step}</span>
+                  </div>
+                  <h3 className="text-sm font-bold mb-1.5">{item.title}</h3>
+                  <p className="text-xs text-[var(--retro-text-muted)] leading-relaxed">{item.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+          <p className="text-xs text-[var(--retro-text-dim)] mt-4">
+            No endless discovery. No scope creep. We start with a Phase-0 Pilot when it fits — validate fast, then scale.
+          </p>
+        </motion.section>
 
         {/* FEATURED DEMO — clearly labeled */}
         <motion.section
