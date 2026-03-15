@@ -33,13 +33,13 @@ Build a modern, interactive web dashboard for managing patient admissions and be
 
 2. **Patient Cards** (must show **name** + **payer** + admission context)
    - Required: **Patient Name** (primary identifier)
-   - **Payer selection & tracking:** Pick Medicare, HMO, or Private per patient. Display and track on card.
+   - **Payer selection & tracking:** Pick Medicare, HMO, or Private per patient. Display and track on card. In SNFs, payer often changes mid-stay (e.g., Medicare for 20 days, then Private Pay). Add **Payer Switch** or **Benefit Verification** status in checklist.
    - Display: Facility (Building A/B/C), Payer (Medicare/HMO/Private), Task Progress (e.g., 2/4 checklist done)
    - **Status flags:** New, Prior Auth, Urgent, Complete. Mark Complete when finished; clear/discharge patient.
    - Click to open side panel for:
      * Facility assignment
      * Payer selection
-     * Stage checklist: Medication List, PASRR Level 1, Face-to-face scheduled, Financial clearance
+     * Stage checklist: Medication List, PASRR Level 1, Face-to-face scheduled, Financial clearance, Benefit Verification / Payer Switch
      * Notes
 
 3. **Analytics Page**
@@ -64,7 +64,8 @@ Build a modern, interactive web dashboard for managing patient admissions and be
 - **Admin account:** Views all coordinators, all pipelines, and metrics.
 
 **Additional Requirements:**
-- Payer selection & tracking — Medicare, HMO, Private per patient, visible on card
+- **Mobile-first admissions view** — Coordinators often walk the floor. Prioritize mobile experience for on-the-move use.
+- Payer selection & tracking — Medicare, HMO, Private per patient, visible on card; support payer switch mid-stay
 - Clearer data — filters, drill-down, export
 - Fully responsive SPA
 - Clean, modular, production-ready code
@@ -73,6 +74,18 @@ Build a modern, interactive web dashboard for managing patient admissions and be
 
 **Deliverable:**
 Interactive frontend demo showing pipeline, patient cards with names, side panel, and analytics.
+
+> **HIPAA / Security Note:** This demo uses **synthetic/mock data only**. No real PHI. Mentioning security early builds trust with facility stakeholders.
+
+**Phase-0 Scoping (for $3k pilot):**
+
+| Priority | Feature | Severity |
+|----------|---------|----------|
+| High | Drag-and-drop Pipeline (5 stages) | Structural |
+| High | Patient Cards with Payer Tracking | Critical |
+| Med | Multi-admin View (Coordinators vs. Admin) | UI/Logic |
+| Med | Analytics (Bed Forecast / Referral Counts) | UI |
+| Low | Export Functionality | UI |
 
 ---
 

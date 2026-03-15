@@ -70,10 +70,12 @@ export default function Demos() {
               <li>Stage checklist: Medication List, PASRR Level 1, Face-to-face scheduled, Financial clearance</li>
               <li><strong>Notifications:</strong> New referral alerts, stage-change alerts, pending-item reminders</li>
               <li><strong>Flags:</strong> New, Prior Auth, Urgent, Complete. Mark Complete when finished; clear patient.</li>
-              <li><strong>Payer selection</strong> — Medicare, HMO, or Private per patient, tracked on card</li>
-              <li><strong>Coordinators coordinate:</strong> See who has beds, message each other, share availability</li>
+              <li><strong>Payer selection</strong> — Medicare, HMO, Private; payer can switch mid-stay</li>
+              <li><strong>Coordinators coordinate:</strong> See who has beds, message each other</li>
               <li><strong>Admin:</strong> Views all coordinators + metrics</li>
-              <li><strong>Clearer data</strong> — filters, drill-down, export</li>
+              <li><strong>Mobile-first</strong> — coordinators walk the floor</li>
+              <li><strong>HIPAA:</strong> Demo uses synthetic data only; no PHI</li>
+              <li>Clearer data — filters, drill-down, export</li>
               <li>Analytics: Referrals, Admitted/Denied counts, bed forecast</li>
               <li>Quick-add new referral with patient name</li>
             </ul>
