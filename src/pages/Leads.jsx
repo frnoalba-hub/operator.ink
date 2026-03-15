@@ -6,6 +6,7 @@ import {
   Mail, Building2, Clock, DollarSign, FileText,
   Download, Eye, ChevronDown, ChevronUp, Paperclip, User
 } from 'lucide-react';
+import { usePageSEO } from '@/hooks/usePageSEO';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import moment from 'moment';
 
@@ -32,6 +33,9 @@ const TIMELINE_LABELS = {
   '3-plus': '3+ Months',
   'flexible': 'Flexible',
 };
+
+const LEADS_TITLE = 'Leads — Intake & CRM | Operator.ink';
+const LEADS_DESC = 'Operator.ink leads: Intake forms, CRM, lead management. Web design, GEO/AEO/SEO, AI workflows, ads inquiries. Track status, budget, timeline.';
 
 const STATUS_CONFIG = {
   'new':        { color: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/40', dot: 'bg-cyan-400' },
@@ -131,6 +135,7 @@ function AttachmentPreview({ url, index }) {
 }
 
 export default function Leads() {
+  usePageSEO(LEADS_TITLE, LEADS_DESC);
   const [expandedId, setExpandedId] = useState(null);
   const queryClient = useQueryClient();
 

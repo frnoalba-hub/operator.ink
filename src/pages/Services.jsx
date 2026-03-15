@@ -3,10 +3,13 @@ import { motion } from 'framer-motion';
 import { Globe, Search, Zap, BarChart2, ArrowRight, Check, Mail, Shield, Lock, FileCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { usePageSEO } from '@/hooks/usePageSEO';
 import StickyNav from '../components/StickyNav';
 import GridOverlay from '../components/GridOverlay';
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
+const SERVICES_TITLE = 'Services — Web Design, GEO, AEO & SEO, AI Workflows, Ads | Operator.ink';
+const SERVICES_DESC = 'Web design, GEO/AEO/SEO search optimization, AI workflows, ads & brand identity. Conversion-focused websites, generative engine optimization, answer engine optimization, local SEO, technical SEO.';
 
 const services = [
   {
@@ -108,6 +111,7 @@ const services = [
 ];
 
 export default function Services() {
+  usePageSEO(SERVICES_TITLE, SERVICES_DESC);
   return (
     <div className="min-h-screen retro-theme antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
 

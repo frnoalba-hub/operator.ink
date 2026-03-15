@@ -3,11 +3,16 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Check, LayoutDashboard, MessageSquare, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { usePageSEO } from '@/hooks/usePageSEO';
 import StickyNav from '../components/StickyNav';
 import GridOverlay from '../components/GridOverlay';
 import BackToHome from '../components/BackToHome';
 
+const PILOT_TITLE = 'Phase-0 Pilot — SNF Admissions & Bed Tracking | Nursing Facility Dashboard | Operator.ink';
+const PILOT_DESC = 'Phase-0 Pilot: Dual-role dashboard for nursing facilities. Admissions coordinators, Kanban pipeline, executive analytics. CensusBoard demo, real-time chat, AI workflow simulation. $3,999.';
+
 export default function Pilot() {
+  usePageSEO(PILOT_TITLE, PILOT_DESC);
   return (
     <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
       <GridOverlay />
@@ -123,13 +128,6 @@ export default function Pilot() {
             >
               Request Pilot <ArrowRight className="w-4 h-4" />
             </Link>
-            <a
-              href="mailto:orders@operator.ink?subject=Buy Templates ($199)"
-              className="retro-link inline-flex items-center justify-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold hover:border-[var(--retro-border-bright)]"
-              style={{ minHeight: '52px' }}
-            >
-              Buy Templates ($199)
-            </a>
           </div>
         </motion.section>
       </main>

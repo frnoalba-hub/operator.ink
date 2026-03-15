@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Upload, X, FileText, Image as ImageIcon, Check, AlertCircle } from 'lucide-react';
 import { createPageUrl } from '@/utils';
+import { usePageSEO } from '@/hooks/usePageSEO';
 import StickyNav from '../components/StickyNav';
 import GridOverlay from '../components/GridOverlay';
 import BackToHome from '../components/BackToHome';
@@ -19,7 +20,11 @@ function validateEmail(email) {
 
 const STORAGE_KEY = 'operator_portal_draft';
 
+const PORTAL_TITLE = 'Portal — Submit Project | Operator.ink';
+const PORTAL_DESC = 'Operator.ink portal: Submit your project brief, files, and get started. System initialization for web design, GEO/AEO/SEO, AI workflows, ads.';
+
 export default function Portal() {
+  usePageSEO(PORTAL_TITLE, PORTAL_DESC);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [projectName, setProjectName] = useState('');

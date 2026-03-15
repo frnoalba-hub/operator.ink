@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Mail, ArrowRight, Search, Zap, BarChart2, Globe, MessageSquare, FileSearch, Wrench, Rocket } from 'lucide-react';
 import { createPageUrl } from '@/utils';
+import { usePageSEO } from '@/hooks/usePageSEO';
 import StickyNav from '../components/StickyNav';
 import IntakeForm from '../components/intake/IntakeForm';
 
@@ -44,8 +45,12 @@ const PIPELINE_STAGES = [
   { id: 'denied', label: 'Discharged', patients: [] },
 ];
 
+const HOME_TITLE = 'Operator.ink — Digital Operations & Growth Systems | GEO, AEO, SEO, AI Workflows';
+const HOME_DESC = 'Operator.ink builds operational websites, GEO/AEO/SEO search strategies, AI workflows, and ads. Web design, local SEO, generative engine optimization, skilled nursing census tools.';
+
 export default function Home() {
   const [movingCardStage, setMovingCardStage] = useState(0);
+  usePageSEO(HOME_TITLE, HOME_DESC);
   useEffect(() => {
     const t = setInterval(() => {
       setMovingCardStage((s) => (s + 1) % 5);
