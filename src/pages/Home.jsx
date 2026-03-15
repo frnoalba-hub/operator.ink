@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, ArrowRight, Search, Zap, BarChart2, Globe, LayoutDashboard } from 'lucide-react';
+import { Mail, ArrowRight, Search, Zap, BarChart2, Globe, LayoutDashboard, Users, BarChart3 } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 import IntakeForm from '../components/intake/IntakeForm';
@@ -35,8 +35,22 @@ const capabilities = [
   }
 ];
 
+const PIPELINE_STAGES = [
+  { id: 'referral', label: 'Referral', patients: ['M. Johnson'] },
+  { id: 'clinical', label: 'Clinical', patients: [] },
+  { id: 'bed', label: 'Bed Offer', patients: ['L. Martinez'] },
+  { id: 'admitted', label: 'Admitted', patients: ['J. Williams'] },
+  { id: 'denied', label: 'Denied', patients: [] },
+];
+
 export default function Home() {
-  // Form state is now managed by IntakeForm component
+  const [movingCardStage, setMovingCardStage] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => {
+      setMovingCardStage((s) => (s + 1) % 5);
+    }, 2400);
+    return () => clearInterval(t);
+  }, []);
 
   return (
     <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
@@ -76,7 +90,7 @@ export default function Home() {
           </p>
         </motion.header>
 
-        {/* DEMOS — unified at top */}
+        {/* DEMOS — unified at top, animated card movement + Admission + View admins + Clear data */}
         <motion.section
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -87,35 +101,55 @@ export default function Home() {
             href={createPageUrl('Demos')}
             className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
           >
-            <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-              <div className="flex items-center gap-3 flex-shrink-0">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center retro-rgb-border" style={{ background: 'var(--retro-bg-elevated)' }}>
-                  <LayoutDashboard className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
+            <div className="p-4 sm:p-5 flex flex-col gap-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center retro-rgb-border" style={{ background: 'var(--retro-bg-elevated)' }}>
+                    <LayoutDashboard className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">Admissions</p>
+                    <h3 className="text-base font-bold group-hover:text-[#00ccff] transition-colors">Bed Tracking Dashboard</h3>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">Demo</p>
-                  <h3 className="text-base font-bold group-hover:text-[#00ccff] transition-colors">Admissions &amp; Bed Tracking Dashboard</h3>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 text-[10px] text-[var(--retro-text-dim)] bg-white/5 rounded-lg px-2 py-1 border border-white/5">
+                    <Users className="w-3 h-3" /> View all administrators
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-[10px] text-[var(--retro-text-dim)] bg-white/5 rounded-lg px-2 py-1 border border-white/5">
+                    <BarChart3 className="w-3 h-3" /> Clearer data
+                  </span>
                 </div>
               </div>
-              <div className="flex-1 min-w-0 flex gap-1.5 sm:gap-2">
-                {[
-                  { stage: 'Referral', patients: ['M. Johnson', 'R. Davis'] },
-                  { stage: 'Clinical', patients: ['T. Chen'] },
-                  { stage: 'Bed Offer', patients: ['L. Martinez'] },
-                  { stage: 'Admitted', patients: ['J. Williams'] },
-                  { stage: 'Denied', patients: [] },
-                ].map((col, i) => (
-                  <div key={i} className="flex-1 min-w-0 rounded-lg bg-black/40 border border-white/5 p-1.5 sm:p-2">
-                    <p className="text-[8px] sm:text-[9px] text-white/40 truncate mb-1">{col.stage}</p>
-                    {col.patients.length ? col.patients.map((name, j) => (
-                      <div key={j} className="text-[9px] sm:text-[10px] text-white/80 truncate py-0.5 px-1 rounded bg-white/5 mb-0.5">{name}</div>
-                    )) : (
-                      <p className="text-[8px] text-white/25 italic">—</p>
-                    )}
+              <div className="flex gap-1.5 sm:gap-2 min-h-[72px]">
+                {PIPELINE_STAGES.map((col, i) => (
+                  <div key={col.id} className="flex-1 min-w-0 rounded-lg bg-black/40 border border-white/5 p-1.5 sm:p-2 relative">
+                    <p className="text-[8px] sm:text-[9px] text-white/40 truncate mb-1">{col.label}</p>
+                    <div className="space-y-0.5">
+                      {col.patients.map((name) => (
+                        <div key={name} className="text-[9px] sm:text-[10px] text-white/80 truncate py-0.5 px-1 rounded bg-white/5">{name}</div>
+                      ))}
+                      {i === movingCardStage && (
+                        <motion.div
+                          key="moving"
+                          initial={{ opacity: 0, scale: 0.9, y: 4 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          transition={{ duration: 0.3 }}
+                          className="text-[9px] sm:text-[10px] text-[#00ccff] truncate py-0.5 px-1 rounded bg-[#00ccff]/10 border border-[#00ccff]/30"
+                        >
+                          R. Davis →
+                        </motion.div>
+                      )}
+                      {col.patients.length === 0 && i !== movingCardStage && (
+                        <p className="text-[8px] text-white/25 italic">—</p>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
-              <div className="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-t-0 sm:border-l border-[var(--retro-border)] pt-3 sm:pt-0 sm:pl-4">
+              <p className="text-[9px] text-[var(--retro-text-dim)]">Drag cards between stages • Admission workflow</p>
+              <div className="flex items-center justify-between pt-1 border-t border-[var(--retro-border)]">
                 <span className="text-[10px] text-[var(--retro-text-dim)]">Pipeline • Notifications • $3k pilot</span>
                 <span className="text-sm font-semibold retro-link inline-flex items-center gap-1">
                   View brief <ArrowRight className="w-3.5 h-3.5" />

@@ -69,6 +69,8 @@ export default function Demos() {
               <li><strong>Patient cards: Name</strong> (required), Facility, Payer, Task progress. Click for side panel</li>
               <li>Stage checklist: Medication List, PASRR Level 1, Face-to-face scheduled, Financial clearance</li>
               <li><strong>Notifications:</strong> New referral alerts, stage-change alerts, pending-item reminders</li>
+              <li><strong>View all administrators</strong> — see all coordinators' pipelines</li>
+              <li><strong>Clearer data</strong> — filters, drill-down, export</li>
               <li>Analytics: Referrals, Admitted/Denied counts, bed forecast</li>
               <li>Quick-add new referral with patient name</li>
             </ul>

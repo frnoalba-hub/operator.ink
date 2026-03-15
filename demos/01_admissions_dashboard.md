@@ -55,6 +55,8 @@ Build a modern, interactive web dashboard for managing patient admissions and be
    - Quick-add to insert a patient (with **name**) into Referral Received
 
 **Additional Requirements:**
+- View all administrators — admin dashboard or toggle to see all coordinators' pipelines
+- Clearer data — better visibility: filters, drill-down, export
 - Fully responsive SPA
 - Clean, modular, production-ready code
 - Side panel / drawer for managing patient details
