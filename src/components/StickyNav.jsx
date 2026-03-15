@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPageUrl } from '@/utils';
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a891df439583825e4f7f0e/cc3b199f0_Untitled5.png";
+const LOGO_URL = "/operator-logo.png";
 const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
 
 export default function StickyNav({ currentPage = 'home' }) {
@@ -34,7 +34,7 @@ export default function StickyNav({ currentPage = 'home' }) {
           <img
             src={LOGO_URL}
             alt="Operator.ink"
-            className="h-8 md:h-10 w-auto object-contain"
+            className="h-14 sm:h-16 min-h-[48px] w-auto object-contain"
           />
         </a>
         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0 flex-1 justify-end">
