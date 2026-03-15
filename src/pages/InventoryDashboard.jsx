@@ -6,45 +6,45 @@ import StickyNav from '../components/StickyNav';
 
 // Mock Data: Dental Instruments
 const MOCK_INVENTORY = [
-  { id: 1, sku: 'EXP-01', name: 'Explorer Probe (Standard)', stock: 150, cost: 4.50, price: 12.00 },
-  { id: 2, sku: 'MIR-02', name: 'Mouth Mirror (#4)', stock: 300, cost: 2.00, price: 8.50 },
-  { id: 3, sku: 'SCL-03', name: 'Sickle Scaler (H6/H7)', stock: 85, cost: 15.00, price: 35.00 },
-  { id: 4, sku: 'TWZ-04', name: 'Cotton Pliers (Locking)', stock: 120, cost: 5.00, price: 14.00 },
-  { id: 5, sku: 'SYR-05', name: 'Aspirating Syringe', stock: 45, cost: 25.00, price: 60.00 },
-  { id: 6, sku: 'DRL-06', name: 'High-Speed Handpiece', stock: 12, cost: 150.00, price: 399.00 },
+  { id: 1, sku: 'GEN-01', name: 'Standard Instrument A', stock: 150, price: 10.00 },
+  { id: 2, sku: 'GEN-02', name: 'Disposable Item B', stock: 300, price: 5.00 },
+  { id: 3, sku: 'GEN-03', name: 'Specialty Tool C', stock: 85, price: 30.00 },
+  { id: 4, sku: 'GEN-04', name: 'Common Supply D', stock: 120, price: 15.00 },
+  { id: 5, sku: 'GEN-05', name: 'Advanced Equipment E', stock: 45, price: 50.00 },
+  { id: 6, sku: 'GEN-06', name: 'Premium Device F', stock: 12, price: 299.00 },
 ];
 
 const MOCK_ORDERS = [
   { 
     id: 'ORD-1001', 
-    client: 'Downtown Dental P.C.', 
+    client: 'Local Clinic A', 
     date: '2026-03-14', 
     status: 'shipped', 
     payment: 'unpaid', 
-    total: 240.00, 
-    items: [{ sku: 'SYR-05', qty: 4 }],
+    total: 200.00, 
+    items: [{ sku: 'GEN-05', qty: 4 }],
     tracking: '1Z9999999999999999',
     carrier: 'UPS'
   },
   { 
     id: 'ORD-1002', 
-    client: 'Smile Family Clinic', 
+    client: 'Regional Practice B', 
     date: '2026-03-15', 
     status: 'delayed', 
     payment: 'paid', 
-    total: 102.00, 
-    items: [{ sku: 'MIR-02', qty: 12 }],
+    total: 60.00, 
+    items: [{ sku: 'GEN-02', qty: 12 }],
     tracking: '9400100000000000000000',
     carrier: 'USPS'
   },
   { 
     id: 'ORD-1003', 
-    client: 'Apex Endodontics', 
+    client: 'Dental Group C', 
     date: '2026-03-15', 
     status: 'processing', 
     payment: 'unpaid', 
-    total: 1596.00, 
-    items: [{ sku: 'DRL-06', qty: 4 }],
+    total: 1196.00, 
+    items: [{ sku: 'GEN-06', qty: 4 }],
     tracking: null,
     carrier: null
   },
@@ -190,12 +190,8 @@ export default function InventoryDashboard() {
                     <h3 className="font-bold text-sm leading-snug">{item.name}</h3>
                   </div>
                   <div className="flex justify-between items-center pt-4 border-t border-[var(--retro-border)]">
-                    <div>
-                      <p className="text-[10px] text-[var(--retro-text-dim)] uppercase tracking-wider">Cost</p>
-                      <p className="font-medium text-sm text-[var(--retro-text-muted)]">${item.cost.toFixed(2)}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-[10px] text-[var(--retro-text-dim)] uppercase tracking-wider">Price</p>
+                    <div className="text-right ml-auto">
+                      <p className="text-[10px] text-[var(--retro-text-dim)] uppercase tracking-wider">Retail Price</p>
                       <p className="font-bold text-sm">${item.price.toFixed(2)}</p>
                     </div>
                   </div>
