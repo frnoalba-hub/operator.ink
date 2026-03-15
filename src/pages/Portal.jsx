@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Upload, X, FileText, Image as ImageIcon, Check, AlertCircle } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
@@ -292,7 +293,7 @@ export default function Portal() {
               {submitting ? 'Submitting…' : 'Submit & create project'} <Check className="w-4 h-4" />
             </button>
             <p className="text-xs text-[var(--retro-text-dim)] mt-3 text-center">
-              We&apos;ll create your account and workspace. Need service, budget & timeline? <a href={`${createPageUrl('Home')}#intake`} className="retro-link">System Initialization</a>
+              We&apos;ll create your account and workspace. Need service, budget & timeline? <Link to={`${createPageUrl('Home')}#intake`} className="retro-link">System Initialization</Link>
             </p>
           </div>
         </motion.form>

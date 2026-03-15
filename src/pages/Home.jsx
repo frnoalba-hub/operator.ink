@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Mail, ArrowRight, Search, Zap, BarChart2, Globe, MessageSquare, FileSearch, Wrench, Rocket } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
@@ -101,9 +102,9 @@ export default function Home() {
               Premium website design, blazing-fast managed hosting, GEO/AEO search optimization, custom workflows, and intelligent AI agents. We build and maintain the digital infrastructure that scales your operations.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-               <a href={createPageUrl('Portal')} className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto">
+               <Link to={createPageUrl('Portal')} className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto">
                  Client Portal <ArrowRight className="w-4 h-4 ml-2" />
-               </a>
+               </Link>
                <a href="#intake" className="retro-link inline-flex items-center justify-center px-6 h-12 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)] w-full sm:w-auto">
                  System Initialization
                </a>
@@ -175,8 +176,8 @@ export default function Home() {
           <p className="text-sm text-[var(--retro-text-muted)] mb-4 max-w-xl">
             Admissions dashboard for skilled nursing. Pick payer (Medicare, HMO, Private), use flags (Prior Auth, Urgent, Complete). Coordinators coordinate—see who has beds, message each other. Admins view all + metrics. Finish & clear patients.
           </p>
-          <a
-            href={createPageUrl('Pilot')}
+          <Link
+            to={createPageUrl('Pilot')}
             className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
           >
             <div className="p-4 sm:p-5">
@@ -238,7 +239,7 @@ export default function Home() {
                 View full brief <ArrowRight className="w-3.5 h-3.5" />
               </span>
             </div>
-          </a>
+          </Link>
         </motion.section>
 
         {/* CTAs + Why Operator.ink */}
@@ -253,9 +254,9 @@ export default function Home() {
               <a href="#intake" className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-6 rounded-xl text-sm hover:opacity-95" style={{ minHeight: '48px' }}>
                 Deploy Request <ArrowRight className="w-4 h-4" />
               </a>
-              <a href={createPageUrl('Services')} className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }}>
+              <Link to={createPageUrl('Services')} className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }}>
                 Services
-              </a>
+              </Link>
               <a href="mailto:orders@operator.ink" className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }}>
                 <Mail className="w-4 h-4 opacity-70" /> orders@operator.ink
               </a>
@@ -276,7 +277,7 @@ export default function Home() {
                 Start Initialization
               </a>
               <p className="text-xs text-[var(--retro-text-muted)] mt-3 pt-3 border-t border-[var(--retro-border)]">
-                Phase-0 Pilot $3,999 → <a href={createPageUrl('Pilot')} className="retro-link">Pilot</a>
+                Phase-0 Pilot $3,999 → <Link to={createPageUrl('Pilot')} className="retro-link">Pilot</Link>
               </p>
             </div>
           </div>

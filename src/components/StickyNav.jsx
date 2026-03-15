@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
 const LOGO_URL = "/operator-logo.png";
@@ -34,29 +35,29 @@ export default function StickyNav({ currentPage = 'home' }) {
       }}
     >
       <div className="w-full max-w-7xl mx-auto px-2 sm:px-8 lg:px-12 flex items-center h-16 gap-2 sm:gap-6">
-        <a
-          href={createPageUrl('Home')}
+        <Link
+          to={createPageUrl('Home')}
           className="flex-shrink-0 transition-opacity hover:opacity-90"
         >
           <span className="text-lg sm:text-2xl font-extrabold tracking-tighter text-white">
             Operator<span className="retro-link-accent">.ink</span>
           </span>
-        </a>
+        </Link>
         <div className="flex-1 min-w-0" />
         <div className="flex items-center gap-0.5 sm:gap-2 overflow-x-auto scrollbar-hide -mr-2 pr-2 sm:mr-0 sm:pr-0">
-          <a href={createPageUrl('Home')} className={navLinkClass(currentPage === 'home')}>
+          <Link to={createPageUrl('Home')} className={navLinkClass(currentPage === 'home')}>
             Home
-          </a>
-          <a href={createPageUrl('Services')} className={navLinkClass(currentPage === 'services')}>
+          </Link>
+          <Link to={createPageUrl('Services')} className={navLinkClass(currentPage === 'services')}>
             Services
-          </a>
+          </Link>
 
-          <a href={createPageUrl('Pilot')} className={navLinkClass(currentPage === 'pilot')}>
+          <Link to={createPageUrl('Pilot')} className={navLinkClass(currentPage === 'pilot')}>
             Pilot
-          </a>
-          <a href={createPageUrl('Portal')} className={navLinkClass(currentPage === 'portal')}>
+          </Link>
+          <Link to={createPageUrl('Portal')} className={navLinkClass(currentPage === 'portal')}>
             Portal
-          </a>
+          </Link>
           <div className="w-px h-6 bg-white/10 mx-1 hidden sm:block" aria-hidden />
           <a
             href={LINKEDIN_URL}
@@ -69,12 +70,12 @@ export default function StickyNav({ currentPage = 'home' }) {
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
             </svg>
           </a>
-          <a
-            href={`${createPageUrl('Home')}#intake`}
+          <Link
+            to={`${createPageUrl('Home')}#intake`}
             className="retro-rgb-btn hidden sm:inline-flex items-center justify-center min-h-[40px] px-6 py-2.5 rounded-lg text-sm font-bold hover:opacity-95 transition-all duration-200"
           >
             Get Started
-          </a>
+          </Link>
         </div>
       </div>
     </motion.nav>

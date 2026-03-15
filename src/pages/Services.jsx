@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Globe, Search, Zap, BarChart2, ArrowRight, Check, Mail, Shield, Lock, FileCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 import GridOverlay from '../components/GridOverlay';
@@ -250,12 +251,12 @@ export default function Services() {
           <h2 className="text-3xl lg:text-4xl font-extrabold mb-4">Ready to Deploy?</h2>
           <p className="text-[var(--retro-text-muted)] mb-8 max-w-xl mx-auto">Tell us your scope and we'll return a custom deployment plan with timeline and pricing.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a
-              href={`${createPageUrl('Home')}#intake`}
+            <Link
+              to={`${createPageUrl('Home')}#intake`}
               className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-extrabold text-base hover:opacity-95 transition-opacity"
             >
               Initialize Project <ArrowRight className="w-4 h-4" />
-            </a>
+            </Link>
             <a
               href="mailto:orders@operator.ink"
               className="retro-link inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl border font-semibold text-base transition-colors"

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check, LayoutDashboard, MessageSquare, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 import GridOverlay from '../components/GridOverlay';
@@ -115,13 +116,13 @@ export default function Pilot() {
           <p className="text-sm text-[var(--retro-text-muted)] mb-2">Up to 10 users. Fully interactive dual-role dashboard.</p>
           <p className="text-xs text-[var(--retro-text-dim)] mb-6 italic">Customization and data integration may increase price up to $4,500.</p>
           <div className="flex flex-col sm:flex-row gap-3">
-            <a
-              href={`${createPageUrl('Home')}#intake`}
+            <Link
+              to={`${createPageUrl('Home')}#intake`}
               className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-8 rounded-xl text-base font-bold hover:opacity-95"
               style={{ minHeight: '52px' }}
             >
               Request Pilot <ArrowRight className="w-4 h-4" />
-            </a>
+            </Link>
             <a
               href="mailto:orders@operator.ink?subject=Buy Templates ($199)"
               className="retro-link inline-flex items-center justify-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold hover:border-[var(--retro-border-bright)]"
