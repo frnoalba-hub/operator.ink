@@ -24,8 +24,27 @@ export default function Pilot() {
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.08] tracking-tight mb-4">
             Phase-0 Pilot: Dual-Role Dashboard for Nursing Facilities
           </h1>
+          <p className="text-lg text-[var(--retro-text-muted)] mb-4">
+            Interactive demo with real-time analytics, workflow boards, and onboarding. Up to 10 users.
+          </p>
           <p className="text-2xl font-bold retro-link-accent mb-2">$3,999</p>
-          <p className="text-sm text-[var(--retro-text-muted)]">Up to 10 users included</p>
+          <p className="text-sm text-[var(--retro-text-muted)] mb-6">Up to 10 users included</p>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href={`${createPageUrl('Home')}#intake`}
+              className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-6 rounded-xl text-base font-bold hover:opacity-95"
+              style={{ minHeight: '52px' }}
+            >
+              Request Pilot <ArrowRight className="w-4 h-4" />
+            </a>
+            <a
+              href="mailto:orders@operator.ink?subject=Buy Templates ($199)"
+              className="retro-link inline-flex items-center justify-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold hover:border-[var(--retro-border-bright)]"
+              style={{ minHeight: '52px' }}
+            >
+              Buy Templates ($199)
+            </a>
+          </div>
         </motion.header>
 
         {/* What You Get */}
@@ -111,22 +130,30 @@ export default function Pilot() {
         >
           <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-2">Phase-0 Pilot</p>
           <p className="text-4xl font-extrabold mb-1">$3,999</p>
-          <p className="text-sm text-[var(--retro-text-muted)] mb-4">Max 10 users included.</p>
-          <p className="text-xs text-[var(--retro-text-dim)] mb-6">Interactive demo, dummy/client data, docs, feedback form. Sign up → provide data → review → optional Phase-1.</p>
+          <p className="text-sm text-[var(--retro-text-muted)] mb-2">Up to 10 users. Fully interactive dual-role dashboard with analytics, workflow simulation, and onboarding.</p>
+          <p className="text-xs text-[var(--retro-text-dim)] mb-6 italic">Customization and data integration may increase price up to $4,500.</p>
+          <ul className="text-sm text-[var(--retro-text-muted)] space-y-1 mb-6">
+            <li>Dual-role dashboard (Coordinator + Executive)</li>
+            <li>Interactive Kanban patient board</li>
+            <li>Real-time contextual chat</li>
+            <li>Analytics: Bed Forecast, Payer Mix, Bottleneck Alerts</li>
+            <li>Simulated AI/agent activity</li>
+            <li>Onboarding walkthrough</li>
+          </ul>
           <div className="flex flex-col sm:flex-row gap-3">
             <a
-              href="mailto:orders@operator.ink?subject=Phase-0 Pilot: Schedule Kickoff"
-              className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-8 rounded-xl text-base hover:opacity-95"
+              href={`${createPageUrl('Home')}#intake`}
+              className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-8 rounded-xl text-base font-bold hover:opacity-95"
               style={{ minHeight: '52px' }}
             >
-              Schedule Pilot Kickoff <ArrowRight className="w-4 h-4" />
+              Request Pilot <ArrowRight className="w-4 h-4" />
             </a>
             <a
-              href={createPageUrl('Demos')}
-              className="retro-link inline-flex items-center justify-center gap-2 px-8 rounded-xl border border-[var(--retro-border)] font-semibold hover:border-[var(--retro-border-bright)]"
+              href="mailto:orders@operator.ink?subject=Buy Templates ($199)"
+              className="retro-link inline-flex items-center justify-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold hover:border-[var(--retro-border-bright)]"
               style={{ minHeight: '52px' }}
             >
-              View Project Brief
+              Buy Templates ($199)
             </a>
           </div>
         </motion.section>

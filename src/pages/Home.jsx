@@ -176,7 +176,7 @@ export default function Home() {
             Admissions dashboard for skilled nursing. Pick payer (Medicare, HMO, Private), use flags (Prior Auth, Urgent, Complete). Coordinators coordinate—see who has beds, message each other. Admins view all + metrics. Finish & clear patients.
           </p>
           <a
-            href={createPageUrl('Demos')}
+            href={createPageUrl('Pilot')}
             className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
           >
             <div className="p-4 sm:p-5">
