@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingCart, Calendar, MessageCircle, Search, Plus, Filter, AlertCircle, CheckCircle2, Truck, CreditCard, ChevronRight, X } from 'lucide-react';
+import { Package, ShoppingCart, Calendar, MessageCircle, Search, Plus, Filter, AlertCircle, CheckCircle2, Truck, CreditCard, ChevronRight, X, Mail, Bell } from 'lucide-react';
 import GridOverlay from '../components/GridOverlay';
 import StickyNav from '../components/StickyNav';
 
@@ -50,6 +50,13 @@ const MOCK_ORDERS = [
   },
 ];
 
+const MOCK_INBOX = [
+  { id: 'msg-1', type: 'whatsapp', sender: 'Dr. Smith (Dental Group C)', time: '10 mins ago', snippet: 'Can we add 2 more Premium Devices to ORD-1003 before it ships?', unread: true },
+  { id: 'msg-2', type: 'email', source: 'Gmail parser', sender: 'orders@localclinic.com', time: '1 hour ago', snippet: 'New Purchase Order attached for 10 Standard Instruments. Please confirm.', unread: true },
+  { id: 'msg-3', type: 'alert', sender: 'System (Stripe)', time: '2 hours ago', snippet: 'Action Required: Payment failed for Regional Practice B. Click to send reminder.', unread: true },
+  { id: 'msg-4', type: 'email', source: 'Yahoo Mail', sender: 'billing@smilefamily.com', time: '1 day ago', snippet: 'Thank you, invoice paid. Receipt requested.', unread: false }
+];
+
 export default function InventoryDashboard() {
   const [activeTab, setActiveTab] = useState('orders'); // 'orders' | 'inventory'
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -78,8 +85,11 @@ export default function InventoryDashboard() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight mb-1">Command Center</h1>
-            <p className="text-sm text-[var(--retro-text-muted)]">Manage inventory, orders, and logistics.</p>
+            <div className="flex items-center gap-3 mb-1">
+              <h1 className="text-3xl font-extrabold tracking-tight">Dashboard Demo</h1>
+              <span className="text-[10px] uppercase font-bold tracking-widest bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 px-2 py-0.5 rounded-full">Active</span>
+            </div>
+            <p className="text-sm text-[var(--retro-text-muted)]">Manage inventory, orders, and incoming communications.</p>
           </div>
           <div className="flex gap-2">
             <button className="retro-rgb-btn flex items-center justify-center w-10 h-10 rounded-xl" title="New Order/Scan">
@@ -104,6 +114,13 @@ export default function InventoryDashboard() {
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'inventory' ? 'bg-[var(--retro-bg)] text-[var(--retro-text)] shadow-sm' : 'text-[var(--retro-text-muted)] hover:text-[var(--retro-text)]'}`}
           >
             Inventory
+          </button>
+          <button 
+            onClick={() => setActiveTab('inbox')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'inbox' ? 'bg-[var(--retro-bg)] text-[var(--retro-text)] shadow-sm' : 'text-[var(--retro-text-muted)] hover:text-[var(--retro-text)]'}`}
+          >
+            Inbox
+            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] font-bold">3</span>
           </button>
         </div>
 
@@ -166,7 +183,7 @@ export default function InventoryDashboard() {
                 </div>
               ))}
             </motion.div>
-          ) : (
+          ) : activeTab === 'inventory' ? (
             <motion.div 
               key="inventory"
               initial={{ opacity: 0, y: 10 }}
@@ -198,7 +215,60 @@ export default function InventoryDashboard() {
                 </div>
               ))}
             </motion.div>
-          )}
+          ) : activeTab === 'inbox' ? (
+            <motion.div 
+              key="inbox"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="space-y-4"
+            >
+              {MOCK_INBOX.map((msg) => (
+                <div 
+                  key={msg.id} 
+                  className={`retro-card rounded-2xl p-5 border cursor-pointer transition-all group ${msg.unread ? 'border-[var(--retro-border-bright)] bg-[var(--retro-bg-elevated)]' : 'border-[var(--retro-border)] opacity-70'}`}
+                >
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 mt-1">
+                      {msg.type === 'whatsapp' && (
+                        <div className="w-10 h-10 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center border border-[#25D366]/20">
+                          <MessageCircle className="w-5 h-5" />
+                        </div>
+                      )}
+                      {msg.type === 'email' && (
+                        <div className="w-10 h-10 rounded-full bg-cyan-400/10 text-cyan-400 flex items-center justify-center border border-cyan-400/20">
+                          <Mail className="w-5 h-5" />
+                        </div>
+                      )}
+                      {msg.type === 'alert' && (
+                        <div className="w-10 h-10 rounded-full bg-rose-400/10 text-rose-400 flex items-center justify-center border border-rose-400/20">
+                          <Bell className="w-5 h-5" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start mb-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-bold text-sm truncate">{msg.sender}</h3>
+                          {msg.unread && <span className="w-2 h-2 rounded-full bg-rose-500 flex-shrink-0" />}
+                        </div>
+                        <span className="text-[10px] text-[var(--retro-text-dim)] font-bold tracking-wider uppercase whitespace-nowrap ml-2">{msg.time}</span>
+                      </div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--retro-text-dim)]">
+                          {msg.type === 'email' ? msg.source : msg.type === 'whatsapp' ? 'WhatsApp Business' : 'Internal Alert'}
+                        </span>
+                      </div>
+                      <p className={`text-sm line-clamp-2 ${msg.unread ? 'text-[var(--retro-text)]' : 'text-[var(--retro-text-muted)]'}`}>
+                        {msg.snippet}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          ) : null}
         </AnimatePresence>
       </main>
 
