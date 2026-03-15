@@ -145,6 +145,29 @@ export default function Home() {
           </div>
         </motion.header>
 
+        {/* Small Demo Preview — mini pipeline mockup */}
+        <motion.a
+          href={createPageUrl('Demos')}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+          className="block mb-16 lg:mb-20"
+        >
+          <div className="retro-card rounded-2xl overflow-hidden p-3 border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-colors group">
+            <p className="text-[10px] uppercase tracking-widest text-[var(--retro-text-dim)] px-2 py-1 mb-2">Demo preview — Admissions Dashboard</p>
+            <div className="flex gap-2 min-h-[80px]">
+              {['Referral', 'Clinical', 'Bed Offer', 'Admitted', 'Denied'].map((col, i) => (
+                <div key={i} className="flex-1 min-w-0 rounded-lg bg-black/30 border border-white/5 p-2">
+                  <p className="text-[9px] text-white/40 truncate mb-1">{col}</p>
+                  <div className="h-5 rounded bg-white/5 mb-1" />
+                  <div className="h-5 rounded bg-white/5 w-3/4" />
+                </div>
+              ))}
+            </div>
+            <p className="text-[10px] text-[var(--retro-text-dim)] mt-2 px-2 group-hover:text-[var(--retro-border-bright)] transition-colors">View full demo brief →</p>
+          </div>
+        </motion.a>
+
         {/* CAPABILITIES BENTO GRID */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
