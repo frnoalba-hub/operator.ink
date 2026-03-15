@@ -1,7 +1,7 @@
 # Admissions Dashboard — Technical Implementation Plan
 
 **Stack:** React + Vite, Tailwind CSS, Framer Motion, Lucide icons  
-**Scope:** Phase-0 Pilot ($3k) — Interactive frontend demo, synthetic data only.
+**Scope:** Phase-0 Pilot ($3,999) — Interactive frontend demo, synthetic data only.
 
 ---
 

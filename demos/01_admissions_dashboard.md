@@ -77,7 +77,7 @@ Interactive frontend demo showing pipeline, patient cards with names, side panel
 
 > **HIPAA / Security Note:** This demo uses **synthetic/mock data only**. No real PHI. Mentioning security early builds trust with facility stakeholders.
 
-**Phase-0 Scoping (for $3k pilot):**
+**Phase-0 Scoping (for $3,999 pilot):**
 
 | Priority | Feature | Severity |
 |----------|---------|----------|

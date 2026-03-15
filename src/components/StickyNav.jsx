@@ -26,16 +26,18 @@ export default function StickyNav({ currentPage = 'home' }) {
         borderBottom: scrolled ? '1px solid var(--retro-border)' : '1px solid transparent',
       }}
     >
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex items-center justify-between h-16">
-        <a href={createPageUrl('Home')}>
+      <div className="w-full mx-auto px-5 sm:px-8 lg:px-12 flex items-center h-16 relative">
+        <div className="flex-1 flex items-center">
+          {/* Left spacer to balance the flex layout */}
+        </div>
+        <a href={createPageUrl('Home')} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <img
             src={LOGO_URL}
             alt="Operator.ink"
-            className="h-auto object-contain"
-            style={{ width: '240px', maxWidth: '40vw' }}
+            className="h-8 md:h-10 w-auto object-contain"
           />
         </a>
-        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0 flex-1 justify-end">
           <a
             href={createPageUrl('Home')}
             className={`retro-link text-sm font-semibold ${currentPage === 'home' ? 'border-b-[var(--retro-border-bright)]' : ''}`}
@@ -53,6 +55,12 @@ export default function StickyNav({ currentPage = 'home' }) {
             className={`retro-link text-sm font-semibold ${currentPage === 'demos' ? 'border-b-[#00ccff]' : ''}`}
           >
             Demos
+          </a>
+          <a
+            href={createPageUrl('Pilot')}
+            className={`retro-link text-sm font-semibold ${currentPage === 'pilot' ? 'border-b-[#00ccff]' : ''}`}
+          >
+            Pilot
           </a>
           <a
             href={LINKEDIN_URL}

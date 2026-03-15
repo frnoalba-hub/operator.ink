@@ -82,16 +82,25 @@ export default function Demos() {
             <p><strong>Deliverable:</strong> Interactive demo with pipeline, name-based patient cards, notifications, side panel, analytics.</p>
           </div>
           <div className="mt-8 pt-6 border-t border-[var(--retro-border)]">
-            <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-2">Phase-0 Pilot — $3,000</p>
+            <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-2">Phase-0 Pilot — $3,999</p>
             <p className="text-sm text-[var(--retro-text-muted)] mb-3">Discovery → tailored deployment → working demo → observation → report. Proven framework, measurable outcomes. Limited slots.</p>
           </div>
-          <a
-            href="mailto:orders@operator.ink?subject=Demo Request: Admissions Dashboard"
-            className="retro-rgb-btn mt-8 inline-flex items-center justify-center gap-2 px-6 rounded-xl text-sm"
-            style={{ minHeight: '48px' }}
-          >
-            <Mail className="w-4 h-4" /> Request This Demo
-          </a>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a
+              href={createPageUrl('Pilot')}
+              className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-6 rounded-xl text-sm"
+              style={{ minHeight: '48px' }}
+            >
+              Phase-0 Pilot — Schedule Kickoff
+            </a>
+            <a
+              href="mailto:orders@operator.ink?subject=Demo Request: Admissions Dashboard"
+              className="retro-link inline-flex items-center justify-center gap-2 px-6 rounded-xl text-sm border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)]"
+              style={{ minHeight: '48px' }}
+            >
+              <Mail className="w-4 h-4" /> Request This Demo
+            </a>
+          </div>
         </motion.article>
 
         <motion.p

@@ -208,7 +208,7 @@ export default function Home() {
                 Start Initialization
               </a>
               <p className="text-[10px] text-[var(--retro-text-dim)] mt-3 pt-3 border-t border-[var(--retro-border)]">
-                Phase-0 Pilot $3k → <a href={createPageUrl('Demos')} className="retro-link">demos</a>
+                Phase-0 Pilot $3,999 → <a href={createPageUrl('Pilot')} className="retro-link">Pilot</a>
               </p>
             </div>
           </div>
