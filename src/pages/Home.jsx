@@ -84,8 +84,8 @@ export default function Home() {
             Digital Operations<br />
             <span className="retro-link-accent">&amp; Growth Systems.</span>
           </h1>
-          <p className="mt-4 text-base text-[var(--retro-text-muted)] max-w-lg">
-            Operational websites, GEO/AEO search, workflows, AI agents.
+          <p className="mt-4 text-base sm:text-lg text-[var(--retro-text-muted)] max-w-2xl">
+            Premium website design, blazing-fast managed hosting, GEO/AEO search optimization, custom workflows, and intelligent AI agents. We build and maintain the digital infrastructure that scales your operations.
           </p>
         </motion.header>
 
@@ -196,7 +196,7 @@ export default function Home() {
             <div className="retro-card rounded-2xl p-6">
               <h3 className="text-base font-bold mb-3">Why Operator.ink</h3>
               <ul className="space-y-2 text-sm text-[var(--retro-text-muted)]">
-                {["Conversion-focused sites.", "GEO + AEO search.", "Agents & workflows.", "Precision ads."].map((item, i) => (
+                {["Premium website design.", "Managed fast hosting.", "Conversion-focused sites.", "GEO + AEO search.", "Agents & workflows.", "Precision ads."].map((item, i) => (
                   <li key={i} className="flex items-center gap-2">
                     <span className="w-1 h-1 rounded-full" style={{ background: 'var(--rgb-gradient)' }} />
                     {item}
