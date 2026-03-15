@@ -38,11 +38,9 @@ export default function StickyNav({ currentPage = 'home' }) {
           href={createPageUrl('Home')}
           className="flex-shrink-0 transition-opacity hover:opacity-90"
         >
-          <img
-            src={LOGO_URL}
-            alt="Operator.ink"
-            className="h-9 sm:h-10 w-auto object-contain"
-          />
+          <span className="text-xl sm:text-2xl font-extrabold tracking-tighter text-white">
+            Operator<span className="retro-link-accent">.ink</span>
+          </span>
         </a>
         <div className="flex-1 min-w-0" />
         <div className="flex items-center gap-1 sm:gap-2">
