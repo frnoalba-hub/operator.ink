@@ -74,14 +74,21 @@ export default function Home() {
 
       <main id="main" className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-24 pb-10 lg:pb-16">
 
-        {/* HERO — Digital Operations left, Operator.ink logo right */}
+        {/* HERO — Operator.ink logo left, Digital Operations right */}
         <motion.header
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
           className="mb-14 lg:mb-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-12"
         >
-          <div>
+          <a href={createPageUrl('Home')} className="flex-shrink-0 mx-auto lg:mx-0 lg:w-1/2 flex lg:justify-start">
+            <img
+              src={LOGO_URL}
+              alt="Operator.ink"
+              className="w-full max-w-[480px] h-auto object-contain"
+            />
+          </a>
+          <div className="lg:w-1/2 lg:pl-10">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight text-white">
               Digital Operations<br />
               <span className="retro-link-accent">&amp; Growth Systems.</span>
@@ -90,13 +97,6 @@ export default function Home() {
               Operational websites, GEO/AEO search, workflows, AI agents.
             </p>
           </div>
-          <a href={createPageUrl('Home')} className="flex-shrink-0 mx-auto lg:mx-0">
-            <img
-              src={LOGO_URL}
-              alt="Operator.ink"
-              className="h-32 sm:h-40 md:h-48 lg:h-56 w-auto object-contain"
-            />
-          </a>
         </motion.header>
 
         {/* FEATURED DEMO — clearly labeled */}
