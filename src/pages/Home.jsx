@@ -36,11 +36,11 @@ const capabilities = [
 ];
 
 const PIPELINE_STAGES = [
-  { id: 'referral', label: 'Referral', patients: [{ name: 'M. Johnson', payer: 'Medicare' }] },
+  { id: 'referral', label: 'Referral', patients: [{ name: 'M. Johnson', payer: 'Medicare', flag: 'New' }] },
   { id: 'clinical', label: 'Clinical', patients: [] },
-  { id: 'bed', label: 'Bed Offer', patients: [{ name: 'L. Martinez', payer: 'HMO' }] },
-  { id: 'admitted', label: 'Admitted', patients: [{ name: 'J. Williams', payer: 'Private' }] },
-  { id: 'denied', label: 'Denied', patients: [] },
+  { id: 'bed', label: 'Bed Offer', patients: [{ name: 'L. Martinez', payer: 'HMO', flag: 'Prior Auth' }] },
+  { id: 'admitted', label: 'Admitted', patients: [{ name: 'J. Williams', payer: 'Private', flag: 'Complete' }] },
+  { id: 'denied', label: 'Discharged', patients: [] },
 ];
 
 export default function Home() {
@@ -105,7 +105,7 @@ export default function Home() {
             </h2>
           </div>
           <p className="text-sm text-[var(--retro-text-muted)] mb-4 max-w-xl">
-            Admissions dashboard for skilled nursing. Pick payer (Medicare, HMO, Private) per patient and track. Coordinators use their own pipeline; admins view all 10+ and see metrics.
+            Admissions dashboard for skilled nursing. Pick payer (Medicare, HMO, Private), use flags (Prior Auth, Urgent, Complete). Coordinators coordinate—see who has beds, message each other. Admins view all + metrics. Finish & clear patients.
           </p>
           <a
             href={createPageUrl('Demos')}
@@ -127,7 +127,12 @@ export default function Home() {
                       {col.patients.map((p) => (
                         <div key={p.name} className="text-[10px] py-0.5 px-1 rounded bg-white/5">
                           <span className="text-white/80 truncate block">{p.name}</span>
-                          <span className="text-[8px] text-white/50">{p.payer}</span>
+                          <span className="text-[8px] text-white/50 block">{p.payer}</span>
+                          {p.flag && (
+                            <span className={`text-[7px] mt-0.5 inline-block rounded px-1 ${p.flag === 'Complete' ? 'bg-green-500/20 text-green-400' : p.flag === 'Prior Auth' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/10 text-white/60'}`}>
+                              {p.flag}
+                            </span>
+                          )}
                         </div>
                       ))}
                       {i === movingCardStage && (
@@ -139,7 +144,8 @@ export default function Home() {
                           className="text-[10px] py-0.5 px-1 rounded bg-[#00ccff]/10 border border-[#00ccff]/30"
                         >
                           <span className="text-[#00ccff] block">R. Davis</span>
-                          <span className="text-[8px] text-[#00ccff]/80">HMO</span>
+                          <span className="text-[8px] text-[#00ccff]/80 block">HMO</span>
+                          <span className="text-[7px] mt-0.5 inline-block rounded px-1 bg-amber-500/20 text-amber-400">Prior Auth</span>
                         </motion.div>
                       )}
                       {col.patients.length === 0 && i !== movingCardStage && (
@@ -149,7 +155,9 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <p className="text-[10px] text-[var(--retro-text-dim)] mt-2">Pick payer (Medicare/HMO/Private) • Track per patient • Admin sees all coordinators + metrics</p>
+              <p className="text-[10px] text-[var(--retro-text-dim)] mt-2">
+                Flags: New, Prior Auth, Urgent, Complete • Finish & clear patients • Coordinators see who has beds, message each other
+              </p>
               <span className="text-xs font-semibold retro-link inline-flex items-center gap-1 mt-2">
                 View full brief <ArrowRight className="w-3.5 h-3.5" />
               </span>

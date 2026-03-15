@@ -35,6 +35,7 @@ Build a modern, interactive web dashboard for managing patient admissions and be
    - Required: **Patient Name** (primary identifier)
    - **Payer selection & tracking:** Pick Medicare, HMO, or Private per patient. Display and track on card.
    - Display: Facility (Building A/B/C), Payer (Medicare/HMO/Private), Task Progress (e.g., 2/4 checklist done)
+   - **Status flags:** New, Prior Auth, Urgent, Complete. Mark Complete when finished; clear/discharge patient.
    - Click to open side panel for:
      * Facility assignment
      * Payer selection
@@ -55,9 +56,12 @@ Build a modern, interactive web dashboard for managing patient admissions and be
 6. **New Referral Input**
    - Quick-add to insert a patient (with **name**) into Referral Received
 
-**User roles & multi-administrator:**
-- **Coordinators (e.g. 10):** Each uses the dashboard for their own pipeline. They see only their patients.
-- **Admin account:** Views all coordinators, all pipelines, and metrics (totals, conversion, by admin). One admin can oversee 10+ coordinators.
+**Flags on patient cards:**
+- New, Prior Auth, Urgent, Complete — status flags to prioritize and track. Mark Complete when finished with a patient; clear/discharge when done.
+
+**User roles & coordinator coordination:**
+- **Coordinators (e.g. 10):** Each uses the dashboard for their own pipeline. They can **talk to each other** — see who has beds (Building A/B/C), message to coordinate, share availability.
+- **Admin account:** Views all coordinators, all pipelines, and metrics.
 
 **Additional Requirements:**
 - Payer selection & tracking — Medicare, HMO, Private per patient, visible on card
