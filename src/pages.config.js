@@ -52,6 +52,7 @@ import Pilot from './pages/Pilot';
 import Portal from './pages/Portal';
 import Leads from './pages/Leads';
 import Services from './pages/Services';
+import InventoryDashboard from './pages/InventoryDashboard';
 
 export const PAGES = {
     "Home": Home,
@@ -59,6 +60,7 @@ export const PAGES = {
     "Portal": Portal,
     "Leads": Leads,
     "Services": Services,
+    "InventoryDashboard": InventoryDashboard,
 }
 
 export const pagesConfig = {
