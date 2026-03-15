@@ -5,7 +5,7 @@ import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 import IntakeForm from '../components/intake/IntakeForm';
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69a891df439583825e4f7f0e/cc3b199f0_Untitled5.png";
+const LOGO_URL = "/operator-logo.png";
 const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
 
 const capabilities = [
@@ -74,20 +74,29 @@ export default function Home() {
 
       <main id="main" className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-24 pb-10 lg:pb-16">
 
-        {/* HERO — Demos at top */}
+        {/* HERO — Digital Operations left, Operator.ink logo right */}
         <motion.header
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-14 lg:mb-16"
+          className="mb-14 lg:mb-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-12"
         >
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight text-white">
-            Digital Operations<br />
-            <span className="retro-link-accent">&amp; Growth Systems.</span>
-          </h1>
-          <p className="mt-4 text-base text-[var(--retro-text-muted)] max-w-lg">
-            Operational websites, GEO/AEO search, workflows, AI agents.
-          </p>
+          <div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight text-white">
+              Digital Operations<br />
+              <span className="retro-link-accent">&amp; Growth Systems.</span>
+            </h1>
+            <p className="mt-4 text-base text-[var(--retro-text-muted)] max-w-lg">
+              Operational websites, GEO/AEO search, workflows, AI agents.
+            </p>
+          </div>
+          <a href={createPageUrl('Home')} className="flex-shrink-0 mx-auto lg:mx-0">
+            <img
+              src={LOGO_URL}
+              alt="Operator.ink"
+              className="h-32 sm:h-40 md:h-48 lg:h-56 w-auto object-contain"
+            />
+          </a>
         </motion.header>
 
         {/* FEATURED DEMO — clearly labeled */}
