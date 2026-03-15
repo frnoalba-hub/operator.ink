@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Mail, ArrowRight, Search, Zap, BarChart2, Globe } from 'lucide-react';
+import { Check, Mail, ArrowRight, Search, Zap, BarChart2, Globe, LayoutDashboard } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import StickyNav from '../components/StickyNav';
 import IntakeForm from '../components/intake/IntakeForm';
@@ -100,8 +100,25 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Value Panel */}
-          <div className="lg:col-span-5">
+          {/* Value Panel + Featured Demo */}
+          <div className="lg:col-span-5 flex flex-col gap-5">
+            {/* Featured Demo — admissions / skilled nursing */}
+            <a
+              href={createPageUrl('Demos')}
+              className="retro-card rounded-[24px] p-5 lg:p-6 flex items-start gap-4 hover:border-[var(--retro-border-bright)] transition-colors group"
+            >
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 retro-rgb-border" style={{ background: 'var(--retro-bg-elevated)' }}>
+                <LayoutDashboard className="w-6 h-6" style={{ color: 'var(--retro-text)' }} />
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-1">Featured Demo</p>
+                <h3 className="text-lg font-bold mb-1 group-hover:text-[var(--retro-border-bright)] transition-colors">Admissions &amp; Bed Tracking Dashboard</h3>
+                <p className="text-sm text-[var(--retro-text-muted)] mb-3">For admissions coordinators &amp; skilled nursing facilities. Pipeline, patient cards, analytics.</p>
+                <span className="text-sm font-semibold retro-link inline-flex items-center gap-2">
+                  View Demo Brief <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </a>
             <div className="retro-card rounded-[32px] p-7 lg:p-8">
               <h3 className="text-xl font-bold mb-4">Why Operator.ink</h3>
               <ul className="space-y-3 text-sm text-[var(--retro-text-muted)]">
