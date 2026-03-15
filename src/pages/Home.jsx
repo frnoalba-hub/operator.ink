@@ -145,7 +145,7 @@ export default function Home() {
           </div>
         </motion.header>
 
-        {/* Small Demo Preview — mini pipeline mockup */}
+        {/* Small Demo Preview — pipeline with patient names per SNF admissions workflow */}
         <motion.a
           href={createPageUrl('Demos')}
           initial={{ opacity: 0, y: 12 }}
@@ -154,17 +154,26 @@ export default function Home() {
           className="block mb-16 lg:mb-20"
         >
           <div className="retro-card rounded-2xl overflow-hidden p-3 border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-colors group">
-            <p className="text-[10px] uppercase tracking-widest text-[var(--retro-text-dim)] px-2 py-1 mb-2">Demo preview — Admissions Dashboard</p>
-            <div className="flex gap-2 min-h-[80px]">
-              {['Referral', 'Clinical', 'Bed Offer', 'Admitted', 'Denied'].map((col, i) => (
+            <p className="text-[10px] uppercase tracking-widest text-[var(--retro-text-dim)] px-2 py-1 mb-2">Demo — Admissions & Bed Tracking</p>
+            <div className="flex gap-2 min-h-[88px]">
+              {[
+                { stage: 'Referral', patients: ['M. Johnson', 'R. Davis'] },
+                { stage: 'Clinical Review', patients: ['T. Chen'] },
+                { stage: 'Bed Offer', patients: ['L. Martinez'] },
+                { stage: 'Admitted', patients: ['J. Williams'] },
+                { stage: 'Denied', patients: [] },
+              ].map((col, i) => (
                 <div key={i} className="flex-1 min-w-0 rounded-lg bg-black/30 border border-white/5 p-2">
-                  <p className="text-[9px] text-white/40 truncate mb-1">{col}</p>
-                  <div className="h-5 rounded bg-white/5 mb-1" />
-                  <div className="h-5 rounded bg-white/5 w-3/4" />
+                  <p className="text-[9px] text-white/40 truncate mb-1.5">{col.stage}</p>
+                  {col.patients.length ? col.patients.map((name, j) => (
+                    <div key={j} className="text-[10px] text-white/80 truncate py-0.5 px-1.5 rounded bg-white/5 mb-1">{name}</div>
+                  )) : (
+                    <p className="text-[9px] text-white/30 italic">—</p>
+                  )}
                 </div>
               ))}
             </div>
-            <p className="text-[10px] text-[var(--retro-text-dim)] mt-2 px-2 group-hover:text-[var(--retro-border-bright)] transition-colors">View full demo brief →</p>
+            <p className="text-[10px] text-[var(--retro-text-dim)] mt-2 px-2 group-hover:text-[var(--retro-border-bright)] transition-colors">Patient cards • Name + Payer + Admission stage →</p>
           </div>
         </motion.a>
 

@@ -59,18 +59,19 @@ export default function Demos() {
             </div>
           </div>
           <div className="prose prose-invert max-w-none text-sm text-[var(--retro-text-muted)] space-y-4">
-            <p><strong>Objective:</strong> Build a modern, interactive web dashboard for managing patient admissions and bed availability in skilled nursing facilities.</p>
-            <p><strong>Design:</strong> Dark command-center aesthetic. Vercel, Linear inspiration. Grid-based, responsive, minimalistic. Subtle animations.</p>
+            <p><strong>Objective:</strong> Build a dashboard for managing patient admissions in skilled nursing facilities. Each card tracks <strong>patient name</strong> + admission status.</p>
+            <p><strong>How admissions work:</strong> Referral (name, source) → Clinical Review (PASRR, meds, diagnosis) → Bed Offer / Financial (insurance, prior auth, bed) → Admitted or Denied.</p>
+            <p><strong>Design:</strong> Dark command-center aesthetic. Vercel, Linear inspiration. Grid-based, responsive, minimalistic.</p>
             <p><strong>Tech:</strong> React + Vite, Tailwind CSS, Framer Motion, Lucide icons.</p>
             <p><strong>Core features:</strong></p>
             <ul className="list-disc pl-5 space-y-1">
-              <li>Admissions pipeline (5 stages: Referral Received → Clinical Review → Bed Offer / Financial → Admitted → Denied / Discharged), drag-and-drop</li>
-              <li>Patient cards: Name, Facility (A/B/C), Payer, Task progress. Click for side panel</li>
-              <li>Analytics: Total referrals, Admitted/Denied counts, Forecasting metric</li>
-              <li>Agent activity log (auto-scrolling simulated actions)</li>
-              <li>Quick-add for new referrals</li>
+              <li>Pipeline (5 stages), drag-and-drop patient cards</li>
+              <li><strong>Patient cards: Name</strong> (required), Facility, Payer, Task progress. Click for side panel</li>
+              <li>Stage checklist: Medication List, PASRR Level 1, Face-to-face scheduled, Financial clearance</li>
+              <li>Analytics: Referrals, Admitted/Denied counts, bed forecast</li>
+              <li>Quick-add new referral with patient name</li>
             </ul>
-            <p><strong>Deliverable:</strong> Interactive frontend demo with pipeline, cards, side panel, analytics.</p>
+            <p><strong>Deliverable:</strong> Interactive demo with pipeline, name-based patient cards, side panel, analytics.</p>
           </div>
           <a
             href="mailto:orders@operator.ink?subject=Demo Request: Admissions Dashboard"
