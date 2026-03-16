@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, ShoppingCart, Calendar, MessageCircle, Search, Plus, Filter, AlertCircle, CheckCircle2, Truck, CreditCard, ChevronRight, X, Mail, Bell } from 'lucide-react';
+import { Package, ShoppingCart, Calendar, MessageCircle, Search, Plus, Filter, AlertCircle, CheckCircle2, Truck, CreditCard, ChevronRight, X, Mail, Bell, Activity, ArrowUpRight, ArrowDownRight, Zap } from 'lucide-react';
 import GridOverlay from '../components/GridOverlay';
 import StickyNav from '../components/StickyNav';
 
@@ -57,6 +57,14 @@ const MOCK_INBOX = [
   { id: 'msg-4', type: 'email', source: 'Yahoo Mail', sender: 'billing@smilefamily.com', time: '1 day ago', snippet: 'Thank you, invoice paid. Receipt requested.', unread: false }
 ];
 
+const MOCK_INTEGRATIONS = [
+  { id: 'int-1', name: 'WhatsApp Business', desc: 'Omnichannel messaging & notifications', status: 'connected', icon: MessageCircle, color: 'text-[#25D366]', bg: 'bg-[#25D366]/10', border: 'border-[#25D366]/20' },
+  { id: 'int-2', name: 'Stripe', desc: 'Payment processing & invoicing', status: 'connected', icon: CreditCard, color: 'text-[#635BFF]', bg: 'bg-[#635BFF]/10', border: 'border-[#635BFF]/20' },
+  { id: 'int-3', name: 'Gmail Workspace', desc: 'Email parsing & PO ingestion', status: 'connected', icon: Mail, color: 'text-[#EA4335]', bg: 'bg-[#EA4335]/10', border: 'border-[#EA4335]/20' },
+  { id: 'int-4', name: 'USPS / FedEx', desc: 'Real-time logistics tracking', status: 'connected', icon: Truck, color: 'text-amber-500', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
+  { id: 'int-5', name: 'QuickBooks', desc: 'Accounting sync', status: 'disconnected', icon: Activity, color: 'text-zinc-400', bg: 'bg-zinc-400/10', border: 'border-zinc-400/20' },
+];
+
 export default function InventoryDashboard() {
   const [activeTab, setActiveTab] = useState('orders'); // 'orders' | 'inventory'
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -101,8 +109,44 @@ export default function InventoryDashboard() {
           </div>
         </div>
 
+        {/* Top Level KPIs */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="retro-card rounded-2xl p-4 border border-[var(--retro-border)]">
+            <div className="flex justify-between items-start mb-2">
+              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Revenue (7d)</p>
+              <Activity className="w-4 h-4 text-emerald-400" />
+            </div>
+            <p className="text-2xl font-extrabold">$14,250</p>
+            <p className="text-xs text-emerald-400 mt-1 flex items-center font-bold"><ArrowUpRight className="w-3 h-3 mr-0.5"/> 12% vs last week</p>
+          </div>
+          <div className="retro-card rounded-2xl p-4 border border-[var(--retro-border)]">
+            <div className="flex justify-between items-start mb-2">
+              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Pending Orders</p>
+              <Package className="w-4 h-4 text-cyan-400" />
+            </div>
+            <p className="text-2xl font-extrabold">12</p>
+            <p className="text-xs text-[var(--retro-text-muted)] mt-1 font-medium">4 require attention</p>
+          </div>
+          <div className="retro-card rounded-2xl p-4 border border-[var(--retro-border)]">
+            <div className="flex justify-between items-start mb-2">
+              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Low Stock Alerts</p>
+              <AlertCircle className="w-4 h-4 text-rose-400" />
+            </div>
+            <p className="text-2xl font-extrabold">2</p>
+            <p className="text-xs text-rose-400 mt-1 flex items-center font-bold"><ArrowDownRight className="w-3 h-3 mr-0.5"/> Action needed</p>
+          </div>
+          <div className="retro-card rounded-2xl p-4 border border-[var(--retro-border)]">
+            <div className="flex justify-between items-start mb-2">
+              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Active Syncs</p>
+              <Zap className="w-4 h-4 text-amber-400" />
+            </div>
+            <p className="text-2xl font-extrabold">4/5</p>
+            <p className="text-xs text-[var(--retro-text-muted)] mt-1 font-medium">Base44 systems nominal</p>
+          </div>
+        </div>
+
         {/* Tab Navigation */}
-        <div className="flex gap-2 mb-6 p-1 rounded-xl bg-[var(--retro-bg-elevated)] border border-[var(--retro-border)] inline-flex">
+        <div className="flex gap-2 mb-6 p-1 rounded-xl bg-[var(--retro-bg-elevated)] border border-[var(--retro-border)] inline-flex overflow-x-auto max-w-full hide-scrollbar">
           <button 
             onClick={() => setActiveTab('orders')}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'orders' ? 'bg-[var(--retro-bg)] text-[var(--retro-text)] shadow-sm' : 'text-[var(--retro-text-muted)] hover:text-[var(--retro-text)]'}`}
@@ -117,10 +161,17 @@ export default function InventoryDashboard() {
           </button>
           <button 
             onClick={() => setActiveTab('inbox')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'inbox' ? 'bg-[var(--retro-bg)] text-[var(--retro-text)] shadow-sm' : 'text-[var(--retro-text-muted)] hover:text-[var(--retro-text)]'}`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${activeTab === 'inbox' ? 'bg-[var(--retro-bg)] text-[var(--retro-text)] shadow-sm' : 'text-[var(--retro-text-muted)] hover:text-[var(--retro-text)]'}`}
           >
             Inbox
             <span className="flex items-center justify-center w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] font-bold">3</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('integrations')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${activeTab === 'integrations' ? 'bg-[var(--retro-bg)] text-[var(--retro-text)] shadow-sm' : 'text-[var(--retro-text-muted)] hover:text-[var(--retro-text)]'}`}
+          >
+            Integrations
+            <span className="flex items-center justify-center w-2 h-2 rounded-full bg-emerald-500"></span>
           </button>
         </div>
 
@@ -267,6 +318,56 @@ export default function InventoryDashboard() {
                   </div>
                 </div>
               ))}
+            </motion.div>
+          ) : activeTab === 'integrations' ? (
+            <motion.div 
+              key="integrations"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="mb-6 retro-card rounded-2xl p-5 border border-[var(--retro-border)] bg-[var(--retro-bg-elevated)]/50">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-400/10 text-cyan-400 flex items-center justify-center border border-cyan-400/20 flex-shrink-0">
+                    <Zap className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-base mb-1">Base44 API Gateway</h3>
+                    <p className="text-sm text-[var(--retro-text-muted)] leading-relaxed">
+                      These integrations are managed securely by Base44. No code required—just authenticate and the dashboard automatically syncs data across all your connected tools.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {MOCK_INTEGRATIONS.map((integration) => {
+                  const Icon = integration.icon;
+                  return (
+                    <div key={integration.id} className="retro-card rounded-2xl p-5 border border-[var(--retro-border)] flex flex-col h-full hover:border-[var(--retro-border-bright)] transition-colors">
+                      <div className="flex justify-between items-start mb-4">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${integration.bg} ${integration.color} ${integration.border}`}>
+                          <Icon className="w-6 h-6" />
+                        </div>
+                        <div className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${integration.status === 'connected' ? 'bg-emerald-400/10 text-emerald-400 border-emerald-400/20' : 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'}`}>
+                          {integration.status}
+                        </div>
+                      </div>
+                      <h3 className="font-bold text-base mb-1">{integration.name}</h3>
+                      <p className="text-sm text-[var(--retro-text-muted)] mb-6 flex-1">{integration.desc}</p>
+                      
+                      <button className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all border ${
+                        integration.status === 'connected' 
+                          ? 'bg-[var(--retro-bg-elevated)] text-[var(--retro-text)] border-[var(--retro-border)] hover:border-rose-400/30 hover:text-rose-400'
+                          : 'retro-rgb-btn border-transparent'
+                      }`}>
+                        {integration.status === 'connected' ? 'Disconnect' : 'Connect Account'}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
             </motion.div>
           ) : null}
         </AnimatePresence>
