@@ -107,11 +107,11 @@ export default function Home() {
               Premium website design, blazing-fast managed hosting, GEO/AEO search optimization, custom workflows, and intelligent AI agents. We build and maintain the digital infrastructure that scales your operations.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-               <Link to={createPageUrl('Portal')} className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto">
-                 Client Portal <ArrowRight className="w-4 h-4 ml-2" />
+               <Link to={createPageUrl('InventoryDashboard')} className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto">
+                 Dashboard Demo <ArrowRight className="w-4 h-4 ml-2" />
                </Link>
                <a href="#intake" className="retro-link inline-flex items-center justify-center px-6 h-12 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)] w-full sm:w-auto">
-                 System Initialization
+                 Custom Dashboard Request
                </a>
             </div>
           </div>
@@ -179,8 +179,42 @@ export default function Home() {
             </h2>
           </div>
           <p className="text-sm text-[var(--retro-text-muted)] mb-4 max-w-xl">
-            Admissions dashboard for skilled nursing. Pick payer (Medicare, HMO, Private), use flags (Prior Auth, Urgent, Complete). Coordinators coordinate—see who has beds, message each other. Admins view all + metrics. Finish & clear patients.
+            Live interactive environments demonstrating our custom workflows, from inventory command centers to skilled nursing admissions tracking.
           </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Project 1: Inventory Dashboard */}
+            <Link
+              to={createPageUrl('InventoryDashboard')}
+              className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
+            >
+              <div className="p-4 sm:p-5">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                  <h3 className="text-base font-bold group-hover:text-[#00ccff] transition-colors">Inventory & Sales Command Center</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-[#00ccff]/90 bg-[#00ccff]/10 rounded px-2 py-0.5 border border-[#00ccff]/30 uppercase font-bold tracking-wider">Live Demo</span>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-[var(--retro-text-muted)] mb-4">
+                  A high-performance MVP simulating logistics management. Try toggling between stock counts, detailed order tracking panes, and the omnichannel message inbox.
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {['React', 'Motion', 'Responsive', 'Mock Data'].map((tag) => (
+                    <span key={tag} className="text-xs font-bold text-[var(--retro-text-dim)] bg-[var(--retro-bg-elevated)] rounded border border-[var(--retro-border)] px-2 py-1 uppercase tracking-tight">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <span className="text-xs font-semibold retro-link flex items-center gap-1 mt-auto">
+                  Launch interactive demo <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Project 2: SNF Admissions */}
           <Link
             to={createPageUrl('Pilot')}
             className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
@@ -245,6 +279,7 @@ export default function Home() {
               </span>
             </div>
           </Link>
+          </div>
         </motion.section>
 
         {/* CTAs + Why Operator.ink */}
@@ -257,10 +292,10 @@ export default function Home() {
           <div className="lg:col-span-7">
             <div className="flex flex-wrap gap-3">
               <a href="#intake" className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-6 rounded-xl text-sm hover:opacity-95" style={{ minHeight: '48px' }}>
-                Deploy Request <ArrowRight className="w-4 h-4" />
+                Request Custom Dashboard <ArrowRight className="w-4 h-4" />
               </a>
-              <Link to={createPageUrl('Services')} className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }}>
-                Services
+              <Link to={createPageUrl('InventoryDashboard')} className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }}>
+                View Demo
               </Link>
               <a href="mailto:orders@operator.ink" className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }}>
                 <Mail className="w-4 h-4 opacity-70" /> orders@operator.ink

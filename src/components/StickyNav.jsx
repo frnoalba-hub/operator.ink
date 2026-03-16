@@ -74,10 +74,10 @@ export default function StickyNav({ currentPage = 'home' }) {
             </svg>
           </a>
           <Link
-            to={`${createPageUrl('Home')}#intake`}
+            to={createPageUrl('InventoryDashboard')}
             className="retro-rgb-btn hidden sm:inline-flex items-center justify-center min-h-[40px] px-6 py-2.5 rounded-lg text-sm font-bold hover:opacity-95 transition-all duration-200"
           >
-            Get Started
+            Dashboard Demo
           </Link>
         </div>
       </div>
