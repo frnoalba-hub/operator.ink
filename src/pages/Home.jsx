@@ -182,7 +182,7 @@ export default function Home() {
             Live interactive environments demonstrating our custom workflows, from inventory command centers to skilled nursing admissions tracking.
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 gap-6 mb-8">
             {/* Project 1: Inventory Dashboard */}
             <Link
               to={createPageUrl('InventoryDashboard')}
