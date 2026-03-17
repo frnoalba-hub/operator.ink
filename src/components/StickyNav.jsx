@@ -51,7 +51,6 @@ export default function StickyNav({ currentPage = 'home' }) {
           <Link to={createPageUrl('Services')} className={navLinkClass(currentPage === 'services')}>
             Services
           </Link>
-
           <Link to={createPageUrl('Pilot')} className={navLinkClass(currentPage === 'pilot')}>
             Pilot
           </Link>
