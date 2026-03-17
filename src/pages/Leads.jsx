@@ -141,7 +141,7 @@ export default function Leads() {
 
   const { data: leads = [], isLoading } = useQuery({
     queryKey: ['leads'],
-    queryFn: () => base44.entities.LeadSubmission.list('-created_date'),
+    queryFn: () => base44.entities.LeadSubmission.list('-created_date', 5000),
   });
 
   const updateMutation = useMutation({
