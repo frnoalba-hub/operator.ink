@@ -108,6 +108,41 @@ const services = [
       'Monthly performance reporting',
     ],
   },
+  {
+    id: 'base44',
+    icon: Globe,
+    title: 'Base44 Setup & Consultation',
+    tagline: 'Get your own high-converting platform running on Base44.',
+    color: 'text-[#00E5FF]',
+    border: 'border-[#00E5FF]/20',
+    glow: 'hover:shadow-[0_18px_60px_rgba(0,229,255,0.08)]',
+    description:
+      'We build our ventures on Base44 because it provides the speed, reliability, and tools needed for scalable operations. While you can sign up on your own, setting up a new operational system correctly from day one saves countless hours later.',
+    process: [
+      { step: '01', label: 'Platform Selection', detail: 'We recommend Base44 for its robust infrastructure. You can explore it yourself using our referral link.' },
+      { step: '02', label: 'Architecture Planning', detail: 'If you need help, we offer strategic consulting to structure your environment, workflows, and integrations.' },
+      { step: '03', label: 'Guided Setup', detail: 'A dedicated consultation to ensure your domain, DNS, and baseline operations are configured perfectly.' },
+    ],
+    offerings: [
+      'Base44 environment architecture',
+      'Operational workflow design',
+      'System integration planning',
+      '1-on-1 setup consultation',
+    ],
+    // Custom action buttons for this specific service card
+    actions: [
+      {
+        label: 'Explore Base44',
+        href: 'https://base44.com/?via=operator',
+        primary: false,
+      },
+      {
+        label: 'Book Setup Call',
+        href: 'mailto:alex@operator.ink?subject=Base44 Setup Consultation',
+        primary: true,
+      }
+    ]
+  },
 ];
 
 export default function Services() {
@@ -228,16 +263,39 @@ export default function Services() {
                   </div>
 
                   {/* Offerings */}
-                  <div>
-                    <h3 className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-5">Specific Offerings</h3>
-                    <ul className="space-y-3">
-                      {svc.offerings.map((o) => (
-                        <li key={o} className="flex items-center gap-3 text-sm text-[var(--retro-text-muted)]">
-                          <Check className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--retro-text)' }} />
-                          {o}
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="flex flex-col h-full">
+                    <div className="flex-grow">
+                      <h3 className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-5">Specific Offerings</h3>
+                      <ul className="space-y-3">
+                        {svc.offerings.map((o) => (
+                          <li key={o} className="flex items-center gap-3 text-sm text-[var(--retro-text-muted)]">
+                            <Check className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--retro-text)' }} />
+                            {o}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Custom Actions (if any) */}
+                    {svc.actions && (
+                      <div className="mt-8 pt-8 border-t border-[var(--retro-border)] flex flex-col sm:flex-row gap-3">
+                        {svc.actions.map((action, actionIdx) => (
+                           <a
+                             key={actionIdx}
+                             href={action.href}
+                             target={action.href.startsWith("http") ? "_blank" : undefined}
+                             rel={action.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                             className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 ${
+                               action.primary
+                                 ? "text-white bg-white/10 hover:bg-white/20 border border-white/10"
+                                 : "text-[#00E5FF] bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/20"
+                             }`}
+                           >
+                             {action.label} {action.href.startsWith("http") && <ArrowRight className="w-4 h-4" />}
+                           </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.section>
