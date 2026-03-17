@@ -138,7 +138,7 @@ const services = [
       },
       {
         label: 'Book Setup Call',
-        href: 'https://cal.com/francisco-alba-4b06or/business-architecture-review',
+        href: 'https://cal.com/francisco-alba-4b06or/15min',
         primary: true,
       }
     ]

@@ -72,7 +72,7 @@ export default function StickyNav({ currentPage = 'home' }) {
             Built on Base44
           </a>
           <a
-            href="https://cal.com/francisco-alba-4b06or/business-architecture-review"
+            href="https://cal.com/francisco-alba-4b06or/15min"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200"
