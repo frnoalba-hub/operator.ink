@@ -67,13 +67,15 @@ export default function StickyNav({ currentPage = 'home' }) {
             href="https://base44.pxf.io/c/6842739/2049275/25619?trafcat=base"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden lg:inline-flex items-center justify-center min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-bold text-[#00E5FF] bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/20 transition-all duration-200"
+            className="inline-flex items-center justify-center min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-bold text-[#00E5FF] bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/20 transition-all duration-200"
           >
             Built on Base44
           </a>
           <a
-            href="mailto:alex@operator.ink?subject=Base44 Setup Consultation"
-            className="hidden md:inline-flex items-center justify-center min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/10 transition-all duration-200"
+            href="https://cal.com/francisco-alba-4b06or/business-architecture-review"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200"
           >
             Setup Call
           </a>

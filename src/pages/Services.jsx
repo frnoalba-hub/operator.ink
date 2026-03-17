@@ -138,7 +138,7 @@ const services = [
       },
       {
         label: 'Book Setup Call',
-        href: 'mailto:alex@operator.ink?subject=Base44 Setup Consultation',
+        href: 'https://cal.com/francisco-alba-4b06or/business-architecture-review',
         primary: true,
       }
     ]
