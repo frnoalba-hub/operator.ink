@@ -110,38 +110,38 @@ export default function InventoryDashboard() {
         </div>
 
         {/* Top Level KPIs */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
           <div className="retro-card rounded-2xl p-4 border border-[var(--retro-border)]">
             <div className="flex justify-between items-start mb-2">
               <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Revenue (7d)</p>
               <Activity className="w-4 h-4 text-emerald-400" />
             </div>
-            <p className="text-2xl font-extrabold">$14,250</p>
-            <p className="text-xs text-emerald-400 mt-1 flex items-center font-bold"><ArrowUpRight className="w-3 h-3 mr-0.5"/> 12% vs last week</p>
+            <p className="text-xl md:text-2xl font-extrabold">$14,250</p>
+            <p className="text-[10px] md:text-xs text-emerald-400 mt-1 flex items-center font-bold"><ArrowUpRight className="w-3 h-3 mr-0.5"/> 12% vs last week</p>
           </div>
           <div className="retro-card rounded-2xl p-4 border border-[var(--retro-border)]">
             <div className="flex justify-between items-start mb-2">
               <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Pending Orders</p>
               <Package className="w-4 h-4 text-cyan-400" />
             </div>
-            <p className="text-2xl font-extrabold">12</p>
-            <p className="text-xs text-[var(--retro-text-muted)] mt-1 font-medium">4 require attention</p>
+            <p className="text-xl md:text-2xl font-extrabold">12</p>
+            <p className="text-[10px] md:text-xs text-[var(--retro-text-muted)] mt-1 font-medium">4 require attention</p>
           </div>
           <div className="retro-card rounded-2xl p-4 border border-[var(--retro-border)]">
             <div className="flex justify-between items-start mb-2">
-              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Low Stock Alerts</p>
+              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Low Stock</p>
               <AlertCircle className="w-4 h-4 text-rose-400" />
             </div>
-            <p className="text-2xl font-extrabold">2</p>
-            <p className="text-xs text-rose-400 mt-1 flex items-center font-bold"><ArrowDownRight className="w-3 h-3 mr-0.5"/> Action needed</p>
+            <p className="text-xl md:text-2xl font-extrabold">2</p>
+            <p className="text-[10px] md:text-xs text-rose-400 mt-1 flex items-center font-bold"><ArrowDownRight className="w-3 h-3 mr-0.5"/> Action needed</p>
           </div>
           <div className="retro-card rounded-2xl p-4 border border-[var(--retro-border)]">
             <div className="flex justify-between items-start mb-2">
               <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Active Syncs</p>
               <Zap className="w-4 h-4 text-amber-400" />
             </div>
-            <p className="text-2xl font-extrabold">4/5</p>
-            <p className="text-xs text-[var(--retro-text-muted)] mt-1 font-medium">Base44 systems nominal</p>
+            <p className="text-xl md:text-2xl font-extrabold">4/5</p>
+            <p className="text-[10px] md:text-xs text-[var(--retro-text-muted)] mt-1 font-medium">Base44 nominal</p>
           </div>
         </div>
 
@@ -207,15 +207,15 @@ export default function InventoryDashboard() {
                   onClick={() => setSelectedOrder(order)}
                   className="retro-card rounded-2xl p-5 border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] cursor-pointer transition-all group"
                 >
-                  <div className="flex justify-between items-start mb-3">
+                  <div className="flex flex-col sm:flex-row sm:justify-between items-start mb-3 gap-2 sm:gap-0">
                     <div>
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
                         <span className="font-bold">{order.id}</span>
                         <span className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">{order.date}</span>
                       </div>
                       <p className="text-sm text-[var(--retro-text-muted)] font-medium">{order.client}</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right">
                       <p className="font-bold text-lg">${order.total.toFixed(2)}</p>
                     </div>
                   </div>
@@ -257,8 +257,8 @@ export default function InventoryDashboard() {
                     <p className="text-[10px] uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-1">{item.sku}</p>
                     <h3 className="font-bold text-sm leading-snug">{item.name}</h3>
                   </div>
-                  <div className="flex justify-between items-center pt-4 border-t border-[var(--retro-border)]">
-                    <div className="text-right ml-auto">
+                  <div className="flex flex-col sm:flex-row justify-between sm:items-center pt-4 border-t border-[var(--retro-border)] gap-1">
+                    <div className="text-left sm:text-right sm:ml-auto">
                       <p className="text-[10px] text-[var(--retro-text-dim)] uppercase tracking-wider">Retail Price</p>
                       <p className="font-bold text-sm">${item.price.toFixed(2)}</p>
                     </div>
