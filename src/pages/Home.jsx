@@ -235,10 +235,10 @@ export default function Home() {
                   </span>
                 ))}
               </div>
-              <div className="flex gap-2 min-h-[72px]">
+              <div className="flex gap-2 min-h-[72px] overflow-x-auto hide-scrollbar pb-2">
                 {PIPELINE_STAGES.map((col, i) => (
-                  <div key={col.id} className="flex-1 min-w-0 rounded-lg bg-black/40 border border-white/5 p-2">
-                    <p className="text-xs text-white/40 font-bold truncate mb-1.5 border-b border-white/10 pb-1">{col.label}</p>
+                  <div key={col.id} className="w-28 flex-shrink-0 md:flex-1 md:w-auto rounded-lg bg-black/40 border border-white/5 p-2">
+                    <p className="text-[10px] md:text-xs text-white/40 font-bold truncate mb-1.5 border-b border-white/10 pb-1">{col.label}</p>
                     <div className="space-y-1">
                       {col.patients.map((p) => (
                         <div key={p.name} className="text-sm py-1.5 px-2 rounded bg-white/5 border border-white/5 shadow-sm">
