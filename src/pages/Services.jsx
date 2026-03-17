@@ -133,7 +133,7 @@ const services = [
     actions: [
       {
         label: 'Explore Base44',
-        href: 'https://base44.com/?via=operator',
+        href: 'https://base44.pxf.io/c/6842739/2049275/25619?trafcat=base',
         primary: false,
       },
       {

@@ -65,7 +65,7 @@ export default function StickyNav({ currentPage = 'home' }) {
           <div className="w-px h-6 bg-white/10 mx-1 hidden sm:block" aria-hidden />
           
           <a
-            href="https://base44.com/?via=operator"
+            href="https://base44.pxf.io/c/6842739/2049275/25619?trafcat=base"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden lg:inline-flex items-center justify-center min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-bold text-[#00E5FF] bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/20 transition-all duration-200"
