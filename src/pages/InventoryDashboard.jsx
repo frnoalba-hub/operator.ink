@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Package, ShoppingCart, Calendar, MessageCircle, Search, Plus, Filter, AlertCircle, CheckCircle2, Truck, CreditCard, ChevronRight, X, Mail, Bell, Activity, ArrowUpRight, ArrowDownRight, Zap } from 'lucide-react';
+import SEO from '@/components/SEO';
 import GridOverlay from '../components/GridOverlay';
 import StickyNav from '../components/StickyNav';
+
+const DASHBOARD_TITLE = 'Dashboard Demo — Inventory, Orders & Inbox | Operator.ink';
+const DASHBOARD_DESC = 'Operator.ink dashboard demo: Manage inventory, orders, and incoming communications. Sample dental instruments workflow. WhatsApp, Stripe, Gmail integrations.';
 
 // Mock Data: Dental Instruments
 const MOCK_INVENTORY = [
@@ -85,13 +89,15 @@ export default function InventoryDashboard() {
   };
 
   return (
-    <div className="retro-theme min-h-screen antialiased overflow-x-hidden flex flex-col" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
+    <>
+      <SEO title={DASHBOARD_TITLE} description={DASHBOARD_DESC} />
+      <div className="retro-theme min-h-screen antialiased overflow-x-hidden flex flex-col" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }} role="document">
       <GridOverlay />
       <StickyNav currentPage="dashboard" />
       
       <main className="relative z-10 flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-24 pb-32">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        {/* Page Header */}
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
             <div className="flex items-center gap-3 mb-1">
               <h1 className="text-3xl font-extrabold tracking-tight">Dashboard Demo</h1>
@@ -100,17 +106,17 @@ export default function InventoryDashboard() {
             <p className="text-sm text-[var(--retro-text-muted)]">Manage inventory, orders, and incoming communications.</p>
           </div>
           <div className="flex gap-2">
-            <button className="retro-rgb-btn flex items-center justify-center w-10 h-10 rounded-xl" title="New Order/Scan">
+            <button className="retro-rgb-btn flex items-center justify-center w-10 h-10 rounded-xl" title="New Order/Scan" aria-label="New order or scan">
               <Plus className="w-5 h-5" />
             </button>
-            <button className="retro-card flex items-center justify-center w-10 h-10 rounded-xl border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)]">
+            <button className="retro-card flex items-center justify-center w-10 h-10 rounded-xl border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)]" aria-label="Open calendar">
               <Calendar className="w-5 h-5 opacity-70" />
             </button>
           </div>
-        </div>
+        </header>
 
         {/* Top Level KPIs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8" aria-label="Key metrics">
           <div className="retro-card rounded-2xl p-4 border border-[var(--retro-border)]">
             <div className="flex justify-between items-start mb-2">
               <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Revenue (7d)</p>
@@ -143,10 +149,10 @@ export default function InventoryDashboard() {
             <p className="text-xl md:text-2xl font-extrabold">4/5</p>
             <p className="text-[10px] md:text-xs text-[var(--retro-text-muted)] mt-1 font-medium">Base44 nominal</p>
           </div>
-        </div>
+        </section>
 
         {/* Tab Navigation */}
-        <div className="flex gap-2 mb-6 p-1 rounded-xl bg-[var(--retro-bg-elevated)] border border-[var(--retro-border)] inline-flex overflow-x-auto max-w-full hide-scrollbar">
+        <nav className="flex gap-2 mb-6 p-1 rounded-xl bg-[var(--retro-bg-elevated)] border border-[var(--retro-border)] inline-flex overflow-x-auto max-w-full hide-scrollbar" aria-label="Dashboard sections">
           <button 
             onClick={() => setActiveTab('orders')}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'orders' ? 'bg-[var(--retro-bg)] text-[var(--retro-text)] shadow-sm' : 'text-[var(--retro-text-muted)] hover:text-[var(--retro-text)]'}`}
@@ -173,7 +179,7 @@ export default function InventoryDashboard() {
             Integrations
             <span className="flex items-center justify-center w-2 h-2 rounded-full bg-emerald-500"></span>
           </button>
-        </div>
+        </nav>
 
         {/* Filters/Search Area */}
         <div className="flex gap-3 mb-6">
@@ -193,14 +199,16 @@ export default function InventoryDashboard() {
         {/* Content Area */}
         <AnimatePresence mode="wait">
           {activeTab === 'orders' ? (
-            <motion.div 
+            <motion.section 
               key="orders"
+              aria-labelledby="panel-orders-heading"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
               className="space-y-4"
             >
+              <h2 id="panel-orders-heading" className="sr-only">Orders</h2>
               {MOCK_ORDERS.map((order) => (
                 <div 
                   key={order.id} 
@@ -233,16 +241,18 @@ export default function InventoryDashboard() {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </motion.section>
           ) : activeTab === 'inventory' ? (
-            <motion.div 
+            <motion.section 
               key="inventory"
+              aria-labelledby="panel-inventory-heading"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
             >
+              <h2 id="panel-inventory-heading" className="sr-only">Inventory</h2>
               {MOCK_INVENTORY.map((item) => (
                 <div key={item.id} className="retro-card rounded-2xl p-5 border border-[var(--retro-border)] flex flex-col h-full">
                   <div className="flex justify-between items-start mb-4">
@@ -265,16 +275,18 @@ export default function InventoryDashboard() {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </motion.section>
           ) : activeTab === 'inbox' ? (
-            <motion.div 
+            <motion.section 
               key="inbox"
+              aria-labelledby="panel-inbox-heading"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
               className="space-y-4"
             >
+              <h2 id="panel-inbox-heading" className="sr-only">Inbox</h2>
               {MOCK_INBOX.map((msg) => (
                 <div 
                   key={msg.id} 
@@ -318,15 +330,17 @@ export default function InventoryDashboard() {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </motion.section>
           ) : activeTab === 'integrations' ? (
-            <motion.div 
+            <motion.section 
               key="integrations"
+              aria-labelledby="panel-integrations-heading"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
             >
+              <h2 id="panel-integrations-heading" className="sr-only">Integrations</h2>
               <div className="mb-6 retro-card rounded-2xl p-5 border border-[var(--retro-border)] bg-[var(--retro-bg-elevated)]/50">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-cyan-400/10 text-cyan-400 flex items-center justify-center border border-cyan-400/20 flex-shrink-0">
@@ -368,7 +382,7 @@ export default function InventoryDashboard() {
                   );
                 })}
               </div>
-            </motion.div>
+            </motion.section>
           ) : null}
         </AnimatePresence>
       </main>
@@ -382,6 +396,9 @@ export default function InventoryDashboard() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm"
             onClick={() => setSelectedOrder(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="order-detail-heading"
           >
             <motion.div 
               initial={{ x: '100%' }}
@@ -392,7 +409,7 @@ export default function InventoryDashboard() {
               className="w-full max-w-md h-full bg-[var(--retro-bg)] border-l border-[var(--retro-border)] shadow-2xl overflow-y-auto flex flex-col"
             >
               <div className="sticky top-0 z-10 bg-[var(--retro-bg)]/80 backdrop-blur-md border-b border-[var(--retro-border)] px-6 py-4 flex items-center justify-between">
-                <h2 className="font-extrabold text-lg">{selectedOrder.id}</h2>
+                <h2 id="order-detail-heading" className="font-extrabold text-lg">Order {selectedOrder.id}</h2>
                 <button onClick={() => setSelectedOrder(null)} className="p-2 hover:bg-[var(--retro-bg-elevated)] rounded-full transition-colors">
                   <X className="w-5 h-5" />
                 </button>
@@ -479,5 +496,6 @@ export default function InventoryDashboard() {
       </AnimatePresence>
 
     </div>
+    </>
   );
 }

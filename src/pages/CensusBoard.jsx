@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { LayoutDashboard, BarChart3, Shield } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
-import { usePageSEO } from '@/hooks/usePageSEO';
+import SEO from '@/components/SEO';
 import StickyNav from '../components/StickyNav';
 import GridOverlay from '../components/GridOverlay';
 import BackToHome from '../components/BackToHome';
@@ -25,8 +25,6 @@ export default function CensusBoard() {
   const [view, setView] = useState('coordinator');
   const [cases, setCases] = useState(MOCK_CASES);
   const [selectedCase, setSelectedCase] = useState(null);
-
-  usePageSEO(CENSUS_TITLE, CENSUS_DESC);
 
   const handleCaseClick = (c) => setSelectedCase(c);
   const handleCloseDrawer = () => setSelectedCase(null);
@@ -55,10 +53,12 @@ export default function CensusBoard() {
   };
 
   return (
-    <div
-      className="retro-theme min-h-screen antialiased overflow-x-hidden"
-      style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}
-    >
+    <>
+      <SEO title={CENSUS_TITLE} description={CENSUS_DESC} />
+      <div
+        className="retro-theme min-h-screen antialiased overflow-x-hidden"
+        style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}
+      >
       <GridOverlay />
       <StickyNav currentPage="censusboard" />
       <main className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-24 pb-16">
@@ -161,5 +161,6 @@ export default function CensusBoard() {
         />
       )}
     </div>
+    </>
   );
 }

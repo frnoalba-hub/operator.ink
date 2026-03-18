@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Upload, X, FileText, Image as ImageIcon, Check, AlertCircle } from 'lucide-react';
 import { createPageUrl } from '@/utils';
-import { usePageSEO } from '@/hooks/usePageSEO';
+import SEO from '@/components/SEO';
 import StickyNav from '../components/StickyNav';
 import GridOverlay from '../components/GridOverlay';
 import BackToHome from '../components/BackToHome';
@@ -24,7 +24,6 @@ const PORTAL_TITLE = 'Portal — Submit Project | Operator.ink';
 const PORTAL_DESC = 'Operator.ink portal: Submit your project brief, files, and get started. System initialization for web design, GEO/AEO/SEO, AI workflows, ads.';
 
 export default function Portal() {
-  usePageSEO(PORTAL_TITLE, PORTAL_DESC);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [projectName, setProjectName] = useState('');
@@ -137,7 +136,9 @@ export default function Portal() {
     }`;
 
   return (
-    <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif", background: 'var(--retro-bg)' }}>
+    <>
+      <SEO title={PORTAL_TITLE} description={PORTAL_DESC} />
+      <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif", background: 'var(--retro-bg)' }}>
       <GridOverlay />
       <StickyNav currentPage="portal" />
       <main className="relative z-10 max-w-3xl mx-auto px-5 sm:px-8 lg:px-12 pt-24 pb-16">
@@ -308,5 +309,6 @@ export default function Portal() {
         </p>
       </main>
     </div>
+    </>
   );
 }

@@ -30,6 +30,7 @@ export default function StickyNav({ currentPage = 'home' }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      aria-label="Main navigation"
       style={{
         background: scrolled ? 'rgba(5,5,5,0.95)' : 'transparent',
         backdropFilter: scrolled ? 'blur(20px)' : 'none',
@@ -40,6 +41,7 @@ export default function StickyNav({ currentPage = 'home' }) {
         <Link
           to={createPageUrl('Home')}
           className="flex-shrink-0 transition-opacity hover:opacity-90"
+          aria-label="Operator.ink home"
         >
           <span className="text-lg sm:text-2xl font-extrabold tracking-tighter text-white">
             Operator<span className="retro-link-accent">.ink</span>
@@ -64,6 +66,7 @@ export default function StickyNav({ currentPage = 'home' }) {
             href="https://base44.pxf.io/c/6842739/2049275/25619?trafcat=base"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Visit Base44 platform"
             className="inline-flex items-center justify-center min-h-[36px] px-2 sm:px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold text-[#00E5FF] bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/20 transition-all duration-200"
           >
             Built on Base44
@@ -72,6 +75,7 @@ export default function StickyNav({ currentPage = 'home' }) {
             href="https://cal.com/francisco-alba-4b06or/15min"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Book a 15-minute setup call"
             className="inline-flex items-center justify-center min-h-[36px] px-2 sm:px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-200"
           >
             Setup Call
@@ -92,6 +96,7 @@ export default function StickyNav({ currentPage = 'home' }) {
           <Link
             to={createPageUrl('InventoryDashboard')}
             className="retro-rgb-btn hidden lg:inline-flex items-center justify-center min-h-[40px] px-6 py-2.5 rounded-lg text-sm font-bold hover:opacity-95 transition-all duration-200"
+            aria-label="Open dashboard demo"
           >
             Dashboard Demo
           </Link>

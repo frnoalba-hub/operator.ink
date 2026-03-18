@@ -6,7 +6,7 @@ import {
   Mail, Building2, Clock, DollarSign, FileText,
   Download, Eye, ChevronDown, ChevronUp, Paperclip, User
 } from 'lucide-react';
-import { usePageSEO } from '@/hooks/usePageSEO';
+import SEO from '@/components/SEO';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import moment from 'moment';
 
@@ -86,6 +86,7 @@ function AttachmentPreview({ url, index }) {
             <button
               onClick={() => setPreviewOpen(true)}
               className="flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-300 transition-colors"
+              aria-label={`View attachment ${name}`}
             >
               <Eye className="w-3 h-3" /> View
             </button>
@@ -96,6 +97,7 @@ function AttachmentPreview({ url, index }) {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 px-2 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-xs text-cyan-400 border border-cyan-500/20 transition-colors"
+            aria-label={`Download ${name}`}
           >
             <Download className="w-3 h-3" /> Download
           </a>
@@ -135,7 +137,6 @@ function AttachmentPreview({ url, index }) {
 }
 
 export default function Leads() {
-  usePageSEO(LEADS_TITLE, LEADS_DESC);
   const [expandedId, setExpandedId] = useState(null);
   const queryClient = useQueryClient();
 
@@ -158,7 +159,9 @@ export default function Leads() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 sm:p-10" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif" }}>
+    <>
+      <SEO title={LEADS_TITLE} description={LEADS_DESC} />
+      <div className="min-h-screen bg-black text-white p-6 sm:p-10" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif" }}>
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-3 mb-2">
           <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
@@ -304,6 +307,7 @@ export default function Leads() {
         )}
       </div>
     </div>
+    </>
   );
 }
 

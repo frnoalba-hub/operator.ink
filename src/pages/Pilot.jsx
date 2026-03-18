@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Check, LayoutDashboard, MessageSquare, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { usePageSEO } from '@/hooks/usePageSEO';
+import SEO from '@/components/SEO';
 import StickyNav from '../components/StickyNav';
 import GridOverlay from '../components/GridOverlay';
 import BackToHome from '../components/BackToHome';
@@ -12,9 +12,10 @@ const PILOT_TITLE = 'Phase-0 Pilot — SNF Admissions & Bed Tracking | Nursing F
 const PILOT_DESC = 'Phase-0 Pilot: Dual-role dashboard for nursing facilities. Admissions coordinators, Kanban pipeline, executive analytics. CensusBoard demo, real-time chat, AI workflow simulation. $3,999.';
 
 export default function Pilot() {
-  usePageSEO(PILOT_TITLE, PILOT_DESC);
   return (
-    <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
+    <>
+      <SEO title={PILOT_TITLE} description={PILOT_DESC} />
+      <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
       <GridOverlay />
       <StickyNav currentPage="pilot" />
       <main className="relative z-10 max-w-3xl mx-auto px-5 sm:px-8 lg:px-12 pt-24 pb-16">
@@ -132,5 +133,6 @@ export default function Pilot() {
         </motion.section>
       </main>
     </div>
+    </>
   );
 }

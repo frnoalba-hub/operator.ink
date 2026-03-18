@@ -3,8 +3,10 @@ import { motion } from 'framer-motion';
 import { Globe, Search, Zap, BarChart2, ArrowRight, Check, Mail, Shield, Lock, FileCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { usePageSEO } from '@/hooks/usePageSEO';
+import SEO from '@/components/SEO';
 import StickyNav from '../components/StickyNav';
+import SummaryBox from '../components/SummaryBox';
+import { ORGANIZATION_SCHEMA, SERVICE_SCHEMAS, FAQ_SCHEMA_SERVICES } from '@/schemas/geo-schemas';
 import GridOverlay from '../components/GridOverlay';
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
@@ -17,6 +19,9 @@ const services = [
     icon: Globe,
     title: 'Web Design & Operations',
     tagline: 'Conversion-first websites built to perform, scale, and operate.',
+    problem: 'Websites that look nice but don\'t convert waste traffic and budget. Generic templates fail to capture leads and confuse visitors.',
+    solution: 'We build operational systems: conversion architecture, speed-first design, and analytics from day one. Every page engineered for action.',
+    uniqueInsight: 'Operator.ink sites ship with GEO-ready structure and compliance-aware design — no retrofits later.',
     color: 'text-cyan-400',
     border: 'border-cyan-400/20',
     glow: 'hover:shadow-[0_18px_60px_rgba(6,182,212,0.08)]',
@@ -41,6 +46,9 @@ const services = [
     icon: Search,
     title: 'GEO, AEO & SEO Search',
     tagline: 'Dominate search in every format — classic, local, and AI-generated.',
+    problem: 'Traditional SEO misses AI-generated summaries (ChatGPT, Perplexity). Sites optimized only for Google lose visibility when users ask AI.',
+    solution: 'GEO + AEO + SEO: structured content, schema markup, E-E-A-T signals that satisfy both crawlers and AI summarizers. One strategy, every surface.',
+    uniqueInsight: 'Operator.ink runs GEO on its own site. We use what we sell — and iterate on real ranking data.',
     color: 'text-violet-400',
     border: 'border-violet-400/20',
     glow: 'hover:shadow-[0_18px_60px_rgba(139,92,246,0.08)]',
@@ -65,6 +73,9 @@ const services = [
     icon: Zap,
     title: 'Workflows & AI Agents',
     tagline: 'Eliminate manual work with intelligent automation and custom AI.',
+    problem: 'Manual tasks (follow-ups, data entry, reporting) eat hours. Hiring more people doesn\'t scale; automation that breaks every month wastes time.',
+    solution: 'Custom AI agents and no-code workflows (Make, n8n, Zapier) that run 24/7. We document your operations first, then automate the bottlenecks.',
+    uniqueInsight: 'Compliance-aware by default. Demos use synthetic data only — safe for healthcare and regulated industries.',
     color: 'text-yellow-400',
     border: 'border-yellow-400/20',
     glow: 'hover:shadow-[0_18px_60px_rgba(234,179,8,0.08)]',
@@ -89,6 +100,9 @@ const services = [
     icon: BarChart2,
     title: 'Ads & Brand Identity',
     tagline: 'Cohesive brand systems paired with precision paid acquisition.',
+    problem: 'Weak brands and generic ad creative leak CAC. Inconsistent messaging across channels confuses buyers and burns budget.',
+    solution: 'Cohesive visual identity + ICP-focused copy + multi-channel campaigns (Meta, Google, LinkedIn). Weekly optimization to scale winners.',
+    uniqueInsight: 'We align ads with your GEO/SEO content so paid and organic reinforce the same story.',
     color: 'text-rose-400',
     border: 'border-rose-400/20',
     glow: 'hover:shadow-[0_18px_60px_rgba(251,113,133,0.08)]',
@@ -113,6 +127,9 @@ const services = [
     icon: Globe,
     title: 'Base44 Setup & Consultation',
     tagline: 'Get your own high-converting platform running on Base44.',
+    problem: 'New platforms are overwhelming. Wrong architecture from day one leads to rework and wasted time.',
+    solution: 'Guided architecture and 1-on-1 consultation. We structure your Base44 environment so operations scale cleanly.',
+    uniqueInsight: 'Operator.ink runs on Base44. We\'re not reselling a tool we don\'t use — we advise from real experience.',
     color: 'text-[#00E5FF]',
     border: 'border-[#00E5FF]/20',
     glow: 'hover:shadow-[0_18px_60px_rgba(0,229,255,0.08)]',
@@ -146,9 +163,14 @@ const services = [
 ];
 
 export default function Services() {
-  usePageSEO(SERVICES_TITLE, SERVICES_DESC);
   return (
-    <div className="min-h-screen retro-theme antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
+    <>
+      <SEO
+        title={SERVICES_TITLE}
+        description={SERVICES_DESC}
+        schema={[ORGANIZATION_SCHEMA, ...SERVICE_SCHEMAS, FAQ_SCHEMA_SERVICES]}
+      />
+      <div className="min-h-screen retro-theme antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }} role="document">
 
       <GridOverlay />
 
@@ -157,11 +179,12 @@ export default function Services() {
       <main className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-16">
 
         {/* Page Header */}
-        <motion.div
+        <motion.header
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           className="mb-16 lg:mb-20 max-w-3xl"
+          aria-label="Services overview"
         >
           <div className="flex items-center gap-3 mb-4">
             <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--rgb-gradient)' }} />
@@ -173,10 +196,21 @@ export default function Services() {
           <p className="text-lg text-[var(--retro-text-muted)] leading-relaxed max-w-2xl">
             Four integrated service lines engineered to capture demand, automate operations, and grow revenue. Built for businesses that are serious about scalable, systematic growth. <strong className="text-[var(--retro-text)]">Compliance-aware and safe for healthcare.</strong>
           </p>
-        </motion.div>
+        </motion.header>
+
+        <SummaryBox
+          title="Services Summary"
+          items={[
+            'Web Design & Operations — conversion-first websites that generate leads.',
+            'GEO, AEO & SEO — appear in AI summaries (ChatGPT, Perplexity), featured snippets, and traditional search.',
+            'Workflows & AI Agents — automate manual tasks 24/7 (Make, n8n, Zapier, custom APIs).',
+            'Ads & Brand Identity — cohesive brand + precision campaigns (Meta, Google, LinkedIn).',
+            'Base44 Setup — guided architecture and 1-on-1 consultation.',
+          ]}
+        />
 
         {/* Compliance & Security — safe to use */}
-        <motion.div
+        <motion.section
           id="compliance"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -215,10 +249,10 @@ export default function Services() {
               <strong>Bottom line:</strong> You can safely try our demos and pilots. When you&apos;re ready to deploy with real data, we work within your compliance framework.
             </p>
           </div>
-        </motion.div>
+        </motion.section>
 
         {/* Service Cards */}
-        <div className="space-y-8">
+        <div className="space-y-8" role="list">
           {services.map((svc, idx) => {
             const Icon = svc.icon;
             return (
@@ -241,6 +275,24 @@ export default function Services() {
                     <p className="text-sm font-semibold text-[var(--retro-text-muted)]">{svc.tagline}</p>
                   </div>
                 </div>
+
+                {/* Problem → Solution → Unique Insight (GEO-friendly structure) */}
+                {svc.problem && svc.solution && svc.uniqueInsight && (
+                  <dl className="space-y-4 mb-10 text-sm max-w-3xl">
+                    <div>
+                      <dt className="font-bold text-[var(--retro-text)] mb-1">Problem</dt>
+                      <dd className="text-[var(--retro-text-muted)] leading-relaxed">{svc.problem}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-bold text-[var(--retro-text)] mb-1">Expert Solution</dt>
+                      <dd className="text-[var(--retro-text-muted)] leading-relaxed">{svc.solution}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-bold text-[var(--retro-text)] mb-1">Operator.ink Angle</dt>
+                      <dd className="text-[var(--retro-text-muted)] leading-relaxed">{svc.uniqueInsight}</dd>
+                    </div>
+                  </dl>
+                )}
 
                 {/* Description */}
                 <p className="text-[var(--retro-text-muted)] leading-relaxed mb-10 max-w-3xl text-base lg:text-lg">{svc.description}</p>
@@ -304,13 +356,14 @@ export default function Services() {
         </div>
 
         {/* CTA */}
-        <motion.div
+        <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.6 }}
           className="mt-16 text-center"
+          aria-labelledby="cta-heading"
         >
-          <h2 className="text-3xl lg:text-4xl font-extrabold mb-4">Ready to Deploy?</h2>
+          <h2 id="cta-heading" className="text-3xl lg:text-4xl font-extrabold mb-4">Ready to Deploy?</h2>
           <p className="text-[var(--retro-text-muted)] mb-8 max-w-xl mx-auto">Tell us your scope and we'll return a custom deployment plan with timeline and pricing.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
@@ -327,7 +380,7 @@ export default function Services() {
               <Mail className="w-4 h-4 opacity-70" /> orders@operator.ink
             </a>
           </div>
-        </motion.div>
+        </motion.section>
 
         {/* Footer */}
         <footer className="flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-[var(--retro-text-dim)] border-t border-[var(--retro-border)] py-8 mt-16">
@@ -340,5 +393,6 @@ export default function Services() {
 
       </main>
     </div>
+    </>
   );
 }

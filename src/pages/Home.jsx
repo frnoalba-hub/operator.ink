@@ -3,8 +3,10 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Mail, ArrowRight, Search, Zap, BarChart2, Globe, MessageSquare, FileSearch, Wrench, Rocket } from 'lucide-react';
 import { createPageUrl } from '@/utils';
-import { usePageSEO } from '@/hooks/usePageSEO';
+import SEO from '@/components/SEO';
 import StickyNav from '../components/StickyNav';
+import SummaryBox from '../components/SummaryBox';
+import { ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME } from '@/schemas/geo-schemas';
 import IntakeForm from '../components/intake/IntakeForm';
 
 const LOGO_URL = "/operator-logo.png";
@@ -50,7 +52,6 @@ const HOME_DESC = 'Operator.ink builds operational websites, GEO/AEO/SEO search 
 
 export default function Home() {
   const [movingCardStage, setMovingCardStage] = useState(0);
-  usePageSEO(HOME_TITLE, HOME_DESC);
   useEffect(() => {
     const t = setInterval(() => {
       setMovingCardStage((s) => (s + 1) % 5);
@@ -59,10 +60,16 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
+    <>
+      <SEO
+        title={HOME_TITLE}
+        description={HOME_DESC}
+        schema={[ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME]}
+      />
+      <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }} role="document">
 
-      {/* Tech grid overlay */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-20"
+      {/* Tech grid overlay - decorative */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-20" aria-hidden="true"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1h38v38H1z' stroke='%23ffffff' stroke-opacity='0.06' stroke-width='1' fill='none'/%3E%3C/svg%3E")`,
           backgroundSize: '40px 40px'
@@ -107,15 +114,25 @@ export default function Home() {
               Premium website design, blazing-fast managed hosting, GEO/AEO search optimization, custom workflows, and intelligent AI agents. We build and maintain the digital infrastructure that scales your operations.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-               <Link to={createPageUrl('InventoryDashboard')} className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto">
+               <Link to={createPageUrl('InventoryDashboard')} className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto" aria-label="Try the dashboard demo">
                  Dashboard Demo <ArrowRight className="w-4 h-4 ml-2" />
                </Link>
-               <a href="#intake" className="retro-link inline-flex items-center justify-center px-6 h-12 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)] w-full sm:w-auto">
+               <a href="#intake" className="retro-link inline-flex items-center justify-center px-6 h-12 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)] w-full sm:w-auto" aria-label="Request a custom dashboard">
                  Custom Dashboard Request
                </a>
             </div>
           </div>
         </motion.header>
+
+        <SummaryBox
+          title="At a Glance"
+          items={[
+            'Operator.ink builds operational websites, GEO/AEO/SEO search strategies, AI workflows, and ads.',
+            'Four service lines: Web Design, GEO/AEO/SEO Search, Workflows & AI Agents, Ads & Brand Identity.',
+            'Process: Brief → Discovery → Build → Launch. Phase-0 Pilot $3,999 to validate fast.',
+            'Compliance-aware: demos use synthetic data only. Safe for healthcare and regulated industries.',
+          ]}
+        />
 
         {/* CREATING WITH US — process */}
         <motion.section
@@ -182,8 +199,9 @@ export default function Home() {
             Live interactive environments demonstrating our custom workflows, from inventory command centers to skilled nursing admissions tracking.
           </p>
           
-          <div className="grid grid-cols-1 gap-6 mb-8">
+          <div className="grid grid-cols-1 gap-6 mb-8" role="list">
             {/* Project 1: Inventory Dashboard */}
+            <article>
             <Link
               to={createPageUrl('InventoryDashboard')}
               className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
@@ -213,8 +231,10 @@ export default function Home() {
                 </span>
               </div>
             </Link>
+            </article>
 
             {/* Project 2: SNF Admissions */}
+          <article>
           <Link
             to={createPageUrl('Pilot')}
             className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
@@ -279,6 +299,7 @@ export default function Home() {
               </span>
             </div>
           </Link>
+          </article>
           </div>
         </motion.section>
 
@@ -288,8 +309,10 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.25 }}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 mb-16 lg:mb-20"
+          aria-labelledby="cta-heading"
         >
           <div className="lg:col-span-7">
+            <h2 id="cta-heading" className="sr-only">Get Started</h2>
             <div className="flex flex-wrap gap-3">
               <a href="#intake" className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-6 rounded-xl text-sm hover:opacity-95" style={{ minHeight: '48px' }}>
                 Request Custom Dashboard <ArrowRight className="w-4 h-4" />
@@ -302,9 +325,9 @@ export default function Home() {
               </a>
             </div>
           </div>
-          <div className="lg:col-span-5">
+          <aside className="lg:col-span-5" aria-labelledby="why-heading">
             <div className="retro-card rounded-2xl p-6">
-              <h3 className="text-base font-bold mb-3">Why Operator.ink</h3>
+              <h2 id="why-heading" className="text-base font-bold mb-3">Why Operator.ink</h2>
               <ul className="space-y-2 text-sm text-[var(--retro-text)]">
                 {["Premium website design.", "Managed fast hosting.", "Conversion-focused sites.", "GEO + AEO search.", "Agents & workflows.", "Precision ads.", "Client Portal — upload assets & notes.", "Compliance-aware & safe for healthcare."].map((item, i) => (
                   <li key={i} className="flex items-center gap-2">
@@ -320,7 +343,7 @@ export default function Home() {
                 Phase-0 Pilot $3,999 → <Link to={createPageUrl('Pilot')} className="retro-link">Pilot</Link>
               </p>
             </div>
-          </div>
+          </aside>
         </motion.section>
 
         {/* CAPABILITIES BENTO GRID */}
@@ -404,5 +427,6 @@ export default function Home() {
 
       </main>
     </div>
+    </>
   );
 }
