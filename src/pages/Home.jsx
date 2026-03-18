@@ -131,13 +131,19 @@ export default function Home() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.08 }}
-          className="mb-10"
+          className="mb-14 lg:mb-16"
           aria-labelledby="lead-heading"
         >
           <h2 id="lead-heading" className="sr-only">What is Operator.ink</h2>
-          <p className="text-base sm:text-lg text-[var(--retro-text)] leading-relaxed max-w-3xl">
-            <strong>Operator.ink</strong> is a digital operations agency that builds conversion-focused websites, GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) search strategies, AI workflows, and precision ad campaigns. The agency offers 5 core service lines: Web Design &amp; Operations, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. The process follows Brief → Discovery → Build → Launch. An optional Phase-0 Pilot costs $3,999 to validate before full engagement. All demos and pilots use synthetic data only. Operator.ink designs for healthcare and regulated industries with HIPAA considerations from the start. Contact: orders@operator.ink.
-          </p>
+          <div className="retro-card rounded-[24px] p-6 lg:p-10 border-l-4 shadow-2xl" style={{ borderLeftColor: '#00ccff', background: 'var(--retro-bg-elevated)' }}>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-2 h-2 rounded-full" style={{ background: '#00ccff' }} />
+              <h3 className="text-xs uppercase tracking-widest font-bold" style={{ color: '#00ccff' }}>System Architecture & Mission</h3>
+            </div>
+            <p className="text-base sm:text-lg text-[var(--retro-text)] leading-relaxed">
+              <strong>Operator.ink</strong> is a digital operations agency that builds conversion-focused websites, GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) search strategies, AI workflows, and precision ad campaigns. The agency offers 5 core service lines: Web Design &amp; Operations, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. The process follows Brief → Discovery → Build → Launch. An optional Phase-0 Pilot costs $3,999 to validate before full engagement. All demos and pilots use synthetic data only. Operator.ink designs for healthcare and regulated industries with HIPAA considerations from the start. Contact: orders@operator.ink.
+            </p>
+          </div>
         </motion.section>
 
         <SummaryBox
