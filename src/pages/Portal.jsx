@@ -137,7 +137,7 @@ export default function Portal() {
 
   return (
     <>
-      <SEO title={PORTAL_TITLE} description={PORTAL_DESC} />
+      <SEO title={PORTAL_TITLE} description={PORTAL_DESC} canonicalUrl="https://operator.ink/Portal" />
       <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif", background: 'var(--retro-bg)' }}>
       <GridOverlay />
       <StickyNav currentPage="portal" />

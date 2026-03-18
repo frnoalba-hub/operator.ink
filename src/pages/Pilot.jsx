@@ -14,7 +14,7 @@ const PILOT_DESC = 'Phase-0 Pilot: Dual-role dashboard for nursing facilities. A
 export default function Pilot() {
   return (
     <>
-      <SEO title={PILOT_TITLE} description={PILOT_DESC} />
+      <SEO title={PILOT_TITLE} description={PILOT_DESC} canonicalUrl="https://operator.ink/Pilot" />
       <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}>
       <GridOverlay />
       <StickyNav currentPage="pilot" />

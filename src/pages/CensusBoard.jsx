@@ -54,7 +54,7 @@ export default function CensusBoard() {
 
   return (
     <>
-      <SEO title={CENSUS_TITLE} description={CENSUS_DESC} />
+      <SEO title={CENSUS_TITLE} description={CENSUS_DESC} noIndex />
       <div
         className="retro-theme min-h-screen antialiased overflow-x-hidden"
         style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}

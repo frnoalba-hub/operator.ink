@@ -65,6 +65,8 @@ export default function Home() {
         title={HOME_TITLE}
         description={HOME_DESC}
         schema={[ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME]}
+        canonicalUrl="https://operator.ink/"
+        ogImage="/operator-logo.png"
       />
       <div className="retro-theme min-h-screen antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }} role="document">
 
@@ -111,7 +113,7 @@ export default function Home() {
               <span className="retro-link-accent"> &amp; Growth Systems.</span>
             </h1>
             <p className="text-base sm:text-lg text-[var(--retro-text-muted)] max-w-xl">
-              Premium website design, blazing-fast managed hosting, GEO/AEO search optimization, custom workflows, and intelligent AI agents. We build and maintain the digital infrastructure that scales your operations.
+              5 core service lines: Web Design, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. Premium websites, managed hosting, custom AI agents. Phase-0 Pilot: $3,999. We build the digital infrastructure that scales your operations.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
                <Link to={createPageUrl('InventoryDashboard')} className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto" aria-label="Try the dashboard demo">
@@ -124,15 +126,43 @@ export default function Home() {
           </div>
         </motion.header>
 
+        {/* Lead Paragraph — GEO: Direct answer for AI extraction (KDD '24) */}
+        <motion.section
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.08 }}
+          className="mb-10"
+          aria-labelledby="lead-heading"
+        >
+          <h2 id="lead-heading" className="sr-only">What is Operator.ink</h2>
+          <p className="text-base sm:text-lg text-[var(--retro-text)] leading-relaxed max-w-3xl">
+            <strong>Operator.ink</strong> is a digital operations agency that builds conversion-focused websites, GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) search strategies, AI workflows, and precision ad campaigns. The agency offers 5 core service lines: Web Design &amp; Operations, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. The process follows Brief → Discovery → Build → Launch. An optional Phase-0 Pilot costs $3,999 to validate before full engagement. All demos and pilots use synthetic data only. Operator.ink designs for healthcare and regulated industries with HIPAA considerations from the start. Contact: orders@operator.ink.
+          </p>
+        </motion.section>
+
         <SummaryBox
           title="At a Glance"
           items={[
             'Operator.ink builds operational websites, GEO/AEO/SEO search strategies, AI workflows, and ads.',
-            'Four service lines: Web Design, GEO/AEO/SEO Search, Workflows & AI Agents, Ads & Brand Identity.',
+            '5 service lines: Web Design, GEO/AEO/SEO Search, Workflows & AI Agents, Ads & Brand Identity, Base44 Setup.',
             'Process: Brief → Discovery → Build → Launch. Phase-0 Pilot $3,999 to validate fast.',
             'Compliance-aware: demos use synthetic data only. Safe for healthcare and regulated industries.',
           ]}
         />
+
+        {/* Quotation — GEO: KDD '24 ~41% visibility lift for attributed quotes */}
+        <blockquote
+          className="retro-card rounded-2xl p-6 lg:p-8 mb-14 border-l-4"
+          style={{ borderLeftColor: 'var(--retro-border-bright)' }}
+          cite="https://www.linkedin.com/in/francisco-albavc/"
+        >
+          <p className="text-lg text-[var(--retro-text)] leading-relaxed mb-4">
+            &ldquo;We build systems that work while you sleep. Every website, every workflow, every campaign — engineered for one outcome: your operations scale without you having to scale yourself.&rdquo;
+          </p>
+          <footer className="text-sm text-[var(--retro-text-muted)]">
+            — <cite><strong>Francisco Alba</strong>, Founder, Operator.ink</cite>
+          </footer>
+        </blockquote>
 
         {/* CREATING WITH US — process */}
         <motion.section
@@ -148,7 +178,7 @@ export default function Home() {
               Creating With Us
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { icon: MessageSquare, step: '01', title: 'Brief', desc: 'Share your scope, goals, and constraints. We align on outcomes and timeline.' },
               { icon: FileSearch, step: '02', title: 'Discovery', desc: 'We map your ops, audience, and tech. You get a clear deployment plan.' },
@@ -164,18 +194,18 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: 0.15 + idx * 0.06 }}
                   className="retro-card rounded-2xl p-5 lg:p-6"
                 >
-                  <div className="flex items-center gap-3 mb-3">
+                  <div className="flex items-center gap-3 mb-3" aria-hidden>
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-[var(--retro-border)]" style={{ background: 'var(--retro-bg-elevated)' }}>
                       <Icon className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
                     </div>
                     <span className="text-xs font-mono text-[var(--retro-text-dim)]">{item.step}</span>
                   </div>
-                  <h3 className="text-base font-bold mb-1.5">{item.title}</h3>
-                  <p className="text-sm text-[var(--retro-text-muted)] leading-relaxed">{item.desc}</p>
+                  <dt className="text-base font-bold mb-1.5">Step {item.step}: {item.title}</dt>
+                  <dd className="text-sm text-[var(--retro-text-muted)] leading-relaxed m-0">{item.desc}</dd>
                 </motion.div>
               );
             })}
-          </div>
+          </dl>
           <p className="text-sm text-[var(--retro-text-dim)] mt-4">
             No endless discovery. No scope creep. We start with a Phase-0 Pilot when it fits — validate fast, then scale.
           </p>
@@ -392,7 +422,7 @@ export default function Home() {
           <div>
             <h2 id="intake-heading" className="text-4xl lg:text-5xl font-extrabold mb-4 tracking-tight">System Initialization.</h2>
             <p className="text-[var(--retro-text-muted)] mb-8 leading-relaxed">
-              Describe your scope and we'll return a custom deployment plan with timeline and next steps.
+              Describe your scope and receive a custom deployment plan with timeline and next steps.
             </p>
             <div className="retro-card rounded-[28px] p-6">
               <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-4">Direct Contact</p>

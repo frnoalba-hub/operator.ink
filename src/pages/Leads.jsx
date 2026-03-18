@@ -160,7 +160,7 @@ export default function Leads() {
 
   return (
     <>
-      <SEO title={LEADS_TITLE} description={LEADS_DESC} />
+      <SEO title={LEADS_TITLE} description={LEADS_DESC} noIndex />
       <div className="min-h-screen bg-black text-white p-6 sm:p-10" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif" }}>
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-3 mb-2">

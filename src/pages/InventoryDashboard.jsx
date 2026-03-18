@@ -90,7 +90,7 @@ export default function InventoryDashboard() {
 
   return (
     <>
-      <SEO title={DASHBOARD_TITLE} description={DASHBOARD_DESC} />
+      <SEO title={DASHBOARD_TITLE} description={DASHBOARD_DESC} canonicalUrl="https://operator.ink/InventoryDashboard" />
       <div className="retro-theme min-h-screen antialiased overflow-x-hidden flex flex-col" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }} role="document">
       <GridOverlay />
       <StickyNav currentPage="dashboard" />

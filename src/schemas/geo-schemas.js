@@ -5,6 +5,15 @@
 
 const BASE_URL = 'https://operator.ink';
 
+const LINKEDIN_FOUNDER = 'https://www.linkedin.com/in/francisco-albavc/';
+
+/** Authoritative citation URLs for GEO Glossary (Cite Sources — KDD '24 ~30% visibility lift) */
+export const GEO_CITATION_URLS = {
+  kddPaper: 'https://doi.org/10.1145/3637528.3671900',
+  googleEeat: 'https://developers.google.com/search/docs/fundamentals/creating-helpful-content',
+  generativeEngines: 'https://generative-engines.com/GEO/',
+};
+
 export const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -14,9 +23,14 @@ export const ORGANIZATION_SCHEMA = {
   logo: `${BASE_URL}/operator-logo.png`,
   description: 'Operator.ink builds operational websites, GEO/AEO/SEO search strategies, AI workflows, and ads. Digital operations and growth systems for businesses serious about scalable growth.',
   email: 'orders@operator.ink',
-  sameAs: [
-    'https://www.linkedin.com/in/francisco-albavc/',
-  ],
+  founder: {
+    '@type': 'Person',
+    name: 'Francisco Alba',
+    url: LINKEDIN_FOUNDER,
+    sameAs: [LINKEDIN_FOUNDER],
+  },
+  publisher: { '@id': `${BASE_URL}/#organization` },
+  sameAs: [LINKEDIN_FOUNDER],
 };
 
 export const SERVICE_SCHEMAS = [
@@ -80,6 +94,30 @@ export const FAQ_SCHEMA_HOME = {
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Brief (share scope and goals) → Discovery (we map your ops and audience) → Build (sprints with check-ins) → Launch (handoff, docs, ongoing support). We start with Phase-0 Pilot when it fits to validate fast, then scale.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is Generative Engine Optimization (GEO)?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Generative Engine Optimization (GEO) is the practice of optimizing web content so AI systems like ChatGPT, Perplexity, and Google AI Overviews select, cite, and quote your content in synthesized answers. GEO extends traditional SEO for the AI era—content is structured for machine extraction and authoritative citation.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does Operator.ink work with healthcare companies?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Operator.ink works with healthcare and regulated industries. All demos and pilots use synthetic data only—no real PHI or patient names. Client data is encrypted in transit and at rest. We design for HIPAA considerations from the start.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How much does the Phase-0 Pilot cost?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The Phase-0 Pilot costs $3,999. It validates your project with a working prototype before full engagement. No endless discovery or scope creep—validate fast, then scale.',
       },
     },
   ],

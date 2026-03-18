@@ -6,7 +6,7 @@ import { createPageUrl } from '@/utils';
 import SEO from '@/components/SEO';
 import StickyNav from '../components/StickyNav';
 import SummaryBox from '../components/SummaryBox';
-import { ORGANIZATION_SCHEMA, SERVICE_SCHEMAS, FAQ_SCHEMA_SERVICES } from '@/schemas/geo-schemas';
+import { ORGANIZATION_SCHEMA, SERVICE_SCHEMAS, FAQ_SCHEMA_SERVICES, GEO_CITATION_URLS } from '@/schemas/geo-schemas';
 import GridOverlay from '../components/GridOverlay';
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
@@ -168,6 +168,7 @@ export default function Services() {
       <SEO
         title={SERVICES_TITLE}
         description={SERVICES_DESC}
+        canonicalUrl="https://operator.ink/Services"
         schema={[ORGANIZATION_SCHEMA, ...SERVICE_SCHEMAS, FAQ_SCHEMA_SERVICES]}
       />
       <div className="min-h-screen retro-theme antialiased overflow-x-hidden" style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }} role="document">
@@ -194,13 +195,14 @@ export default function Services() {
             What We<br /><span className="retro-link-accent">Deploy.</span>
           </h1>
           <p className="text-lg text-[var(--retro-text-muted)] leading-relaxed max-w-2xl">
-            Four integrated service lines engineered to capture demand, automate operations, and grow revenue. Built for businesses that are serious about scalable, systematic growth. <strong className="text-[var(--retro-text)]">Compliance-aware and safe for healthcare.</strong>
+            Five core service lines engineered to capture demand, automate operations, and grow revenue: Web Design, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. Phase-0 Pilot: $3,999 to validate before full engagement. Built for businesses serious about scalable growth. <strong className="text-[var(--retro-text)]">Compliance-aware and safe for healthcare.</strong>
           </p>
         </motion.header>
 
         <SummaryBox
           title="Services Summary"
           items={[
+            '5 core service lines. Phase-0 Pilot: $3,999 to validate before full build.',
             'Web Design & Operations — conversion-first websites that generate leads.',
             'GEO, AEO & SEO — appear in AI summaries (ChatGPT, Perplexity), featured snippets, and traditional search.',
             'Workflows & AI Agents — automate manual tasks 24/7 (Make, n8n, Zapier, custom APIs).',
@@ -208,6 +210,42 @@ export default function Services() {
             'Base44 Setup — guided architecture and 1-on-1 consultation.',
           ]}
         />
+
+        {/* Glossary — Cite Sources (KDD '24): link technical terms to authoritative sources */}
+        <motion.section
+          id="glossary"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.06 }}
+          className="mb-16"
+          aria-labelledby="glossary-heading"
+        >
+          <h2 id="glossary-heading" className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-4">Term Definitions</h2>
+          <dl className="retro-card rounded-2xl p-6 lg:p-8 space-y-4 text-sm">
+            <div>
+              <dt className="font-bold text-[var(--retro-text)] mb-1">
+                <a href={GEO_CITATION_URLS.kddPaper} target="_blank" rel="noopener noreferrer" className="retro-link underline underline-offset-2">GEO (Generative Engine Optimization)</a>
+              </dt>
+              <dd className="text-[var(--retro-text-muted)] leading-relaxed m-0">
+                Optimizing web content so AI systems (ChatGPT, Perplexity, Google AI Overviews) select, cite, and quote your content in synthesized answers. Defined in the KDD &apos;24 paper by Aggarwal et al.
+              </dd>
+            </div>
+            <div>
+              <dt className="font-bold text-[var(--retro-text)] mb-1">AEO (Answer Engine Optimization)</dt>
+              <dd className="text-[var(--retro-text-muted)] leading-relaxed m-0">
+                Optimizing content to capture featured snippets and voice search. Extends traditional SEO for answer engines and smart assistants.
+              </dd>
+            </div>
+            <div>
+              <dt className="font-bold text-[var(--retro-text)] mb-1">
+                <a href={GEO_CITATION_URLS.googleEeat} target="_blank" rel="noopener noreferrer" className="retro-link underline underline-offset-2">E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness)</a>
+              </dt>
+              <dd className="text-[var(--retro-text-muted)] leading-relaxed m-0">
+                Google&apos;s quality framework for evaluating content. We engineer E-E-A-T signals (author attribution, citations, factual statements) so both crawlers and AI summarizers recognize authority.
+              </dd>
+            </div>
+          </dl>
+        </motion.section>
 
         {/* Compliance & Security — safe to use */}
         <motion.section
@@ -298,20 +336,20 @@ export default function Services() {
                 <p className="text-[var(--retro-text-muted)] leading-relaxed mb-10 max-w-3xl text-base lg:text-lg">{svc.description}</p>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Process */}
+                  {/* Process — dl/dt/dd for GEO AI extraction */}
                   <div>
                     <h3 className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-5">Process</h3>
-                    <div className="space-y-5">
+                    <dl className="space-y-5">
                       {svc.process.map((p) => (
                         <div key={p.step} className="flex gap-4">
-                          <span className="text-xs font-bold mt-1 w-6 flex-shrink-0" style={{ color: 'var(--retro-text)' }}>{p.step}</span>
+                          <span className="text-xs font-bold mt-1 w-6 flex-shrink-0" style={{ color: 'var(--retro-text)' }} aria-hidden>{p.step}</span>
                           <div>
-                            <p className="font-bold text-sm mb-1" style={{ color: 'var(--retro-text)' }}>{p.label}</p>
-                            <p className="text-sm text-[var(--retro-text-muted)] leading-relaxed">{p.detail}</p>
+                            <dt className="font-bold text-sm mb-1" style={{ color: 'var(--retro-text)' }}>{p.label}</dt>
+                            <dd className="text-sm text-[var(--retro-text-muted)] leading-relaxed m-0">{p.detail}</dd>
                           </div>
                         </div>
                       ))}
-                    </div>
+                    </dl>
                   </div>
 
                   {/* Offerings */}
@@ -364,7 +402,7 @@ export default function Services() {
           aria-labelledby="cta-heading"
         >
           <h2 id="cta-heading" className="text-3xl lg:text-4xl font-extrabold mb-4">Ready to Deploy?</h2>
-          <p className="text-[var(--retro-text-muted)] mb-8 max-w-xl mx-auto">Tell us your scope and we'll return a custom deployment plan with timeline and pricing.</p>
+          <p className="text-[var(--retro-text-muted)] mb-8 max-w-xl mx-auto">Submit your scope and receive a custom deployment plan with timeline and pricing.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to={`${createPageUrl('Home')}#intake`}
