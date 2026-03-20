@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { pagesConfig } from './pages.config'
+import StreamerAnalytics from './pages/StreamerAnalytics.jsx'
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -44,6 +45,14 @@ const AuthenticatedApp = () => {
     }
   }
 
+  // Streamer Analytics: explicit routes so the page ships in the JS bundle even when Base44
+  // build regenerates pages.config.js without these entries (verified: prod bundle lacked Streamer* strings).
+  const streamerEl = (
+    <LayoutWrapper currentPageName="StreamerAnalytics">
+      <StreamerAnalytics />
+    </LayoutWrapper>
+  );
+
   // Render the main app
   return (
     <Routes>
@@ -52,6 +61,8 @@ const AuthenticatedApp = () => {
           <MainPage />
         </LayoutWrapper>
       } />
+      <Route path="/StreamerAnalytics" element={streamerEl} />
+      <Route path="/StreamerAna" element={streamerEl} />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
