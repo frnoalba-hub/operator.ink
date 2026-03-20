@@ -12,7 +12,7 @@ const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 
 /** Marketing pages that render immediately without waiting for auth/public-settings. Reduces timeout risk. */
-const PUBLIC_PATHS = ['/', '/Home', '/Pilot', '/Services'];
+const PUBLIC_PATHS = ['/', '/Home', '/Pilot', '/Services', '/StreamerAna', '/StreamerAnalytics'];
 
 const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>

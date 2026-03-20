@@ -53,7 +53,7 @@ import Portal from './pages/Portal';
 import Leads from './pages/Leads';
 import Services from './pages/Services';
 import InventoryDashboard from './pages/InventoryDashboard';
-import StreamerAna from './pages/StreamerAna';
+import StreamerAnalytics from './pages/StreamerAnalytics';
 
 export const PAGES = {
     "Home": Home,
@@ -62,7 +62,9 @@ export const PAGES = {
     "Leads": Leads,
     "Services": Services,
     "InventoryDashboard": InventoryDashboard,
-    "StreamerAna": StreamerAna,
+    // Both keys: bookmarks / Base44 may reference either name
+    "StreamerAna": StreamerAnalytics,
+    "StreamerAnalytics": StreamerAnalytics,
 }
 
 export const pagesConfig = {
