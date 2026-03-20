@@ -13,7 +13,7 @@ const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 
 /** Marketing pages that render immediately without waiting for auth/public-settings. Reduces timeout risk. */
-const PUBLIC_PATHS = ['/', '/Home', '/Pilot', '/Services', '/StreamerAna', '/StreamerAnalytics'];
+const PUBLIC_PATHS = ['/', '/Home', '/Pilot', '/Services', '/StreamerAnalytics'];
 
 const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
@@ -45,8 +45,8 @@ const AuthenticatedApp = () => {
     }
   }
 
-  // Streamer Analytics: explicit routes so the page ships in the JS bundle even when Base44
-  // build regenerates pages.config.js without these entries (verified: prod bundle lacked Streamer* strings).
+  // Streamer Analytics: explicit route so the page ships in the JS bundle even when Base44
+  // build regenerates pages.config.js without this entry (verified: prod bundle lacked Streamer* strings).
   const streamerEl = (
     <LayoutWrapper currentPageName="StreamerAnalytics">
       <StreamerAnalytics />
@@ -62,7 +62,6 @@ const AuthenticatedApp = () => {
         </LayoutWrapper>
       } />
       <Route path="/StreamerAnalytics" element={streamerEl} />
-      <Route path="/StreamerAna" element={streamerEl} />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
