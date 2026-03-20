@@ -81,38 +81,6 @@ export const MOCK_TITLE_SUGGESTIONS = [
   'Cozy Just Chatting — career Q&A + channel updates',
 ];
 
-/** Preset titles by game — instant suggestions, no API. */
-export const PRESET_TITLES_BY_GAME = {
-  'Hollow Knight': [
-    'Late-night Hollow Knight — first play, no spoilers pls',
-    'Chill Hollow Knight — blind run, no backseating',
-    'Hollow Knight speedrun practice — any%',
-    'Cozy Hollow Knight — exploring Hallownest',
-    'Hollow Knight 112% — going for full completion',
-  ],
-  Valorant: [
-    'Ranked grind | road to Immortal — Valorant',
-    'Unrated chill — learning the ropes',
-    'Valorant ranked duo — LFG',
-    'Warmup deathmatch — then ranked',
-    'Valorant coaching session — VOD review',
-  ],
-  'Just Chatting': [
-    'Cozy Just Chatting — career Q&A + channel updates',
-    'Late-night vibes — chill chat',
-    'Just Chatting — 24h stream day 1',
-    'Q&A + gaming news — drop questions',
-    'Chill stream — music + chat',
-  ],
-  'Indie Horror (tag aggregate)': [
-    'Indie horror night — first play, no spoilers',
-    'Spooky Sunday — indie horror marathon',
-    'Blind playthrough — new indie horror',
-    'Chill horror — low-key scares',
-    'Indie horror co-op — backseat welcome',
-  ],
-};
-
 export const MOCK_HOURLY_BY_GAME = {
   Valorant: buildHourlyCurve(21, 78000, 52000, 1.15),
   'Hollow Knight': buildHourlyCurve(15, 1800, 4200, 0.95),
