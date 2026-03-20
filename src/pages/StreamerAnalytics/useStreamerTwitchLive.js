@@ -9,18 +9,43 @@ function apiPrefix() {
   return import.meta.env.VITE_TWITCH_API_BASE || '';
 }
 
-/** Safe JSON parse; empty or non-JSON body → null + friendly message instead of throwing. */
+/**
+ * Safe JSON parse; empty or non-JSON body → structured error (UI decides how loud to be).
+ * Checks HTTP status first so we don’t mislabel HTML error pages as “empty”.
+ */
 async function safeJsonResponse(res) {
   const text = await res.text();
-  if (!text?.trim()) {
-    return { ok: false, error: 'Proxy or API returned empty response — is Mission Control running on 8787?' };
+  const trimmed = text?.trim() ?? '';
+  if (!trimmed) {
+    return {
+      ok: false,
+      error:
+        res.ok === false
+          ? `Twitch API returned no body (HTTP ${res.status}). Mission Control may be down or the proxy target wrong.`
+          : 'Empty response from /api/twitch — is Mission Control running on port 8787?',
+    };
   }
   try {
-    return JSON.parse(text);
+    return JSON.parse(trimmed);
   } catch {
-    return { ok: false, error: 'Invalid JSON from API — proxy may be returning HTML or an error page.' };
+    return {
+      ok: false,
+      error: `Expected JSON from Twitch API but got ${res.ok ? 'non-JSON' : `HTTP ${res.status}`} (often HTML from the dev server when the route isn’t the API).`,
+    };
   }
 }
+
+/**
+ * Why we’re on sample data (only set when phase === 'mock').
+ * - needs_twitch_env: MC reachable, TWITCH_* not set in workspace .env
+ * - mc_unreachable: could not get /api/twitch/status (MC off, proxy, or wrong base URL)
+ * - helix_failed: creds OK but featured/batch failed (Twitch API error, rate limit, etc.)
+ */
+export const MOCK_REASON = /** @type {const} */ ({
+  NEEDS_TWITCH_ENV: 'needs_twitch_env',
+  MC_UNREACHABLE: 'mc_unreachable',
+  HELIX_FAILED: 'helix_failed',
+});
 
 /**
  * Live Twitch aggregates for Streamer Analytics (Helix via Mission Control proxy).
@@ -28,6 +53,7 @@ async function safeJsonResponse(res) {
 export function useStreamerTwitchLive() {
   const [phase, setPhase] = useState('loading');
   const [configured, setConfigured] = useState(false);
+  const [mockReason, setMockReason] = useState(/** @type {string | null} */ (null));
   const [games, setGames] = useState([]);
   const [categories, setCategories] = useState([]);
   const [batchErrors, setBatchErrors] = useState([]);
@@ -38,6 +64,9 @@ export function useStreamerTwitchLive() {
     const prefix = apiPrefix();
     setPhase('loading');
     setLoadError(null);
+    setMockReason(null);
+    /** Past /status with configured:true — failures after this are Twitch/Helix, not “MC down”. */
+    let pastStatusReady = false;
     try {
       const stRes = await fetch(`${prefix}/api/twitch/status`);
       const st = await safeJsonResponse(stRes);
@@ -46,6 +75,7 @@ export function useStreamerTwitchLive() {
       }
       if (!st.configured) {
         setConfigured(false);
+        setMockReason(MOCK_REASON.NEEDS_TWITCH_ENV);
         setGames([]);
         setCategories([]);
         setBatchErrors([]);
@@ -54,6 +84,7 @@ export function useStreamerTwitchLive() {
         return;
       }
       setConfigured(true);
+      pastStatusReady = true;
 
       const featRes = await fetch(`${prefix}/api/twitch/featured?first=${FEAT_FIRST}`);
       const feat = await safeJsonResponse(featRes);
@@ -78,10 +109,13 @@ export function useStreamerTwitchLive() {
       setCategories(batch.categories || []);
       setBatchErrors(batch.errors || []);
       setFetchedAt(batch.fetchedAt || null);
+      setMockReason(null);
       setPhase('live');
     } catch (e) {
-      setLoadError(String(e?.message || e));
+      const msg = String(e?.message || e);
+      setLoadError(msg);
       setConfigured(false);
+      setMockReason(pastStatusReady ? MOCK_REASON.HELIX_FAILED : MOCK_REASON.MC_UNREACHABLE);
       setPhase('mock');
     }
   }, []);
@@ -93,6 +127,7 @@ export function useStreamerTwitchLive() {
   return {
     phase,
     configured,
+    mockReason,
     games,
     categories,
     batchErrors,

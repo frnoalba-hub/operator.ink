@@ -11,6 +11,9 @@ export default defineConfig({
       '/api/twitch': {
         target: 'http://127.0.0.1:8787',
         changeOrigin: true,
+        // batch-summaries can take a while (many Helix pages)
+        timeout: 180_000,
+        proxyTimeout: 180_000,
       },
     },
   },

@@ -66,6 +66,14 @@ The Vite proxy **only applies in dev**. For production you need either:
 | GET | `/api/twitch/category-summary?game_id=&max_pages=` | One category, paginated streams |
 | POST | `/api/twitch/batch-summaries` | Body: `{ games: [{id,name}], maxPages }` |
 
-## Title Gen (Metadata tab)
+## Title Gen (Titles tab)
 
-The **Generate titles** feature uses a Base44 function, not Mission Control. See [`docs/STREAMER_TITLE_GEN.md`](STREAMER_TITLE_GEN.md) for secrets, deploy, and permissions.
+Uses **Base44** `InvokeLLM` integration credits (no Mission Control). See [`docs/STREAMER_TITLE_GEN.md`](STREAMER_TITLE_GEN.md).
+
+## Troubleshooting
+
+| UI badge in “Live data setup” | Meaning |
+|-------------------------------|---------|
+| **Needs Twitch keys** | MC is reachable; add `TWITCH_CLIENT_ID` / `TWITCH_CLIENT_SECRET` to `_SECRETS_MANAGEMENT/.env` and restart MC. |
+| **MC unreachable** | MC not on 8787, or dev proxy broken, or wrong `VITE_TWITCH_API_BASE`. |
+| **Twitch API error** | Keys set but Helix/token failed — check MC terminal logs. |

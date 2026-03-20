@@ -41,7 +41,7 @@ import {
 } from './mocks';
 import { fmt, gradeStyle, gradeFromRatio, scaleMockToLive, chartAxisStyle, chartTooltipStyle } from './utils';
 import { base44 } from '@/api/base44Client';
-import { useStreamerTwitchLive, TWITCH_BATCH_MAX_PAGES } from './useStreamerTwitchLive';
+import { useStreamerTwitchLive, TWITCH_BATCH_MAX_PAGES, MOCK_REASON } from './useStreamerTwitchLive';
 
 const PAGE_TITLE = 'Streamer Analytics — Pick the Best Category to Stream | Operator.ink';
 const PAGE_DESC =
@@ -63,7 +63,7 @@ export default function StreamerAnalytics() {
   const [titleError, setTitleError] = useState(null);
   const [generatedTitles, setGeneratedTitles] = useState([]);
 
-  const { phase, categories, batchErrors, fetchedAt, loadError, refetch } = useStreamerTwitchLive();
+  const { phase, mockReason, categories, batchErrors, fetchedAt, loadError, refetch } = useStreamerTwitchLive();
 
   const presetTitles = useMemo(() => {
     const game = titleGamePreset?.trim();
@@ -197,7 +197,7 @@ export default function StreamerAnalytics() {
                 )}
                 {phase === 'mock' && (
                   <span className="text-[10px] uppercase font-bold tracking-widest bg-white/5 text-white/50 border border-white/10 px-2 py-0.5 rounded-full">
-                    Mock fallback
+                    Sample data
                   </span>
                 )}
                 {phase === 'loading' && (
@@ -215,18 +215,62 @@ export default function StreamerAnalytics() {
                   </>
                 ) : (
                   <>
-                    <strong className="text-white/70">Mock data</strong> — start Mission Control API (
-                    <code className="text-cyan-400/90 text-xs">8787</code>) with{' '}
-                    <code className="text-white/50 text-xs">TWITCH_CLIENT_ID</code> /{' '}
-                    <code className="text-white/50 text-xs">TWITCH_CLIENT_SECRET</code> in workspace secrets{' '}
-                    <code className="text-white/50 text-xs">.env</code>, run Vite dev (proxy to MC).
+                    You’re viewing <strong className="text-white/80">illustrative numbers</strong> so the page stays
+                    usable without Twitch wired up. Connect Mission Control to replace them with live Helix aggregates.
                   </>
                 )}
               </p>
-              {loadError && (
-                <p className="mt-2 text-xs text-amber-400/90">
-                  Twitch load failed — showing mock. {loadError}
-                </p>
+              {phase === 'mock' && (
+                <details className="mt-3 group text-xs max-w-2xl rounded-xl border border-white/[0.08] bg-black/20 px-3 py-2 open:pb-3">
+                  <summary className="cursor-pointer text-cyan-400/90 hover:text-cyan-300 list-none flex items-center gap-2 py-1 [&::-webkit-details-marker]:hidden">
+                    <span className="inline-block transition-transform group-open:rotate-90 text-[10px] text-white/50">▸</span>
+                    <span className="font-semibold text-white/70">Live data setup</span>
+                    {mockReason === MOCK_REASON.NEEDS_TWITCH_ENV && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400/90">Needs Twitch keys</span>
+                    )}
+                    {mockReason === MOCK_REASON.MC_UNREACHABLE && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-rose-400/80">MC unreachable</span>
+                    )}
+                    {mockReason === MOCK_REASON.HELIX_FAILED && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400/90">Twitch API error</span>
+                    )}
+                  </summary>
+                  <div className="mt-2 pl-6 border-l border-cyan-500/20 text-[var(--retro-text-dim)] space-y-2">
+                    {mockReason === MOCK_REASON.NEEDS_TWITCH_ENV && (
+                      <p>
+                        Mission Control is running and answered <code className="text-white/60">/api/twitch/status</code>, but{' '}
+                        <code className="text-white/50">TWITCH_CLIENT_ID</code> and{' '}
+                        <code className="text-white/50">TWITCH_CLIENT_SECRET</code> are missing. Add them to{' '}
+                        <code className="text-cyan-400/80">09_Tools/VC_CORE_SYSTEMS/_SECRETS_MANAGEMENT/.env</code>, restart
+                        Mission Control, then <strong className="text-white/70">Refresh data</strong>.
+                      </p>
+                    )}
+                    {mockReason === MOCK_REASON.MC_UNREACHABLE && (
+                      <p>
+                        Couldn’t load <code className="text-white/60">/api/twitch/status</code>. Start Mission Control:{' '}
+                        <code className="text-white/50">cd _MISSION_CONTROL</code> → <code className="text-white/50">npm run dev:api</code>{' '}
+                        (port <code className="text-cyan-400/90">8787</code>). With Vite dev, <code className="text-white/50">/api/twitch</code>{' '}
+                        is proxied automatically.
+                      </p>
+                    )}
+                    {mockReason === MOCK_REASON.HELIX_FAILED && (
+                      <p>
+                        Mission Control is up and Twitch credentials are set, but a Helix request failed (token, rate limit, or
+                        network). Check Mission Control terminal logs and try <strong className="text-white/70">Refresh data</strong>.
+                      </p>
+                    )}
+                    <p className="text-white/45 pt-1 border-t border-white/5">
+                      Full steps: <code className="text-cyan-400/70">docs/TWITCH_HELIX_LOCAL.md</code>. Production: set{' '}
+                      <code className="text-white/50">VITE_TWITCH_API_BASE</code> to your API origin (Vite proxy is dev-only).
+                    </p>
+                    {loadError && import.meta.env.DEV && (
+                      <p className="text-amber-400/90 font-mono text-[11px] break-words">
+                        <span className="font-sans font-semibold">Detail: </span>
+                        {loadError}
+                      </p>
+                    )}
+                  </div>
+                </details>
               )}
               {phase === 'live' && fetchedAt && (
                 <p className="mt-1 text-[10px] text-white/35">Last fetch: {new Date(fetchedAt).toLocaleString()}</p>
