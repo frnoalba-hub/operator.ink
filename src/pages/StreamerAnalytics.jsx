@@ -1,148 +1,120 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Radio, BarChart3, Users, ArrowUpRight, ArrowDownRight, Eye, Clock, UserPlus, MessageSquare, Tv, Trophy, Globe, Monitor, Smartphone, Gamepad2, TrendingUp } from 'lucide-react';
+import {
+  Layers,
+  Clock,
+  Sparkles,
+  ArrowUpRight,
+  ArrowDownRight,
+  TrendingUp,
+  Users,
+  Radio,
+  Trophy,
+  Wand2,
+} from 'lucide-react';
 import SEO from '@/components/SEO';
 import StickyNav from '@/components/StickyNav';
 import GridOverlay from '@/components/GridOverlay';
 import BackToHome from '@/components/BackToHome';
 
-const PAGE_TITLE = 'Streamer Analytics — Twitch & Streaming Analytics | Operator.ink';
-const PAGE_DESC = 'Streamer Analytics: Twitch & streaming analytics for creators. Viewers, engagement, growth metrics.';
+const PAGE_TITLE = 'Streamer Analytics — Pick the Best Category to Stream | Operator.ink';
+const PAGE_DESC =
+  'Compare Twitch categories by viewer demand vs competition, find best times to go live per game, and improve titles. Built for streamers choosing where to stream.';
 
-// ─── Mock Data ───────────────────────────────────────────────────────────────
+// ─── Mock: category opportunity (viewer/streamer ratio = demand per live channel) ───
 
-const MOCK_KPIS = {
-  '7d':  { avgViewers: 342,   peakViewers: 1_247, hoursStreamed: 28.5, followersGained: 186,  chatMessages: 14_820, streams: 6  },
-  '30d': { avgViewers: 298,   peakViewers: 2_031, hoursStreamed: 112,  followersGained: 724,  chatMessages: 58_340, streams: 22 },
-  '90d': { avgViewers: 271,   peakViewers: 2_031, hoursStreamed: 318,  followersGained: 2_140, chatMessages: 162_900, streams: 64 },
-};
-
-const MOCK_TREND = [
-  { day: 'Mon', viewers: 280 },
-  { day: 'Tue', viewers: 310 },
-  { day: 'Wed', viewers: 420 },
-  { day: 'Thu', viewers: 385 },
-  { day: 'Fri', viewers: 510 },
-  { day: 'Sat', viewers: 680 },
-  { day: 'Sun', viewers: 342 },
+const MOCK_CATEGORIES = [
+  {
+    game: 'Hollow Knight',
+    viewers: 8200,
+    streamers: 18,
+    ratio: 456,
+    trend: +12,
+    note: 'High viewers per stream — easier to get noticed if it fits your content.',
+    grade: 'A',
+  },
+  {
+    game: 'Valorant',
+    viewers: 185000,
+    streamers: 2100,
+    ratio: 88,
+    trend: -3,
+    note: 'Huge audience but very crowded — need strong differentiation.',
+    grade: 'B',
+  },
+  {
+    game: 'Just Chatting',
+    viewers: 312000,
+    streamers: 4200,
+    ratio: 74,
+    trend: +1,
+    note: 'Saturated; ratio is low — many streamers splitting the pie.',
+    grade: 'C',
+  },
+  {
+    game: 'Indie Horror (tag aggregate)',
+    viewers: 24000,
+    streamers: 95,
+    ratio: 253,
+    trend: +28,
+    note: 'Niche with solid demand — good for smaller channels.',
+    grade: 'A',
+  },
 ];
 
-const MOCK_CHANNELS = [
-  { id: 1, name: 'AlexPlaysGames',  platform: 'Twitch',  status: 'live',    avgViewers: 342, peakViewers: 1247, delta: +14.2, category: 'Valorant',        followers: 8_420 },
-  { id: 2, name: 'AlexGaming',      platform: 'YouTube', status: 'offline',  avgViewers: 189, peakViewers: 612,  delta: -3.1,  category: 'Variety',         followers: 3_210 },
-  { id: 3, name: 'alex_live',       platform: 'Kick',    status: 'offline',  avgViewers: 76,  peakViewers: 245,  delta: +28.6, category: 'Just Chatting',   followers: 1_180 },
-];
+// ─── Mock: when each category peaks (for scheduling) ───
 
 const MOCK_BEST_TIMES = [
-  { day: 'Saturday',  time: '7 PM – 11 PM', avgViewers: 580, category: 'Valorant' },
-  { day: 'Friday',    time: '8 PM – 12 AM', avgViewers: 510, category: 'Variety' },
-  { day: 'Sunday',    time: '3 PM – 7 PM',  avgViewers: 420, category: 'Just Chatting' },
-  { day: 'Wednesday', time: '9 PM – 11 PM', avgViewers: 385, category: 'Valorant' },
+  { game: 'Valorant', day: 'Saturday', window: '7 PM – 11 PM UTC', intensity: 'Peak' },
+  { game: 'Just Chatting', day: 'Friday', window: '8 PM – 1 AM UTC', intensity: 'Peak' },
+  { game: 'Hollow Knight', day: 'Sunday', window: '2 PM – 6 PM UTC', intensity: 'High' },
+  { game: 'Indie Horror', day: 'Thursday', window: '9 PM – 12 AM UTC', intensity: 'High' },
 ];
 
-const MOCK_AUDIENCE = {
-  geo: [
-    { region: 'United States', percent: 62, viewers: 212 },
-    { region: 'Mexico',        percent: 14, viewers: 48 },
-    { region: 'Canada',        percent: 8,  viewers: 27 },
-    { region: 'United Kingdom', percent: 5, viewers: 17 },
-    { region: 'Germany',       percent: 3,  viewers: 10 },
-    { region: 'Other',         percent: 8,  viewers: 28 },
-  ],
-  devices: [
-    { type: 'Desktop',  percent: 58, icon: Monitor },
-    { type: 'Mobile',   percent: 28, icon: Smartphone },
-    { type: 'Console',  percent: 14, icon: Gamepad2 },
-  ],
-  peakHours: [
-    { hour: '6 PM', intensity: 0.4 },
-    { hour: '7 PM', intensity: 0.7 },
-    { hour: '8 PM', intensity: 0.9 },
-    { hour: '9 PM', intensity: 1.0 },
-    { hour: '10 PM', intensity: 0.85 },
-    { hour: '11 PM', intensity: 0.6 },
-    { hour: '12 AM', intensity: 0.3 },
-  ],
-};
+// ─── Mock: title tools ───
 
-// ─── Tabs ────────────────────────────────────────────────────────────────────
+const MOCK_TITLE_PATTERNS = [
+  'Short hook + game name in first 40 chars',
+  '“First play” / “Blind” / “Hard mode” modifiers when true',
+  'One clear CTA word: speedrun, chill, ranked, coaching',
+];
+
+const MOCK_TITLE_SUGGESTIONS = [
+  'Late-night Hollow Knight — first play, no spoilers pls',
+  'Ranked grind | road to Immortal — Valorant',
+  'Cozy Just Chatting — career Q&A + channel updates',
+];
 
 const TABS = [
-  { id: 'overview',  label: 'Overview',  icon: BarChart3 },
-  { id: 'channels',  label: 'Channels',  icon: Radio },
-  { id: 'audience',  label: 'Audience',  icon: Users },
+  { id: 'categories', label: 'Categories', icon: Layers },
+  { id: 'timing', label: 'Best times', icon: Clock },
+  { id: 'titles', label: 'Titles', icon: Sparkles },
 ];
-
-const DATE_RANGES = ['7d', '30d', '90d'];
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function fmt(n) {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
-  return String(n);
+  return String(Math.round(n));
 }
 
-function getPlatformColor(platform) {
-  switch (platform) {
-    case 'Twitch':  return { text: 'text-[#9146FF]', bg: 'bg-[#9146FF]/10', border: 'border-[#9146FF]/20' };
-    case 'YouTube': return { text: 'text-[#FF0000]', bg: 'bg-[#FF0000]/10', border: 'border-[#FF0000]/20' };
-    case 'Kick':    return { text: 'text-[#53FC18]', bg: 'bg-[#53FC18]/10', border: 'border-[#53FC18]/20' };
-    default:        return { text: 'text-zinc-400',  bg: 'bg-zinc-400/10',  border: 'border-zinc-400/20' };
-  }
+function gradeStyle(grade) {
+  if (grade === 'A') return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/30';
+  if (grade === 'B') return 'text-cyan-400 bg-cyan-400/10 border-cyan-400/30';
+  return 'text-amber-400 bg-amber-400/10 border-amber-400/30';
 }
-
-function getStatusBadge(status) {
-  if (status === 'live') return 'bg-rose-500 text-white';
-  return 'bg-zinc-700 text-zinc-400';
-}
-
-// ─── Mini Bar Chart (pure CSS, no dep) ───────────────────────────────────────
-
-function MiniBarChart({ data, maxKey = 'viewers', color = '#00ccff' }) {
-  const max = Math.max(...data.map(d => d[maxKey]));
-  return (
-    <div className="flex items-end gap-1.5 h-32 w-full">
-      {data.map((d, i) => {
-        const pct = max > 0 ? (d[maxKey] / max) * 100 : 0;
-        return (
-          <div key={i} className="flex-1 flex flex-col items-center gap-1">
-            <span className="text-[9px] text-[var(--retro-text-dim)] font-bold">{d[maxKey]}</span>
-            <div
-              className="w-full rounded-t-md transition-all duration-500"
-              style={{ height: `${pct}%`, background: color, minHeight: '4px', opacity: 0.7 + (pct / 300) }}
-            />
-            <span className="text-[9px] text-[var(--retro-text-dim)] font-medium">{d.day}</span>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-// ─── Component ───────────────────────────────────────────────────────────────
 
 export default function StreamerAnalytics() {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [dateRange, setDateRange] = useState('7d');
-
-  const kpis = MOCK_KPIS[dateRange];
-
-  const KPI_CARDS = [
-    { label: 'Avg Viewers',      value: fmt(kpis.avgViewers),      icon: Eye,          delta: +8.4,  dim: dateRange },
-    { label: 'Peak Viewers',     value: fmt(kpis.peakViewers),     icon: TrendingUp,   delta: +22.1, dim: dateRange },
-    { label: 'Hours Streamed',   value: kpis.hoursStreamed + 'h',  icon: Clock,        delta: +5.0,  dim: dateRange },
-    { label: 'Followers Gained', value: fmt(kpis.followersGained), icon: UserPlus,     delta: +12.3, dim: dateRange },
-    { label: 'Chat Messages',   value: fmt(kpis.chatMessages),    icon: MessageSquare, delta: +18.7, dim: dateRange },
-    { label: 'Streams',         value: String(kpis.streams),      icon: Tv,            delta: 0,     dim: dateRange },
-  ];
+  const [activeTab, setActiveTab] = useState('categories');
 
   return (
     <>
       <SEO title={PAGE_TITLE} description={PAGE_DESC} noIndex />
       <div
         className="retro-theme min-h-screen antialiased overflow-x-hidden flex flex-col"
-        style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif", background: 'var(--retro-bg)' }}
+        style={{
+          fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif",
+          background: 'var(--retro-bg)',
+        }}
         role="document"
       >
         <GridOverlay />
@@ -151,36 +123,39 @@ export default function StreamerAnalytics() {
         <main className="relative z-10 flex-1 w-full px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24 pt-24 pb-16">
           <BackToHome />
 
-          {/* ── Header ── */}
           <motion.header
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
+            className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-8"
           >
-            <div>
-              <div className="flex items-center gap-3 mb-1">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Streamer Analytics</h1>
-                <span className="text-[10px] uppercase font-bold tracking-widest bg-[#9146FF]/10 text-[#9146FF] border border-[#9146FF]/20 px-2 py-0.5 rounded-full">Beta</span>
+                <span className="text-[10px] uppercase font-bold tracking-widest bg-[#9146FF]/10 text-[#9146FF] border border-[#9146FF]/20 px-2 py-0.5 rounded-full">
+                  Beta
+                </span>
               </div>
-              <p className="text-sm text-[var(--retro-text-dim)] mt-1">
-                Twitch & streaming analytics • Viewers, engagement, growth.
+              <p className="text-sm text-[var(--retro-text-dim)] leading-relaxed">
+                <strong className="text-white/90">Pick a better category to stream in.</strong> Compare viewer demand vs
+                how many people are already live, see rough best times per game, then tighten your title. Mock data for
+                now — Twitch data hooks next.
               </p>
             </div>
 
-            {/* Tab Nav */}
-            <nav className="flex rounded-xl border border-white/10 p-1 bg-black/30" aria-label="View tabs">
+            <nav className="flex rounded-xl border border-white/10 p-1 bg-black/30 flex-shrink-0" aria-label="View tabs">
               {TABS.map((t) => {
                 const Icon = t.icon;
                 const isActive = activeTab === t.id;
                 return (
                   <button
                     key={t.id}
+                    type="button"
                     role="tab"
                     aria-selected={isActive}
                     id={`tab-${t.id}`}
                     aria-controls={`panel-${t.id}`}
                     onClick={() => setActiveTab(t.id)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                    className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
                       isActive
                         ? 'bg-white/10 text-white shadow-sm'
                         : 'text-white/60 hover:text-white/80 hover:bg-white/5'
@@ -194,144 +169,81 @@ export default function StreamerAnalytics() {
             </nav>
           </motion.header>
 
-          {/* ── Content Area ── */}
           <AnimatePresence mode="wait">
-
-            {/* ────── OVERVIEW TAB ────── */}
-            {activeTab === 'overview' && (
+            {activeTab === 'categories' && (
               <motion.div
-                key="overview"
+                key="categories"
                 role="tabpanel"
-                id="panel-overview"
-                aria-labelledby="tab-overview"
+                id="panel-categories"
+                aria-labelledby="tab-categories"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
                 className="space-y-6"
               >
-                {/* Date Range */}
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-bold uppercase tracking-wider text-white/60 flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4" /> Overview
-                  </h2>
-                  <div className="flex gap-1.5">
-                    {DATE_RANGES.map((r) => (
-                      <button
-                        key={r}
-                        onClick={() => setDateRange(r)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
-                          dateRange === r
-                            ? 'bg-white/10 text-white border-white/20'
-                            : 'bg-white/[0.02] text-[var(--retro-text-dim)] border-white/5 hover:border-white/10'
-                        }`}
+                <div className="flex items-center gap-2 text-xs text-white/50">
+                  <TrendingUp className="w-4 h-4 text-cyan-400" />
+                  <span>
+                    <strong className="text-white/70">Viewer / streamer ratio</strong> — higher ≈ more eyeballs per live
+                    channel (simplified; not financial advice).
+                  </span>
+                </div>
+
+                <div className="grid gap-4">
+                  {MOCK_CATEGORIES.map((row, i) => {
+                    const up = row.trend >= 0;
+                    return (
+                      <div
+                        key={row.game}
+                        className="retro-card rounded-2xl p-5 sm:p-6 border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-colors"
                       >
-                        {r}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* KPI Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
-                  {KPI_CARDS.map((kpi) => {
-                    const KpiIcon = kpi.icon;
-                    const isPositive = kpi.delta > 0;
-                    const isNeutral = kpi.delta === 0;
-                    return (
-                      <div key={kpi.label} className="retro-card rounded-2xl p-4 border border-[var(--retro-border)]">
-                        <div className="flex justify-between items-start mb-2">
-                          <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">{kpi.label}</p>
-                          <KpiIcon className="w-4 h-4 text-[var(--retro-text-dim)]" />
-                        </div>
-                        <p className="text-xl md:text-2xl font-extrabold">{kpi.value}</p>
-                        {!isNeutral && (
-                          <p className={`text-[10px] md:text-xs mt-1 flex items-center font-bold ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
-                            {isPositive ? <ArrowUpRight className="w-3 h-3 mr-0.5" /> : <ArrowDownRight className="w-3 h-3 mr-0.5" />}
-                            {Math.abs(kpi.delta)}% vs prior
-                          </p>
-                        )}
-                        {isNeutral && (
-                          <p className="text-[10px] text-[var(--retro-text-dim)] mt-1">{kpi.dim}</p>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Viewer Trend Chart */}
-                <div className="retro-card rounded-2xl p-6 lg:p-8 border border-[var(--retro-border)]">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-6 flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4" /> Viewer Trend (Last 7 Days)
-                  </h3>
-                  <MiniBarChart data={MOCK_TREND} maxKey="viewers" color="#00ccff" />
-                </div>
-              </motion.div>
-            )}
-
-            {/* ────── CHANNELS TAB ────── */}
-            {activeTab === 'channels' && (
-              <motion.div
-                key="channels"
-                role="tabpanel"
-                id="panel-channels"
-                aria-labelledby="tab-channels"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-6"
-              >
-                <h2 className="text-sm font-bold uppercase tracking-wider text-white/60 flex items-center gap-2">
-                  <Radio className="w-4 h-4" /> Your Channels
-                </h2>
-
-                {/* Channel Cards */}
-                <div className="space-y-3">
-                  {MOCK_CHANNELS.map((ch, idx) => {
-                    const pc = getPlatformColor(ch.platform);
-                    const isPositive = ch.delta > 0;
-                    return (
-                      <div key={ch.id} className="retro-card rounded-2xl p-5 border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all group">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                          <div className="flex items-center gap-4">
-                            <div className="flex items-center justify-center w-10 h-10 rounded-xl font-extrabold text-lg bg-[var(--retro-bg)] border border-[var(--retro-border)]">
-                              {idx + 1}
+                        <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8">
+                          <div className="flex items-start gap-4 flex-1 min-w-0">
+                            <div className="w-10 h-10 rounded-xl bg-[var(--retro-bg)] border border-[var(--retro-border)] flex items-center justify-center font-extrabold text-white/80 flex-shrink-0">
+                              {i + 1}
                             </div>
-                            <div>
-                              <div className="flex items-center gap-2 mb-1">
-                                <h3 className="font-bold text-base">{ch.name}</h3>
-                                <span className={`text-[9px] uppercase font-extrabold tracking-wider px-2 py-0.5 rounded-full ${getStatusBadge(ch.status)}`}>
-                                  {ch.status === 'live' ? '● LIVE' : 'OFFLINE'}
+                            <div className="min-w-0">
+                              <div className="flex flex-wrap items-center gap-2 mb-1">
+                                <h2 className="text-lg font-bold text-white">{row.game}</h2>
+                                <span
+                                  className={`text-[10px] uppercase font-extrabold tracking-wider px-2 py-0.5 rounded-md border ${gradeStyle(row.grade)}`}
+                                >
+                                  {row.grade} opportunity
                                 </span>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border ${pc.text} ${pc.bg} ${pc.border}`}>
-                                  {ch.platform}
-                                </span>
-                                <span className="text-xs text-[var(--retro-text-dim)]">{ch.category}</span>
-                              </div>
+                              <p className="text-sm text-[var(--retro-text-dim)] leading-snug">{row.note}</p>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-6 sm:gap-8">
-                            <div className="text-center">
-                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Avg</p>
-                              <p className="font-extrabold text-lg">{fmt(ch.avgViewers)}</p>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:gap-6 text-center lg:text-right">
+                            <div>
+                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)]">Live viewers</p>
+                              <p className="font-extrabold text-lg flex items-center justify-center lg:justify-end gap-1">
+                                <Users className="w-4 h-4 text-[var(--retro-text-dim)] opacity-70" />
+                                {fmt(row.viewers)}
+                              </p>
                             </div>
-                            <div className="text-center">
-                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Peak</p>
-                              <p className="font-extrabold text-lg">{fmt(ch.peakViewers)}</p>
+                            <div>
+                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)]">Channels live</p>
+                              <p className="font-extrabold text-lg flex items-center justify-center lg:justify-end gap-1">
+                                <Radio className="w-4 h-4 text-[var(--retro-text-dim)] opacity-70" />
+                                {fmt(row.streamers)}
+                              </p>
                             </div>
-                            <div className="text-center">
-                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Followers</p>
-                              <p className="font-bold text-sm">{fmt(ch.followers)}</p>
+                            <div>
+                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)]">Ratio</p>
+                              <p className="font-extrabold text-lg text-cyan-400">{row.ratio}</p>
                             </div>
-                            <div className="text-center">
-                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">Δ 7d</p>
-                              <p className={`font-bold text-sm flex items-center ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
-                                {isPositive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                                {Math.abs(ch.delta)}%
+                            <div>
+                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)]">Trend</p>
+                              <p
+                                className={`font-bold text-sm flex items-center justify-center lg:justify-end gap-0.5 ${
+                                  up ? 'text-emerald-400' : 'text-rose-400'
+                                }`}
+                              >
+                                {up ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                                {Math.abs(row.trend)}% (mock)
                               </p>
                             </div>
                           </div>
@@ -340,139 +252,122 @@ export default function StreamerAnalytics() {
                     );
                   })}
                 </div>
-
-                {/* Best Stream Times */}
-                <div className="retro-card rounded-2xl p-6 border border-[var(--retro-border)]">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-4 flex items-center gap-2">
-                    <Trophy className="w-4 h-4 text-amber-400" /> Best Stream Times
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {MOCK_BEST_TIMES.map((bt, i) => (
-                      <div key={i} className="flex items-center gap-4 p-3 rounded-xl bg-[var(--retro-bg)] border border-[var(--retro-border)]">
-                        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-400/10 text-amber-400 font-extrabold text-sm border border-amber-400/20">
-                          {i + 1}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-bold text-sm">{bt.day} · {bt.time}</p>
-                          <p className="text-xs text-[var(--retro-text-dim)]">{bt.category} · Avg {bt.avgViewers} viewers</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </motion.div>
             )}
 
-            {/* ────── AUDIENCE TAB ────── */}
-            {activeTab === 'audience' && (
+            {activeTab === 'timing' && (
               <motion.div
-                key="audience"
+                key="timing"
                 role="tabpanel"
-                id="panel-audience"
-                aria-labelledby="tab-audience"
+                id="panel-timing"
+                aria-labelledby="tab-timing"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
                 className="space-y-6"
               >
-                <h2 className="text-sm font-bold uppercase tracking-wider text-white/60 flex items-center gap-2">
-                  <Users className="w-4 h-4" /> Audience Breakdown
-                </h2>
+                <p className="text-sm text-[var(--retro-text-dim)] max-w-3xl">
+                  <strong className="text-white/80">When to go live in each category</strong> — rough windows from mock
+                  aggregates. Real version needs historical snapshots (see product spec).
+                </p>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-                  {/* Geographic Breakdown */}
-                  <div className="retro-card rounded-2xl p-6 border border-[var(--retro-border)]">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-4 flex items-center gap-2">
-                      <Globe className="w-4 h-4" /> Geography
-                    </h3>
-                    <div className="space-y-3">
-                      {MOCK_AUDIENCE.geo.map((g) => (
-                        <div key={g.region}>
-                          <div className="flex justify-between items-center mb-1">
-                            <span className="text-sm font-semibold">{g.region}</span>
-                            <span className="text-xs font-bold text-[var(--retro-text-dim)]">{g.percent}% · {g.viewers} avg</span>
-                          </div>
-                          <div className="w-full h-2 rounded-full bg-[var(--retro-bg)] border border-[var(--retro-border)] overflow-hidden">
-                            <motion.div
-                              initial={{ width: 0 }}
-                              animate={{ width: `${g.percent}%` }}
-                              transition={{ duration: 0.6, delay: 0.1 }}
-                              className="h-full rounded-full"
-                              style={{ background: 'linear-gradient(90deg, #00ccff, #9966ff)' }}
-                            />
-                          </div>
+                <div className="retro-card rounded-2xl p-6 border border-[var(--retro-border)]">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-4 flex items-center gap-2">
+                    <Trophy className="w-4 h-4 text-amber-400" /> Suggested windows (mock)
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {MOCK_BEST_TIMES.map((bt) => (
+                      <div
+                        key={`${bt.game}-${bt.day}`}
+                        className="flex items-center gap-4 p-4 rounded-xl bg-[var(--retro-bg)] border border-[var(--retro-border)]"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-amber-400/10 text-amber-400 flex items-center justify-center border border-amber-400/20 flex-shrink-0">
+                          <Clock className="w-5 h-5" />
                         </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Device Breakdown */}
-                  <div className="retro-card rounded-2xl p-6 border border-[var(--retro-border)]">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-4 flex items-center gap-2">
-                      <Monitor className="w-4 h-4" /> Devices
-                    </h3>
-                    <div className="space-y-4">
-                      {MOCK_AUDIENCE.devices.map((d) => {
-                        const DevIcon = d.icon;
-                        return (
-                          <div key={d.type} className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-[var(--retro-bg)] border border-[var(--retro-border)] flex items-center justify-center">
-                              <DevIcon className="w-5 h-5 text-[var(--retro-text-dim)]" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex justify-between items-center mb-1">
-                                <span className="text-sm font-bold">{d.type}</span>
-                                <span className="text-sm font-extrabold">{d.percent}%</span>
-                              </div>
-                              <div className="w-full h-2 rounded-full bg-[var(--retro-bg)] border border-[var(--retro-border)] overflow-hidden">
-                                <motion.div
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${d.percent}%` }}
-                                  transition={{ duration: 0.6, delay: 0.1 }}
-                                  className="h-full rounded-full"
-                                  style={{ background: d.type === 'Desktop' ? '#66ff66' : d.type === 'Mobile' ? '#00ccff' : '#ffcc00' }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* Peak Viewing Hours */}
-                    <div className="mt-8">
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-4 flex items-center gap-2">
-                        <Clock className="w-4 h-4" /> Peak Viewing Hours
-                      </h3>
-                      <div className="flex items-end gap-2 h-24">
-                        {MOCK_AUDIENCE.peakHours.map((ph) => (
-                          <div key={ph.hour} className="flex-1 flex flex-col items-center gap-1">
-                            <motion.div
-                              initial={{ height: 0 }}
-                              animate={{ height: `${ph.intensity * 100}%` }}
-                              transition={{ duration: 0.5, delay: 0.05 }}
-                              className="w-full rounded-t-md"
-                              style={{
-                                background: `rgba(255, 51, 102, ${0.3 + ph.intensity * 0.7})`,
-                                minHeight: '4px',
-                              }}
-                            />
-                            <span className="text-[8px] text-[var(--retro-text-dim)] font-medium whitespace-nowrap">{ph.hour}</span>
-                          </div>
-                        ))}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-white">{bt.game}</p>
+                          <p className="text-sm text-[var(--retro-text-dim)]">
+                            {bt.day} · {bt.window}
+                          </p>
+                        </div>
+                        <span className="text-[10px] uppercase font-extrabold text-emerald-400/90 flex-shrink-0">
+                          {bt.intensity}
+                        </span>
                       </div>
-                    </div>
+                    ))}
                   </div>
+                </div>
+
+                <div className="rounded-xl border border-dashed border-white/20 p-8 text-center text-sm text-white/40">
+                  Heatmap by hour × day-of-week (per category) — placeholder for v2.
                 </div>
               </motion.div>
             )}
 
+            {activeTab === 'titles' && (
+              <motion.div
+                key="titles"
+                role="tabpanel"
+                id="panel-titles"
+                aria-labelledby="tab-titles"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+              >
+                <div className="retro-card rounded-2xl p-6 border border-[var(--retro-border)]">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-3 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" /> Best title patterns
+                  </h3>
+                  <p className="text-sm text-[var(--retro-text-dim)] mb-4">
+                    Learn from high-performing streams in a category — patterns only, not copying verbatim.
+                  </p>
+                  <ul className="space-y-2">
+                    {MOCK_TITLE_PATTERNS.map((p) => (
+                      <li key={p} className="text-sm text-white/85 flex gap-2">
+                        <span className="text-cyan-400 flex-shrink-0">→</span>
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="retro-card rounded-2xl p-6 border border-[var(--retro-border)]">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-3 flex items-center gap-2">
+                    <Wand2 className="w-4 h-4 text-violet-400" /> Gen (mock)
+                  </h3>
+                  <p className="text-sm text-[var(--retro-text-dim)] mb-4">
+                    Describe your stream; get editable suggestions. Wire to LLM later; respect platform ToS.
+                  </p>
+                  <label htmlFor="title-prompt" className="sr-only">
+                    Stream description for title ideas
+                  </label>
+                  <textarea
+                    id="title-prompt"
+                    rows={3}
+                    className="w-full rounded-xl bg-black/30 border border-white/10 p-3 text-sm text-white/90 mb-4 resize-none focus:outline-none focus:border-cyan-500/40"
+                    placeholder="e.g. Hollow Knight first play, chill, no backseating"
+                  />
+                  <p className="text-[10px] uppercase font-bold text-white/40 mb-2">Example outputs</p>
+                  <ul className="space-y-2">
+                    {MOCK_TITLE_SUGGESTIONS.map((s) => (
+                      <li
+                        key={s}
+                        className="text-sm p-3 rounded-lg bg-white/[0.04] border border-white/10 text-white/90"
+                      >
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            )}
           </AnimatePresence>
 
-          <p className="mt-8 text-xs text-white/30">
-            Streamer Analytics v1 • Mock data. Twitch Helix integration coming soon.
+          <p className="mt-10 text-xs text-white/30">
+            Built for streamers choosing a category and schedule — mock data. Helix + snapshots per product spec.
           </p>
         </main>
       </div>
