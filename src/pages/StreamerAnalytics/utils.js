@@ -11,6 +11,13 @@ export function gradeStyle(grade) {
   return 'text-amber-400 bg-amber-400/10 border-amber-400/30';
 }
 
+/** Human-friendly label for the grade badge. */
+export const GRADE_LABEL = /** @type {const} */ ({
+  A: 'Great fit',
+  B: 'Solid',
+  C: 'Crowded',
+});
+
 export function gradeFromRatio(ratio) {
   if (ratio >= 200) return 'A';
   if (ratio >= 80) return 'B';
@@ -31,10 +38,12 @@ export function scaleMockToLive(templateRows, liveViewerTotal) {
   }));
 }
 
-export const chartAxisStyle = { fontSize: 11, fill: 'rgba(255,255,255,0.45)' };
+export const chartAxisStyle = { fontSize: 11, fill: 'rgba(255,255,255,0.45)', fontWeight: 500 };
 export const chartTooltipStyle = {
-  backgroundColor: 'rgba(15,15,18,0.95)',
-  border: '1px solid rgba(255,255,255,0.12)',
-  borderRadius: '12px',
+  backgroundColor: 'rgba(10,10,14,0.96)',
+  border: '1px solid rgba(255,255,255,0.1)',
+  borderRadius: '14px',
   fontSize: 12,
+  padding: '10px 14px',
+  boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
 };

@@ -30,7 +30,7 @@ export const MOCK_CATEGORIES = [
     streamers: 18,
     ratio: 456,
     trend: +12,
-    note: 'High viewers per stream — easier to get noticed if it fits your content.',
+    note: 'High viewer-to-streamer ratio — fewer broadcasters splitting the audience, so your stream is easier to find.',
     grade: 'A',
   },
   {
@@ -39,7 +39,7 @@ export const MOCK_CATEGORIES = [
     streamers: 2100,
     ratio: 88,
     trend: -3,
-    note: 'Huge audience but very crowded — need strong differentiation.',
+    note: 'Massive audience but highly competitive — strong branding or a niche angle is key to stand out.',
     grade: 'B',
   },
   {
@@ -48,7 +48,7 @@ export const MOCK_CATEGORIES = [
     streamers: 4200,
     ratio: 74,
     trend: +1,
-    note: 'Saturated; ratio is low — many streamers splitting the pie.',
+    note: 'Very saturated category — many streamers sharing the pie, so discoverability is harder for newcomers.',
     grade: 'C',
   },
   {
@@ -57,7 +57,7 @@ export const MOCK_CATEGORIES = [
     streamers: 95,
     ratio: 253,
     trend: +28,
-    note: 'Niche with solid demand — good for smaller channels.',
+    note: 'Growing niche with strong demand — great entry point for smaller channels looking to build an audience.',
     grade: 'A',
   },
 ];
@@ -70,15 +70,16 @@ export const MOCK_BEST_TIMES = [
 ];
 
 export const MOCK_TITLE_PATTERNS = [
-  'Short hook + game name in first 40 chars',
-  '“First play” / “Blind” / “Hard mode” modifiers when true',
-  'One clear CTA word: speedrun, chill, ranked, coaching',
+  'Lead with a hook — game name + what makes this stream different, in the first 40 characters',
+  'Use honest modifiers when they apply: "first play", "blind run", "hard mode"',
+  'Include one clear activity tag: ranked, speedrun, chill, coaching, creative',
+  'Emojis are fine sparingly — one or two to set the vibe, not a wall of them',
 ];
 
 export const MOCK_TITLE_SUGGESTIONS = [
-  'Late-night Hollow Knight — first play, no spoilers pls',
+  'Late-night Hollow Knight — first play, no spoilers pls 🌙',
   'Ranked grind | road to Immortal — Valorant',
-  'Cozy Just Chatting — career Q&A + channel updates',
+  'Cozy Just Chatting — career Q&A + channel updates ☕',
 ];
 
 export const MOCK_HOURLY_BY_GAME = {

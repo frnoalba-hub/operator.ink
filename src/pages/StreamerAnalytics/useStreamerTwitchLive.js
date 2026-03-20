@@ -11,7 +11,10 @@ function apiPrefix() {
 
 /**
  * Safe JSON parse; empty or non-JSON body → structured error (UI decides how loud to be).
- * Checks HTTP status first so we don’t mislabel HTML error pages as “empty”.
+ * Checks HTTP status first so we don't mislabel HTML error pages as "empty".
+ *
+ * NOTE: Error strings here feed `loadError` which is gated behind `showDevInternals` in the UI.
+ * Keep them descriptive for devs but free of secrets / exact port numbers.
  */
 async function safeJsonResponse(res) {
   const text = await res.text();
@@ -21,8 +24,8 @@ async function safeJsonResponse(res) {
       ok: false,
       error:
         res.ok === false
-          ? `Twitch API returned no body (HTTP ${res.status}). Mission Control may be down or the proxy target wrong.`
-          : 'Empty response from /api/twitch — is Mission Control running on port 8787?',
+          ? `Twitch API returned no body (HTTP ${res.status}). Backend proxy may be unavailable.`
+          : 'Empty response from Twitch API — is the backend proxy running?',
     };
   }
   try {
@@ -30,15 +33,15 @@ async function safeJsonResponse(res) {
   } catch {
     return {
       ok: false,
-      error: `Expected JSON from Twitch API but got ${res.ok ? 'non-JSON' : `HTTP ${res.status}`} (often HTML from the dev server when the route isn’t the API).`,
+      error: `Expected JSON from Twitch API but got ${res.ok ? 'non-JSON' : `HTTP ${res.status}`} (the dev server may be serving HTML instead of proxying the request).`,
     };
   }
 }
 
 /**
- * Why we’re on sample data (only set when phase === 'mock').
- * - needs_twitch_env: MC reachable, TWITCH_* not set in workspace .env
- * - mc_unreachable: could not get /api/twitch/status (MC off, proxy, or wrong base URL)
+ * Why we're on sample data (only set when phase === 'mock').
+ * - needs_twitch_env: proxy reachable, TWITCH_* not set in workspace .env
+ * - mc_unreachable: could not get /api/twitch/status (proxy off, or wrong base URL)
  * - helix_failed: creds OK but featured/batch failed (Twitch API error, rate limit, etc.)
  */
 export const MOCK_REASON = /** @type {const} */ ({
@@ -48,7 +51,7 @@ export const MOCK_REASON = /** @type {const} */ ({
 });
 
 /**
- * Live Twitch aggregates for Streamer Analytics (Helix via Mission Control proxy).
+ * Live Twitch aggregates for Streamer Analytics (Helix via backend proxy).
  */
 export function useStreamerTwitchLive() {
   const [phase, setPhase] = useState('loading');
@@ -65,7 +68,7 @@ export function useStreamerTwitchLive() {
     setPhase('loading');
     setLoadError(null);
     setMockReason(null);
-    /** Past /status with configured:true — failures after this are Twitch/Helix, not “MC down”. */
+    /** Past /status with configured:true — failures after this are Twitch/Helix, not "proxy down". */
     let pastStatusReady = false;
     try {
       const stRes = await fetch(`${prefix}/api/twitch/status`);

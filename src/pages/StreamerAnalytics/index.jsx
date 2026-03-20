@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Layers,
@@ -16,6 +16,7 @@ import {
   Database,
   ExternalLink,
   Link2,
+  Info,
 } from 'lucide-react';
 import {
   LineChart,
@@ -46,18 +47,30 @@ import {
   STATUS_LABEL,
   STATUS_STYLE,
 } from './analyticsProviders';
-import { fmt, gradeStyle, gradeFromRatio, scaleMockToLive, chartAxisStyle, chartTooltipStyle } from './utils';
-import { useStreamerTwitchLive, TWITCH_BATCH_MAX_PAGES } from './useStreamerTwitchLive';
+import { fmt, gradeStyle, gradeFromRatio, GRADE_LABEL, scaleMockToLive, chartAxisStyle, chartTooltipStyle } from './utils';
+import {
+  useStreamerTwitchLive,
+  TWITCH_BATCH_MAX_PAGES,
+  MOCK_REASON,
+} from './useStreamerTwitchLive';
 
-const PAGE_TITLE = 'Streamer Analytics — Pick the Best Category to Stream | Operator.ink';
+/* ------------------------------------------------------------------ */
+/*  Constants                                                          */
+/* ------------------------------------------------------------------ */
+
+const PAGE_TITLE = 'Streamer Analytics — Find Your Best Twitch Category | Operator.ink';
 const PAGE_DESC =
-  'Compare Twitch categories by viewer demand vs competition, plan stream times, and improve titles.';
+  'Compare Twitch categories by viewer demand vs competition. Plan your schedule, improve your titles, and find where viewers will notice you.';
 
 const TABS = [
   { id: 'categories', label: 'Categories', icon: Layers },
   { id: 'timing', label: 'Best times', icon: Clock },
   { id: 'titles', label: 'Titles', icon: Sparkles },
 ];
+
+/* ------------------------------------------------------------------ */
+/*  Component                                                          */
+/* ------------------------------------------------------------------ */
 
 export default function StreamerAnalytics() {
   /** Internal setup (paths, env, raw errors, roadmap cards) — dev / local only, not public builds. */
@@ -66,8 +79,10 @@ export default function StreamerAnalytics() {
   const [activeTab, setActiveTab] = useState('categories');
   const [chartGame, setChartGame] = useState('Valorant');
   const [chartGameId, setChartGameId] = useState(null);
+  const tabListRef = useRef(null);
 
-  const { phase, categories, batchErrors, fetchedAt, loadError, refetch } = useStreamerTwitchLive();
+  const { phase, categories, batchErrors, fetchedAt, loadError, mockReason, refetch } =
+    useStreamerTwitchLive();
 
   const providerStatusById = useMemo(() => resolveProviderStatus({ phase }), [phase]);
 
@@ -102,8 +117,8 @@ export default function StreamerAnalytics() {
       live: true,
       pagesFetched: c.pagesFetched,
       note: showDevInternals
-        ? 'Live Helix: total viewers ÷ channels live in this category (paginated sample). Higher ratio often means more viewers per stream.'
-        : 'Live Twitch: total viewers ÷ channels live in this category (sample). Higher ratio often means more viewers per stream.',
+        ? 'Live Helix: total viewers ÷ channels live in this category (paginated sample).'
+        : 'Live Twitch data — viewers ÷ channels currently streaming in this category.',
     }));
   }, [phase, categories, showDevInternals]);
 
@@ -122,6 +137,22 @@ export default function StreamerAnalytics() {
 
   const categoryRows = liveCategoryRows.length ? liveCategoryRows : null;
 
+  /* Keyboard nav for tab bar (left/right arrows) */
+  const handleTabKeyDown = useCallback(
+    (e) => {
+      const ids = TABS.map((t) => t.id);
+      const idx = ids.indexOf(activeTab);
+      let next = idx;
+      if (e.key === 'ArrowRight') next = (idx + 1) % ids.length;
+      else if (e.key === 'ArrowLeft') next = (idx - 1 + ids.length) % ids.length;
+      else return;
+      e.preventDefault();
+      setActiveTab(ids[next]);
+      tabListRef.current?.querySelector(`#tab-${ids[next]}`)?.focus();
+    },
+    [activeTab],
+  );
+
   return (
     <>
       <SEO title={PAGE_TITLE} description={PAGE_DESC} noIndex />
@@ -132,7 +163,7 @@ export default function StreamerAnalytics() {
         <GridOverlay />
         <StickyNav currentPage="streameranalytics" />
 
-        {/* Ambient Dark Gradients for sleek color touches */}
+        {/* Ambient dark gradients */}
         <div className="fixed inset-0 pointer-events-none z-0">
           <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-violet-600/10 blur-[150px] rounded-full mix-blend-screen" />
           <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-cyan-600/10 blur-[150px] rounded-full mix-blend-screen" />
@@ -141,14 +172,15 @@ export default function StreamerAnalytics() {
         <main className="relative z-10 flex-1 w-full px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24 pt-28 pb-20">
           <BackToHome />
 
+          {/* ── Hero ── */}
           <motion.header
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-12"
+            className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-14"
           >
             <div className="max-w-3xl">
-              <div className="flex flex-wrap items-center gap-3 mb-4">
+              <div className="flex flex-wrap items-center gap-3 mb-4" aria-live="polite">
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
                   Streamer Analytics
                 </h1>
@@ -172,36 +204,47 @@ export default function StreamerAnalytics() {
                 )}
               </div>
               <p className="text-base lg:text-lg text-zinc-400 leading-relaxed font-light">
-                <strong className="text-white font-medium">Pick a better category to stream in.</strong> Compare viewer
-                demand vs how many people are already live, then tune schedule and titles.{' '}
+                <strong className="text-white font-medium">Find the right category for your stream.</strong>{' '}
+                See where viewer demand outpaces competition, then plan your schedule and sharpen your titles.{' '}
                 {phase === 'live' ? (
                   showDevInternals ? (
                     <>
-                      Categories use <strong className="text-white font-medium">live Twitch Helix</strong> via Mission
-                      Control. The <strong className="text-white font-medium">Data sources</strong> section is a dev roadmap
+                      Categories use <strong className="text-white font-medium">live Twitch Helix</strong> via the backend
+                      proxy. The <strong className="text-white font-medium">Data sources</strong> section is a dev roadmap
                       for combining other analytics server-side. The 24h curve is still a template scaled to live totals
                       until hourly snapshots exist.
                     </>
                   ) : (
                     <>
-                      Categories below use <strong className="text-white font-medium">live Twitch data</strong>. The 24h
-                      chart is a simplified shape scaled to current totals — not full historical hour-by-hour data yet.
+                      Categories below are <strong className="text-white font-medium">live from Twitch</strong>. The 24h
+                      chart shows an estimated shape scaled to current totals — full historical data is coming soon.
                     </>
                   )
-                ) : showDevInternals ? (
-                  <>
-                    You’re seeing <strong className="text-white font-medium">sample categories</strong> for local testing.
-                    Connect Mission Control + Twitch credentials (see internal docs) to load live data.
-                  </>
                 ) : (
                   <>
-                    You’re seeing <strong className="text-white font-medium">sample categories</strong> so you can explore
-                    the tool. <strong className="text-white font-medium">Live Twitch categories</strong> will show here when
-                    the service is connected.
+                    You're seeing <strong className="text-white font-medium">sample categories</strong> so you can explore
+                    the tool. <strong className="text-white font-medium">Live Twitch data</strong> will load automatically
+                    once the backend is connected.
                   </>
                 )}
               </p>
 
+              {/* Dev-only diagnostic boxes — never render in production builds */}
+              {showDevInternals && phase === 'mock' && mockReason === MOCK_REASON.NEEDS_TWITCH_ENV && (
+                <p className="mt-4 text-sm text-amber-200/90 bg-amber-500/10 border border-amber-500/25 px-4 py-3 rounded-xl max-w-2xl leading-relaxed font-mono">
+                  <strong className="text-amber-100 not-italic font-bold">dev:</strong> TWITCH_CLIENT_ID / TWITCH_CLIENT_SECRET not set in backend .env. Set them, then restart the proxy.
+                </p>
+              )}
+              {showDevInternals && phase === 'mock' && mockReason === MOCK_REASON.MC_UNREACHABLE && (
+                <p className="mt-4 text-sm text-amber-200/90 bg-amber-500/10 border border-amber-500/25 px-4 py-3 rounded-xl max-w-2xl leading-relaxed font-mono">
+                  <strong className="text-amber-100 not-italic font-bold">dev:</strong> Backend proxy unreachable. Start the local proxy or set VITE_TWITCH_API_BASE to a deployed endpoint.
+                </p>
+              )}
+              {showDevInternals && phase === 'mock' && mockReason === MOCK_REASON.HELIX_FAILED && (
+                <p className="mt-4 text-sm text-rose-200/90 bg-rose-500/10 border border-rose-500/25 px-4 py-3 rounded-xl max-w-2xl leading-relaxed font-mono">
+                  <strong className="text-rose-100 not-italic font-bold">dev:</strong> Twitch API error — creds OK but Helix request failed (rate limit, revoked keys, or timeout).
+                </p>
+              )}
               {loadError && showDevInternals && (
                 <p className="mt-4 text-xs font-mono text-rose-400 bg-rose-500/10 border border-rose-500/20 px-3 py-2 rounded-lg inline-block break-words">
                   Detail: {loadError}
@@ -210,23 +253,30 @@ export default function StreamerAnalytics() {
               {phase === 'live' && fetchedAt && (
                 <p className="mt-4 text-[11px] text-zinc-500 tracking-widest uppercase flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Last fetch: {new Date(fetchedAt).toLocaleString()}
+                  Updated {new Date(fetchedAt).toLocaleString()}
                 </p>
               )}
             </div>
 
+            {/* Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 flex-shrink-0">
               <button
                 type="button"
                 onClick={() => refetch()}
                 disabled={phase === 'loading'}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 hover:border-white/20 transition-all disabled:opacity-40 shadow-xl"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black transition-all disabled:opacity-40 shadow-xl"
               >
                 <RefreshCw className={`w-4 h-4 text-cyan-400 ${phase === 'loading' ? 'animate-spin' : ''}`} />
                 Refresh data
               </button>
-              <nav className="flex rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-1.5 shadow-xl" aria-label="View tabs">
-                {TABS.map((t) => {
+              <nav
+                ref={tabListRef}
+                className="flex rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-1.5 shadow-xl"
+                role="tablist"
+                aria-label="Analytics views"
+                onKeyDown={handleTabKeyDown}
+              >
+                {TABS.map((t, ti) => {
                   const Icon = t.icon;
                   const isActive = activeTab === t.id;
                   return (
@@ -235,10 +285,11 @@ export default function StreamerAnalytics() {
                       type="button"
                       role="tab"
                       aria-selected={isActive}
+                      tabIndex={isActive ? 0 : -1}
                       id={`tab-${t.id}`}
                       aria-controls={`panel-${t.id}`}
                       onClick={() => setActiveTab(t.id)}
-                      className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
+                      className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/60 ${
                         isActive
                           ? 'bg-white/10 text-white shadow-sm ring-1 ring-white/10'
                           : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
@@ -253,6 +304,7 @@ export default function StreamerAnalytics() {
             </div>
           </motion.header>
 
+          {/* ── Tab Panels ── */}
           <AnimatePresence mode="wait">
             {activeTab === 'categories' && (
               <motion.div
@@ -264,26 +316,28 @@ export default function StreamerAnalytics() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.3 }}
-                className="space-y-6"
+                className="space-y-8"
               >
-                <div className="flex flex-col gap-3 text-xs text-zinc-400 max-w-4xl bg-white/[0.02] border border-white/5 rounded-2xl p-4 backdrop-blur-sm">
+                {/* Ratio explainer */}
+                <div className="flex flex-col gap-3 text-xs text-zinc-400 max-w-4xl bg-white/[0.02] border border-white/5 rounded-2xl p-5 backdrop-blur-sm">
                   <div className="flex items-center gap-3">
                     <TrendingUp className="w-5 h-5 text-cyan-400 flex-shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
                     <span className="leading-relaxed">
-                      <strong className="text-white/90">Viewer / streamer ratio</strong> — Higher usually means more
-                      eyeballs per live channel in that category (easier to get noticed if the game fits you). Not
-                      financial advice; Twitch numbers are a snapshot.
+                      <strong className="text-white/90">Viewer / streamer ratio</strong> — the higher the
+                      ratio, the more viewers per live channel. Categories with a high ratio are often easier to
+                      break into (fewer broadcasters splitting the audience).
                     </span>
                   </div>
                   {batchErrors?.length > 0 && (
                     <p className="text-amber-400/90 text-sm pl-8 mt-1">
-                      Couldn’t load {batchErrors.length} categor{batchErrors.length === 1 ? 'y' : 'ies'}. Try{' '}
+                      Couldn't load {batchErrors.length} categor{batchErrors.length === 1 ? 'y' : 'ies'}. Try{' '}
                       <strong className="text-zinc-300">Refresh data</strong>
-                      {showDevInternals ? ' or reduce batch size in Mission Control.' : '.'}
+                      {showDevInternals ? ' or check the backend proxy logs.' : '.'}
                     </p>
                   )}
                 </div>
 
+                {/* Dev-only: Data sources roadmap */}
                 {showDevInternals && (
                   <div className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
                     <div className="flex items-start gap-4 mb-6">
@@ -296,7 +350,7 @@ export default function StreamerAnalytics() {
                           This page does <strong className="text-zinc-200 font-medium">not</strong> invent extra provider
                           metrics. Twitch Helix is the only live pipeline wired here. The cards below are the roadmap:
                           normalize each provider on the server, then merge (e.g. weighted index, cross-platform tags, or
-                          “confirm with Helix” for anything live).
+                          "confirm with Helix" for anything live).
                         </p>
                       </div>
                     </div>
@@ -332,6 +386,7 @@ export default function StreamerAnalytics() {
                   </div>
                 )}
 
+                {/* Loading state */}
                 {phase === 'loading' && !categoryRows?.length && (
                   <div className="rounded-3xl p-16 border border-white/5 bg-white/[0.02] backdrop-blur-xl text-center text-zinc-500 flex flex-col items-center justify-center min-h-[400px]">
                     <RefreshCw className="w-8 h-8 animate-spin mb-4 text-cyan-400/80" />
@@ -339,18 +394,36 @@ export default function StreamerAnalytics() {
                   </div>
                 )}
 
+                {/* Empty state: live returned 0 categories */}
+                {phase === 'live' && !categoryRows?.length && (
+                  <div className="rounded-3xl p-16 border border-white/5 bg-white/[0.02] backdrop-blur-xl text-center flex flex-col items-center justify-center min-h-[300px]">
+                    <Info className="w-8 h-8 mb-4 text-zinc-500" />
+                    <p className="text-sm font-medium text-zinc-400 mb-2">No categories returned</p>
+                    <p className="text-xs text-zinc-500 max-w-md">
+                      The Twitch API responded but didn't return any categories this time. Hit{' '}
+                      <strong className="text-zinc-300">Refresh data</strong> to try again.
+                    </p>
+                  </div>
+                )}
+
+                {/* Category cards */}
                 <div className="grid gap-5">
                   {(categoryRows ||
                     MOCK_CATEGORIES.map((row) => ({ ...row, key: row.game, live: false }))).map((row, i) => {
                     const up = row.trend >= 0;
                     const rowKey = row.key || row.game;
+                    const gradeLabel = GRADE_LABEL[row.grade] || row.grade;
                     return (
                       <div
                         key={rowKey}
-                        className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 hover:border-white/20 hover:bg-zinc-800/40 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.5)] group"
+                        className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 hover:border-white/20 hover:bg-zinc-800/40 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.5)] group relative overflow-hidden"
                       >
+                        {/* Subtle left accent on hover */}
+                        <div className={`absolute top-0 left-0 w-1 h-full transition-all duration-300 opacity-0 group-hover:opacity-100 ${
+                          row.grade === 'A' ? 'bg-emerald-400' : row.grade === 'B' ? 'bg-cyan-400' : 'bg-amber-400'
+                        }`} />
+
                         <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
-                          
                           <div className="flex items-start gap-5 flex-1 min-w-0">
                             <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center font-black text-white text-lg flex-shrink-0 shadow-inner">
                               {i + 1}
@@ -361,7 +434,7 @@ export default function StreamerAnalytics() {
                                 <span
                                   className={`text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-lg border ${gradeStyle(row.grade)}`}
                                 >
-                                  {row.grade} Target
+                                  {row.grade} — {gradeLabel}
                                 </span>
                                 {row.live && (
                                   <span className="text-[10px] uppercase font-bold text-emerald-400 border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 rounded-md shadow-[0_0_10px_rgba(16,185,129,0.1)]">
@@ -370,21 +443,21 @@ export default function StreamerAnalytics() {
                                 )}
                               </div>
                               <p className="text-sm text-zinc-400 font-light leading-relaxed max-w-2xl">{row.note}</p>
-                              {row.live && row.pagesFetched != null && (
+                              {row.live && row.pagesFetched != null && showDevInternals && (
                                 <p className="text-[10px] text-zinc-500 font-mono mt-3 uppercase tracking-wider flex items-center gap-2">
-                                  {showDevInternals ? 'Helix' : 'API'} pages: {row.pagesFetched} / {TWITCH_BATCH_MAX_PAGES}
+                                  API pages: {row.pagesFetched} / {TWITCH_BATCH_MAX_PAGES}
                                 </p>
                               )}
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 lg:gap-8 text-left lg:text-right">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 text-left lg:text-right">
                             <div>
                               <p className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 mb-1 flex items-center lg:justify-end gap-1.5"><Users className="w-3.5 h-3.5"/> Viewers</p>
                               <p className="font-bold text-xl text-white tracking-tight drop-shadow-sm">{fmt(row.viewers)}</p>
                             </div>
                             <div>
-                              <p className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 mb-1 flex items-center lg:justify-end gap-1.5"><Radio className="w-3.5 h-3.5"/> Broadcasters</p>
+                              <p className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 mb-1 flex items-center lg:justify-end gap-1.5"><Radio className="w-3.5 h-3.5"/> Streamers</p>
                               <p className="font-bold text-xl text-white tracking-tight drop-shadow-sm">{fmt(row.streamers)}</p>
                             </div>
                             <div>
@@ -395,7 +468,7 @@ export default function StreamerAnalytics() {
                               <p className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 mb-1">Trend</p>
                               {row.live ? (
                                 <p className="font-bold text-[15px] text-cyan-400/90 pt-1 lg:justify-end flex">
-                                  Streaming
+                                  Now live
                                 </p>
                               ) : (
                                 <p
@@ -417,6 +490,7 @@ export default function StreamerAnalytics() {
               </motion.div>
             )}
 
+            {/* ── Timing Tab ── */}
             {activeTab === 'timing' && (
               <motion.div
                 key="timing"
@@ -431,16 +505,20 @@ export default function StreamerAnalytics() {
               >
                 <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-5 backdrop-blur-sm max-w-4xl">
                   <p className="text-sm font-light text-zinc-300 leading-relaxed border-l-2 border-amber-400/50 pl-4">
-                    <strong className="text-white font-medium">When to go live.</strong> Suggested windows below are still
-                    mock. The chart uses a rough 24h shape; with{' '}
-                    {showDevInternals ? 'live Helix' : 'live Twitch data'} it scales to current viewer totals for the game
-                    you pick. Real heatmaps need saved hourly data later.
+                    <strong className="text-white font-medium">Plan when to go live.</strong> The suggested time windows
+                    below are based on general patterns — not your specific audience yet. The chart shows an estimated
+                    24h viewer curve{' '}
+                    {chartIsLive
+                      ? 'scaled to the current live total for your selected category.'
+                      : 'using sample data. With live Twitch data connected, it scales to real viewer totals.'}
                   </p>
                 </div>
 
+                {/* Suggested windows */}
                 <div className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
                   <h3 className="text-xs font-bold uppercase tracking-widest text-white/70 mb-6 flex items-center gap-3">
-                    <Trophy className="w-4 h-4 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.6)]" /> Suggested windows (mock)
+                    <Trophy className="w-4 h-4 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.6)]" /> Suggested stream windows
+                    <span className="text-zinc-500 normal-case font-normal ml-1">(illustrative)</span>
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {MOCK_BEST_TIMES.map((bt) => (
@@ -465,14 +543,17 @@ export default function StreamerAnalytics() {
                   </div>
                 </div>
 
+                {/* 24h Chart */}
                 <div className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
                   <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-8">
                     <div>
                       <h3 className="text-xs font-bold uppercase tracking-widest text-white/70 mb-3 flex items-center gap-3">
-                        <LineChartIcon className="w-4 h-4 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]" /> 24h activity (illustrative curve)
+                        <LineChartIcon className="w-4 h-4 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]" /> 24h viewer activity
+                        <span className="text-zinc-500 normal-case font-normal ml-1">(estimated curve)</span>
                       </h3>
                       <p className="text-xs text-zinc-400 font-light max-w-xl">
-                        <span className="text-cyan-400 font-semibold drop-shadow-sm">Teal series</span> denotes concurrent scales. <span className="text-violet-400 font-semibold drop-shadow-sm">Violet series</span> maps retention volume.
+                        <span className="text-cyan-400 font-semibold drop-shadow-sm">Teal</span> = average viewers at each hour.{' '}
+                        <span className="text-violet-400 font-semibold drop-shadow-sm">Violet</span> = total watch-hours (engagement volume).
                       </p>
                     </div>
                     <label className="flex flex-col gap-2 shrink-0">
@@ -487,6 +568,7 @@ export default function StreamerAnalytics() {
                             setChartGame(v);
                           }
                         }}
+                        aria-label="Select category for chart"
                         className="rounded-xl bg-black/50 border border-white/15 px-4 py-2.5 text-sm font-semibold text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all shadow-inner"
                       >
                         {chartIsLive
@@ -539,18 +621,18 @@ export default function StreamerAnalytics() {
                           contentStyle={chartTooltipStyle}
                           labelStyle={{ color: 'rgba(255,255,255,0.8)', fontWeight: 'bold' }}
                           formatter={(value, name) => {
-                            if (name === 'Avg concurrent viewers') return [fmt(value), 'Active Viewers'];
-                            if (name === 'Viewer-hours (k)') return [`${value}k`, 'Retention Metric'];
+                            if (name === 'Avg viewers') return [fmt(value), 'Viewers at this hour'];
+                            if (name === 'Watch-hours (k)') return [`${value}k`, 'Total watch-hours'];
                             return [value, name];
                           }}
-                          labelFormatter={(_, p) => (p?.[0]?.payload ? `Time Block ${p[0].payload.label}:00` : '')}
+                          labelFormatter={(_, p) => (p?.[0]?.payload ? `${p[0].payload.label}:00` : '')}
                         />
-                        <Legend wrapperStyle={{ fontSize: 11, fontWeight: 'bold', paddingTop: 20, color: 'rgba(255,255,255,0.7)' }} />
+                        <Legend wrapperStyle={{ fontSize: 11, fontWeight: 600, paddingTop: 20, color: 'rgba(255,255,255,0.7)' }} />
                         <Line
                           yAxisId="ccv"
                           type="monotone"
                           dataKey="ccv"
-                          name="Avg concurrent viewers"
+                          name="Avg viewers"
                           stroke="#22d3ee"
                           strokeWidth={3}
                           dot={false}
@@ -560,7 +642,7 @@ export default function StreamerAnalytics() {
                           yAxisId="vh"
                           type="monotone"
                           dataKey="viewerHoursK"
-                          name="Viewer-hours (k)"
+                          name="Watch-hours (k)"
                           stroke="#a78bfa"
                           strokeWidth={3}
                           dot={false}
@@ -573,6 +655,7 @@ export default function StreamerAnalytics() {
               </motion.div>
             )}
 
+            {/* ── Titles Tab ── */}
             {activeTab === 'titles' && (
               <motion.div
                 key="titles"
@@ -585,13 +668,14 @@ export default function StreamerAnalytics() {
                 transition={{ duration: 0.3 }}
                 className="grid grid-cols-1 lg:grid-cols-2 gap-8"
               >
+                {/* Title patterns */}
                 <div className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col">
                   <h3 className="text-xs font-bold uppercase tracking-widest text-white/70 mb-5 flex items-center gap-3">
-                    <Sparkles className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]" /> Title patterns
+                    <Sparkles className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]" /> What makes a strong title
                   </h3>
                   <p className="text-sm text-zinc-400 font-light mb-8">
-                    Ideas from how strong titles are usually built — hooks, honesty, clear game or vibe. Don’t copy others
-                    verbatim; stay within Twitch ToS.
+                    Patterns from streams that consistently pull viewers — hooks, honest tags, and a clear vibe. Don't
+                    copy others verbatim; stay within Twitch Community Guidelines.
                   </p>
                   <ul className="space-y-4">
                     {MOCK_TITLE_PATTERNS.map((p) => (
@@ -603,31 +687,31 @@ export default function StreamerAnalytics() {
                   </ul>
                 </div>
 
+                {/* Title suggestions */}
                 <div className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
                   <h3 className="text-xs font-bold uppercase tracking-widest text-white/70 mb-5 flex items-center gap-3">
-                    <Wand2 className="w-5 h-5 text-violet-400 drop-shadow-[0_0_10px_rgba(167,139,250,0.6)]" /> Titles + other signals
+                    <Wand2 className="w-5 h-5 text-violet-400 drop-shadow-[0_0_10px_rgba(167,139,250,0.6)]" /> Title ideas
                   </h3>
                   <p className="text-sm text-zinc-400 font-light mb-4">
-                    Titles work best when they match <strong className="text-zinc-300">real</strong> stream context — game,
-                    mood, schedule. We’re not adding more canned title banks here; optional next step is LLM or data from{' '}
-                    <strong className="text-zinc-300">your</strong> analytics providers.
+                    Titles work best when they match <strong className="text-zinc-300">your</strong> actual stream — the
+                    game, your mood, what makes this session different. These are starting points, not templates.
                   </p>
                   {showDevInternals && (
                     <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 mb-6 text-xs text-zinc-400 leading-relaxed font-light">
-                      <strong className="text-violet-200/90 font-semibold">Combine carefully (dev):</strong> use Helix for
-                      “who is live right now”; use third-party indexes or YouTube for trends; merge on the server with
-                      clear rules.
+                      <strong className="text-violet-200/90 font-semibold">Dev note:</strong> Optional next step is LLM-powered
+                      title generation using the streamer's context (game, schedule, analytics). Combine with Helix "who is live"
+                      data + third-party trend indexes on the server.
                     </div>
                   )}
                   
                   <label htmlFor="title-prompt" className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2 block ml-1">
-                    Your stream (optional)
+                    Describe your stream (optional)
                   </label>
                   <textarea
                     id="title-prompt"
                     rows={4}
                     className="w-full rounded-xl bg-black/40 border border-white/10 p-4 text-sm text-white mb-8 resize-none focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all shadow-inner placeholder:text-zinc-600"
-                    placeholder="e.g. First playthrough, no spoilers, high interaction."
+                    placeholder="e.g. First playthrough of Hollow Knight, no spoilers, chill vibes."
                   />
                   
                   <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4 ml-1">Examples</p>
@@ -638,7 +722,7 @@ export default function StreamerAnalytics() {
                         className="text-sm font-medium leading-relaxed p-4 rounded-xl bg-white/[0.03] border border-white/10 text-white shadow-sm flex items-start gap-3 relative overflow-hidden group"
                       >
                         <div className="absolute top-0 left-0 w-1 h-full bg-violet-500/50 group-hover:bg-violet-400 transition-colors" />
-                        <span className="font-mono text-zinc-500 text-[10px] tracking-widest uppercase mt-0.5 shrink-0">OPT-{idx + 1}</span>
+                        <span className="font-mono text-zinc-500 text-[10px] tracking-widest uppercase mt-0.5 shrink-0">{idx + 1}</span>
                         <span>{s}</span>
                       </li>
                     ))}
@@ -648,18 +732,17 @@ export default function StreamerAnalytics() {
             )}
           </AnimatePresence>
 
+          {/* ── Footer ── */}
           <footer className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs text-zinc-500">
             <p className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
               {showDevInternals ? (
-                <>
-                  Streamer Analytics — Mission Control <code className="text-zinc-600">/api/twitch/*</code>
-                </>
+                <>Streamer Analytics — dev mode</>
               ) : (
                 <>Streamer Analytics — Operator.ink</>
               )}
             </p>
-            <p>Operator.ink</p>
+            <p className="text-zinc-600">© {new Date().getFullYear()} Operator.ink</p>
           </footer>
         </main>
       </div>

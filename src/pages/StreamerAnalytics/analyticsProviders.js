@@ -1,6 +1,9 @@
 /**
  * Streamer Analytics — analytics / directory providers (metadata only; no fabricated metrics).
  * Used to document how live Twitch (Helix) can be combined with other sources later.
+ *
+ * NOTE: This section only renders inside the dev-only gate (showDevInternals).
+ * Keep blurbs free of secrets / port numbers anyway — defense in depth.
  */
 
 /** @typedef {'live' | 'sample' | 'planned' | 'reference'} ProviderUiStatus */
@@ -19,7 +22,7 @@ export const ANALYTICS_PROVIDERS = [
     id: 'twitch_helix',
     name: 'Twitch (Helix)',
     blurb:
-      'Categories, concurrent viewers, and live channel counts via Mission Control /api/twitch/* (app access token). This page uses Helix as the primary live signal.',
+      'Categories, concurrent viewers, and live channel counts via backend proxy (app access token). Primary live signal for this page.',
     defaultStatus: 'sample',
     docsUrl: 'https://dev.twitch.tv/docs/api/reference',
   },
@@ -43,7 +46,7 @@ export const ANALYTICS_PROVIDERS = [
     id: 'indexes',
     name: 'Third-party indexes',
     blurb:
-      'Stream Charts, SullyGnome, TwitchTracker, etc. — good for research and benchmarks. Respect ToS; data may lag; combine with Helix as source of truth for “right now”.',
+      'Stream Charts, SullyGnome, TwitchTracker, etc. — good for research and benchmarks. Respect ToS; data may lag; combine with Helix as source of truth for "right now".',
     defaultStatus: 'reference',
   },
 ];
