@@ -5,6 +5,15 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   logLevel: 'error', // Suppress warnings, only show errors
+  server: {
+    proxy: {
+      // Mission Control API (run: VC_CORE_SYSTEMS/_MISSION_CONTROL → npm run dev:api, port 8787)
+      '/api/twitch': {
+        target: 'http://127.0.0.1:8787',
+        changeOrigin: true,
+      },
+    },
+  },
   plugins: [
     base44({
       // Support for legacy code that imports the base44 SDK with @/integrations, @/entities, etc.

@@ -1,8 +1,8 @@
 # Streamer Analytics — Product Spec
 
-**File:** `src/pages/StreamerAnalytics.jsx`
+**Module:** `src/pages/StreamerAnalytics/` (`index.jsx`, `mocks.js`, `utils.js`, `useStreamerTwitchLive.js`)
 **Route:** `/StreamerAnalytics` (direct link, not in nav)
-**Status:** 🟡 Active — Phase 1 UI in progress
+**Status:** 🟢 Active — Live Helix for **categories** (local via Mission Control); hourly history = snapshots (next)
 **Collaborators:** Cursor (UI) + Antigravity (data/arch)
 **Last updated:** 2026-03-20
 
@@ -63,19 +63,20 @@ A hidden analytics dashboard for Twitch streamers. Accessible via direct link on
 - **Rate limits:** 800 req/min (app token), respect `Ratelimit-Remaining` headers
 - **CORS:** Must proxy through a backend — cannot call Helix directly from browser
 
-### Backend Proxy Options
-1. **Mission Control API** — Add `/api/twitch/*` proxy routes to existing server (`_MISSION_CONTROL/server/index.js`)
-2. **Vercel Edge Function** — Add `api/twitch.js` to operator.ink repo
-3. **Mock JSON** — Use static fixture data for Phase 1-4 UI development
+### Backend Proxy (current)
+1. **Mission Control API** — **`/api/twitch/*`** in `_MISSION_CONTROL/server/index.js` + `twitch-helix.js` (app token, Helix).
+2. **operator.ink dev** — Vite proxies `/api/twitch` → `http://127.0.0.1:8787` (`vite.config.js`).
+3. **Mock fallback** — If credentials missing or request fails, Streamer Analytics shows mock categories.
 
-**Recommendation:** Use mock JSON first, wire Vercel edge function when UI is complete.
+**Docs:** `docs/TWITCH_HELIX_LOCAL.md`  
+**Production:** Set `VITE_TWITCH_API_BASE` to a deployed proxy URL, or add serverless routes; see TWITCH_HELIX_LOCAL.md.
 
 ---
 
 ## UI Mapping
 
 ```
-StreamerAnalytics.jsx
+pages/StreamerAnalytics/
 ├── Header (title + tab nav)
 ├── Tab: Overview
 │   ├── Date range selector (7d / 30d / 90d)

@@ -2,7 +2,7 @@
 
 ## Active Feature: Streamer Analytics
 
-Working on `src/pages/StreamerAnalytics.jsx`. Both Cursor and Antigravity are collaborating on this.
+Working on `src/pages/StreamerAnalytics/` (colocated module). Both Cursor and Antigravity are collaborating on this.
 
 **Reference doc:** `VC_CORE_HQ/11_Memory/SHARED_BRAIN/STREAMER_ANALYTICS_REF.md`
 **Feature task:** `VC_CORE_HQ/11_Memory/SHARED_BRAIN/STREAMER_ANA_TASK.md`
@@ -11,7 +11,7 @@ Working on `src/pages/StreamerAnalytics.jsx`. Both Cursor and Antigravity are co
 
 - **Purpose:** Help streamers **choose which category/game to stream in** (viewer demand vs channels live, best times, titles) — not a generic “my channel stats” dashboard.
 - **Route:** `/StreamerAnalytics` (direct link only, not in nav)
-- **File:** `src/pages/StreamerAnalytics.jsx`
+- **Module:** `src/pages/StreamerAnalytics/` — `index.jsx`, `mocks.js`, `utils.js`, `useStreamerTwitchLive.js`
 - **Registered in:** explicit `<Route>` in `src/App.jsx` (Base44 may omit extra `pages.config` entries)
 - **Style system:** Uses `retro-theme` CSS vars + Tailwind classes (see `App.css`)
 - **Pattern:** Follow `InventoryDashboard.jsx` or `CensusBoard.jsx` for patterns
@@ -26,12 +26,14 @@ Working on `src/pages/StreamerAnalytics.jsx`. Both Cursor and Antigravity are co
 ## File Structure (StreamerAnalytics scope)
 
 ```
-src/
-  pages/
-    StreamerAnalytics.jsx    ← Main page (you are here)
-  components/
-    streamer/                ← Optional splits: CategoryRow, TimingHeatmap, TitleLab, etc.
+src/pages/StreamerAnalytics/   ← all Streamer Analytics code lives here
+  index.jsx
+  mocks.js
+  utils.js
+  useStreamerTwitchLive.js
+  README.md
 ```
+Optional cross-page streamer components may use `src/components/streamer/` — prefer colocating splits inside `StreamerAnalytics/` first.
 
 ## Tech Stack
 
