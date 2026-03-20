@@ -53,6 +53,7 @@ import Portal from './pages/Portal';
 import Leads from './pages/Leads';
 import Services from './pages/Services';
 import InventoryDashboard from './pages/InventoryDashboard';
+import StreamerAna from './pages/StreamerAna';
 
 export const PAGES = {
     "Home": Home,
@@ -61,6 +62,7 @@ export const PAGES = {
     "Leads": Leads,
     "Services": Services,
     "InventoryDashboard": InventoryDashboard,
+    "StreamerAna": StreamerAna,
 }
 
 export const pagesConfig = {
