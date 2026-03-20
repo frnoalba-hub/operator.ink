@@ -65,3 +65,7 @@ The Vite proxy **only applies in dev**. For production you need either:
 | GET | `/api/twitch/featured?first=24` | Top games (`/helix/games/top`) |
 | GET | `/api/twitch/category-summary?game_id=&max_pages=` | One category, paginated streams |
 | POST | `/api/twitch/batch-summaries` | Body: `{ games: [{id,name}], maxPages }` |
+
+## Title Gen (Metadata tab)
+
+The **Generate titles** feature uses a Base44 function, not Mission Control. See [`docs/STREAMER_TITLE_GEN.md`](STREAMER_TITLE_GEN.md) for secrets, deploy, and permissions.

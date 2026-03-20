@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Bed } from 'lucide-react';
-import { PAYERS, FLAGS, FACILITIES } from '@/data/censusMockData';
+import { FACILITIES } from '@/data/censusMockData';
 
 const FLAG_COLORS = {
   New: 'bg-white/10 text-white/80',

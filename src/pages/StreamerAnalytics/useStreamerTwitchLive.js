@@ -9,6 +9,19 @@ function apiPrefix() {
   return import.meta.env.VITE_TWITCH_API_BASE || '';
 }
 
+/** Safe JSON parse; empty or non-JSON body → null + friendly message instead of throwing. */
+async function safeJsonResponse(res) {
+  const text = await res.text();
+  if (!text?.trim()) {
+    return { ok: false, error: 'Proxy or API returned empty response — is Mission Control running on 8787?' };
+  }
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { ok: false, error: 'Invalid JSON from API — proxy may be returning HTML or an error page.' };
+  }
+}
+
 /**
  * Live Twitch aggregates for Streamer Analytics (Helix via Mission Control proxy).
  */
@@ -27,7 +40,10 @@ export function useStreamerTwitchLive() {
     setLoadError(null);
     try {
       const stRes = await fetch(`${prefix}/api/twitch/status`);
-      const st = await stRes.json();
+      const st = await safeJsonResponse(stRes);
+      if (!st || st.error) {
+        throw new Error(st?.error || 'Could not reach Twitch API');
+      }
       if (!st.configured) {
         setConfigured(false);
         setGames([]);
@@ -40,9 +56,9 @@ export function useStreamerTwitchLive() {
       setConfigured(true);
 
       const featRes = await fetch(`${prefix}/api/twitch/featured?first=${FEAT_FIRST}`);
-      const feat = await featRes.json();
-      if (!feat.ok) {
-        throw new Error(feat.error || 'Featured games request failed');
+      const feat = await safeJsonResponse(featRes);
+      if (!feat || feat.error || !feat.ok) {
+        throw new Error(feat?.error || 'Featured games request failed');
       }
 
       const batchRes = await fetch(`${prefix}/api/twitch/batch-summaries`, {
@@ -53,9 +69,9 @@ export function useStreamerTwitchLive() {
           maxPages: TWITCH_BATCH_MAX_PAGES,
         }),
       });
-      const batch = await batchRes.json();
-      if (!batch.ok) {
-        throw new Error(batch.error || 'Batch summaries failed');
+      const batch = await safeJsonResponse(batchRes);
+      if (!batch || batch.error || !batch.ok) {
+        throw new Error(batch?.error || 'Batch summaries failed');
       }
 
       setGames(feat.games);
