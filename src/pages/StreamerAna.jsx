@@ -25,7 +25,7 @@ export default function StreamerAna() {
       >
         <GridOverlay />
         <StickyNav currentPage="streamerana" />
-        <main className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-24 pb-16">
+        <main className="relative z-10 w-full px-6 lg:px-12 xl:px-16 2xl:px-24 pt-24 pb-16">
           <BackToHome />
 
           <motion.header
@@ -62,17 +62,26 @@ export default function StreamerAna() {
           <motion.section
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="retro-card rounded-2xl p-8 border border-[var(--retro-border)]"
+            className="retro-card rounded-2xl p-8 lg:p-10 border border-[var(--retro-border)]"
           >
-            <h2 className="text-sm font-bold uppercase tracking-wider text-white/60 mb-4 flex items-center gap-2">
-              <BarChart3 className="w-4 h-4" /> Overview
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-white/60 flex items-center gap-2">
+                <BarChart3 className="w-4 h-4" /> Overview
+              </h2>
+              <div className="flex gap-2 text-xs text-[var(--retro-text-dim)]">
+                <span className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 cursor-default">7d</span>
+                <span className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 opacity-60 cursor-default">30d</span>
+                <span className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 opacity-60 cursor-default">90d</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 mb-6">
               {[
                 { label: 'Avg Viewers', value: '—', dim: '7d' },
                 { label: 'Peak Viewers', value: '—', dim: '7d' },
                 { label: 'Hours Streamed', value: '—', dim: '7d' },
                 { label: 'Followers Gained', value: '—', dim: '7d' },
+                { label: 'Chat Messages', value: '—', dim: '7d' },
+                { label: 'Streams', value: '—', dim: '7d' },
               ].map((kpi) => (
                 <div key={kpi.label} className="retro-card rounded-xl p-4 border border-[var(--retro-border)]">
                   <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)] tracking-wider">{kpi.label}</p>
@@ -81,7 +90,10 @@ export default function StreamerAna() {
                 </div>
               ))}
             </div>
-            <p className="text-sm text-white/40 italic">
+            <div className="mt-8 h-48 rounded-xl border border-dashed border-white/20 flex items-center justify-center bg-white/[0.02]">
+              <p className="text-sm text-white/40 italic">Chart area — viewer trend, peak hours, etc.</p>
+            </div>
+            <p className="mt-6 text-sm text-white/40 italic">
               Skeleton — Connect Twitch API or data source to populate metrics.
             </p>
           </motion.section>
