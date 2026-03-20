@@ -1,0 +1,2 @@
+# Netlify-style: serve Discord verification at /.well-known/discord
+/.well-known/discord  /discord-verification.txt  200
