@@ -14,6 +14,8 @@ import {
   LineChart as LineChartIcon,
   RefreshCw,
   Database,
+  ExternalLink,
+  Link2,
 } from 'lucide-react';
 import {
   LineChart,
@@ -37,15 +39,19 @@ import {
   MOCK_TITLE_SUGGESTIONS,
   MOCK_HOURLY_BY_GAME,
   CHART_GAME_OPTIONS,
-  PRESET_TITLES_BY_GAME,
 } from './mocks';
+import {
+  ANALYTICS_PROVIDERS,
+  resolveProviderStatus,
+  STATUS_LABEL,
+  STATUS_STYLE,
+} from './analyticsProviders';
 import { fmt, gradeStyle, gradeFromRatio, scaleMockToLive, chartAxisStyle, chartTooltipStyle } from './utils';
-import { base44 } from '@/api/base44Client';
 import { useStreamerTwitchLive, TWITCH_BATCH_MAX_PAGES, MOCK_REASON } from './useStreamerTwitchLive';
 
 const PAGE_TITLE = 'Streamer Analytics — Pick the Best Category to Stream | Operator.ink';
 const PAGE_DESC =
-  'Compare Twitch categories by viewer demand vs competition, find best times to go live per game, and improve titles. Built for streamers choosing where to stream.';
+  'Twitch Helix plus room to combine YouTube, Kick, and third-party analytics — compare demand vs competition and plan streams.';
 
 const TABS = [
   { id: 'categories', label: 'Categories', icon: Layers },
@@ -57,61 +63,11 @@ export default function StreamerAnalytics() {
   const [activeTab, setActiveTab] = useState('categories');
   const [chartGame, setChartGame] = useState('Valorant');
   const [chartGameId, setChartGameId] = useState(null);
-  const [titlePrompt, setTitlePrompt] = useState('');
-  const [titleGamePreset, setTitleGamePreset] = useState('');
-  const [titleLoading, setTitleLoading] = useState(false);
-  const [titleError, setTitleError] = useState(null);
-  const [generatedTitles, setGeneratedTitles] = useState([]);
 
   const { phase, mockReason, categories, batchErrors, fetchedAt, loadError, refetch } = useStreamerTwitchLive();
 
-  const presetTitles = useMemo(() => {
-    const game = titleGamePreset?.trim();
-    if (!game || !PRESET_TITLES_BY_GAME[game]) return [];
-    return PRESET_TITLES_BY_GAME[game];
-  }, [titleGamePreset]);
+  const providerStatusById = useMemo(() => resolveProviderStatus({ phase }), [phase]);
 
-  const handleGenerateTitles = async () => {
-    const desc = titlePrompt.trim();
-    if (!desc) {
-      setTitleError('Enter a short description of your stream.');
-      return;
-    }
-    setTitleLoading(true);
-    setTitleError(null);
-    setGeneratedTitles([]);
-    try {
-      const gameCtx = titleGamePreset?.trim() ? ` (game: ${titleGamePreset})` : '';
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are a Twitch stream title advisor. Generate 5 concise, engaging stream titles (under 100 chars each, honest, no clickbait) for: "${desc}"${gameCtx}. Return a JSON object with a "titles" array of strings.`,
-        model: 'gpt_5_mini',
-        response_json_schema: {
-          type: 'object',
-          properties: {
-            titles: {
-              type: 'array',
-              items: { type: 'string' },
-              description: 'Array of 5 stream title strings',
-            },
-          },
-          required: ['titles'],
-        },
-      });
-      const titles = Array.isArray(result?.titles) ? result.titles : [];
-      setGeneratedTitles(titles);
-      if (titles.length === 0) {
-        setTitleError('No titles returned. Uses Base44 integration credits.');
-      }
-    } catch (e) {
-      setTitleError(
-        e?.message || 'Title Gen uses Base44 integration credits. Check your app has AI integrations enabled.'
-      );
-    } finally {
-      setTitleLoading(false);
-    }
-  };
-
-  /** Chart uses Helix-backed categories only when we have rows (avoids empty select). */
   const chartIsLive = phase === 'live' && categories.length > 0;
 
   useEffect(() => {
@@ -142,8 +98,7 @@ export default function StreamerAnalytics() {
       grade: gradeFromRatio(c.ratio),
       live: true,
       pagesFetched: c.pagesFetched,
-      note:
-        'Live Helix sample: total viewers ÷ channels live (paginated; big categories may be partial — increase maxPages on server later).',
+      note: 'Live Helix: total viewers ÷ channels live in this category (paginated sample). Higher ratio often means more viewers per stream.',
     }));
   }, [phase, categories]);
 
@@ -166,106 +121,117 @@ export default function StreamerAnalytics() {
     <>
       <SEO title={PAGE_TITLE} description={PAGE_DESC} noIndex />
       <div
-        className="retro-theme min-h-screen antialiased overflow-x-hidden flex flex-col"
-        style={{
-          fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif",
-          background: 'var(--retro-bg)',
-        }}
+        className="bg-black text-zinc-300 min-h-screen antialiased overflow-x-hidden flex flex-col selection:bg-cyan-500/30 selection:text-cyan-50"
         role="document"
       >
         <GridOverlay />
         <StickyNav currentPage="streameranalytics" />
 
-        <main className="relative z-10 flex-1 w-full px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24 pt-24 pb-16">
+        {/* Ambient Dark Gradients for sleek color touches */}
+        <div className="fixed inset-0 pointer-events-none z-0">
+          <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-violet-600/10 blur-[150px] rounded-full mix-blend-screen" />
+          <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-cyan-600/10 blur-[150px] rounded-full mix-blend-screen" />
+        </div>
+
+        <main className="relative z-10 flex-1 w-full px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24 pt-28 pb-20">
           <BackToHome />
 
           <motion.header
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-8"
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-12"
           >
-            <div className="max-w-2xl">
-              <div className="flex flex-wrap items-center gap-3 mb-2">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Streamer Analytics</h1>
-                <span className="text-[10px] uppercase font-bold tracking-widest bg-[#9146FF]/10 text-[#9146FF] border border-[#9146FF]/20 px-2 py-0.5 rounded-full">
+            <div className="max-w-3xl">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+                  Streamer Analytics
+                </h1>
+                <span className="text-[10px] uppercase font-bold tracking-widest bg-[#9146FF]/15 text-[#b9a3ff] border border-[#9146FF]/30 px-3 py-1 rounded-full">
                   Beta
                 </span>
                 {phase === 'live' && (
-                  <span className="text-[10px] uppercase font-bold tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                  <span className="text-[10px] uppercase font-bold tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
                     <Database className="w-3 h-3" /> Live Helix
                   </span>
                 )}
                 {phase === 'mock' && (
-                  <span className="text-[10px] uppercase font-bold tracking-widest bg-white/5 text-white/50 border border-white/10 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] uppercase font-bold tracking-widest bg-white/5 text-zinc-400 border border-white/10 px-3 py-1 rounded-full">
                     Sample data
                   </span>
                 )}
                 {phase === 'loading' && (
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-white/40">Loading…</span>
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 flex items-center gap-1.5 px-2 py-1">
+                    <RefreshCw className="w-3 h-3 animate-spin" /> Loading…
+                  </span>
                 )}
               </div>
-              <p className="text-sm text-[var(--retro-text-dim)] leading-relaxed">
-                <strong className="text-white/90">Pick a better category to stream in.</strong> Compare viewer demand vs
-                how many people are already live, then tune schedule and titles.{' '}
+              <p className="text-base lg:text-lg text-zinc-400 leading-relaxed">
+                <strong className="text-white font-medium">Pick a better category to stream in.</strong> Compare viewer
+                demand vs how many people are already live, then tune schedule and titles.{' '}
                 {phase === 'live' ? (
                   <>
-                    Categories below use <strong className="text-white/80">live Twitch data</strong> via Mission Control (
-                    <code className="text-cyan-400/90 text-xs">/api/twitch/*</code>, app token). 24h curve shape is still
-                    illustrative — scaled to current totals until we store hourly snapshots.
+                    Categories below use <strong className="text-white font-medium">live Twitch data</strong> (Helix via
+                    Mission Control). The 24h curve is still a template scaled to current totals — true hour-by-hour needs
+                    stored snapshots later.
                   </>
                 ) : (
                   <>
-                    You’re viewing <strong className="text-white/80">illustrative numbers</strong> so the page stays
-                    usable without Twitch wired up. Connect Mission Control to replace them with live Helix aggregates.
+                    You’re seeing <strong className="text-white font-medium">illustrative numbers</strong> so the tool
+                    works offline. Connect Mission Control + Twitch keys (below) to load real categories.
                   </>
                 )}
               </p>
               {phase === 'mock' && (
-                <details className="mt-3 group text-xs max-w-2xl rounded-xl border border-white/[0.08] bg-black/20 px-3 py-2 open:pb-3">
-                  <summary className="cursor-pointer text-cyan-400/90 hover:text-cyan-300 list-none flex items-center gap-2 py-1 [&::-webkit-details-marker]:hidden">
-                    <span className="inline-block transition-transform group-open:rotate-90 text-[10px] text-white/50">▸</span>
-                    <span className="font-semibold text-white/70">Live data setup</span>
+                <details className="mt-4 group text-sm max-w-2xl rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 open:pb-4">
+                  <summary className="cursor-pointer text-cyan-400/90 hover:text-cyan-300 list-none flex flex-wrap items-center gap-2 [&::-webkit-details-marker]:hidden">
+                    <span className="inline-block transition-transform group-open:rotate-90 text-zinc-500 text-xs">▸</span>
+                    <span className="font-semibold text-zinc-200">Enable live Twitch data</span>
                     {mockReason === MOCK_REASON.NEEDS_TWITCH_ENV && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400/90">Needs Twitch keys</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400/90">
+                        Needs Twitch keys
+                      </span>
                     )}
                     {mockReason === MOCK_REASON.MC_UNREACHABLE && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-rose-400/80">MC unreachable</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-rose-400/85">
+                        MC not reachable
+                      </span>
                     )}
                     {mockReason === MOCK_REASON.HELIX_FAILED && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400/90">Twitch API error</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400/90">
+                        Twitch API error
+                      </span>
                     )}
                   </summary>
-                  <div className="mt-2 pl-6 border-l border-cyan-500/20 text-[var(--retro-text-dim)] space-y-2">
+                  <div className="mt-3 pl-5 border-l border-cyan-500/25 text-zinc-400 text-xs sm:text-sm space-y-2">
                     {mockReason === MOCK_REASON.NEEDS_TWITCH_ENV && (
                       <p>
-                        Mission Control is running and answered <code className="text-white/60">/api/twitch/status</code>, but{' '}
-                        <code className="text-white/50">TWITCH_CLIENT_ID</code> and{' '}
-                        <code className="text-white/50">TWITCH_CLIENT_SECRET</code> are missing. Add them to{' '}
-                        <code className="text-cyan-400/80">09_Tools/VC_CORE_SYSTEMS/_SECRETS_MANAGEMENT/.env</code>, restart
-                        Mission Control, then <strong className="text-white/70">Refresh data</strong>.
+                        Mission Control is running, but <code className="text-zinc-300">TWITCH_CLIENT_ID</code> and{' '}
+                        <code className="text-zinc-300">TWITCH_CLIENT_SECRET</code> are missing. Add them to{' '}
+                        <code className="text-cyan-400/90">09_Tools/VC_CORE_SYSTEMS/_SECRETS_MANAGEMENT/.env</code>, restart
+                        Mission Control, then click <strong className="text-zinc-200">Refresh data</strong>.
                       </p>
                     )}
                     {mockReason === MOCK_REASON.MC_UNREACHABLE && (
                       <p>
-                        Couldn’t load <code className="text-white/60">/api/twitch/status</code>. Start Mission Control:{' '}
-                        <code className="text-white/50">cd _MISSION_CONTROL</code> → <code className="text-white/50">npm run dev:api</code>{' '}
-                        (port <code className="text-cyan-400/90">8787</code>). With Vite dev, <code className="text-white/50">/api/twitch</code>{' '}
-                        is proxied automatically.
+                        Start Mission Control: <code className="text-zinc-300">cd _MISSION_CONTROL</code> →{' '}
+                        <code className="text-zinc-300">npm run dev:api</code> (port <code className="text-cyan-400/90">8787</code>
+                        ). With Vite dev, <code className="text-zinc-300">/api/twitch</code> proxies to MC automatically.
                       </p>
                     )}
                     {mockReason === MOCK_REASON.HELIX_FAILED && (
                       <p>
-                        Mission Control is up and Twitch credentials are set, but a Helix request failed (token, rate limit, or
-                        network). Check Mission Control terminal logs and try <strong className="text-white/70">Refresh data</strong>.
+                        Keys are set but a Helix request failed (token, rate limit, or network). Check the Mission Control
+                        terminal, then try <strong className="text-zinc-200">Refresh data</strong>.
                       </p>
                     )}
-                    <p className="text-white/45 pt-1 border-t border-white/5">
-                      Full steps: <code className="text-cyan-400/70">docs/TWITCH_HELIX_LOCAL.md</code>. Production: set{' '}
-                      <code className="text-white/50">VITE_TWITCH_API_BASE</code> to your API origin (Vite proxy is dev-only).
+                    <p className="text-zinc-500 pt-1 border-t border-white/5">
+                      Doc: <code className="text-cyan-500/80">docs/TWITCH_HELIX_LOCAL.md</code>. Production: set{' '}
+                      <code className="text-zinc-400">VITE_TWITCH_API_BASE</code> to your API URL (proxy is dev-only).
                     </p>
                     {loadError && import.meta.env.DEV && (
                       <p className="text-amber-400/90 font-mono text-[11px] break-words">
-                        <span className="font-sans font-semibold">Detail: </span>
+                        <span className="font-sans font-semibold text-zinc-400">Detail: </span>
                         {loadError}
                       </p>
                     )}
@@ -273,21 +239,24 @@ export default function StreamerAnalytics() {
                 </details>
               )}
               {phase === 'live' && fetchedAt && (
-                <p className="mt-1 text-[10px] text-white/35">Last fetch: {new Date(fetchedAt).toLocaleString()}</p>
+                <p className="mt-4 text-[11px] text-zinc-500 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Last fetch: {new Date(fetchedAt).toLocaleString()}
+                </p>
               )}
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-start gap-3 flex-shrink-0">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 flex-shrink-0">
               <button
                 type="button"
                 onClick={() => refetch()}
                 disabled={phase === 'loading'}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-black/30 px-4 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/5 disabled:opacity-40"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 hover:border-white/20 transition-all disabled:opacity-40 shadow-xl"
               >
-                <RefreshCw className={`w-4 h-4 ${phase === 'loading' ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-4 h-4 text-cyan-400 ${phase === 'loading' ? 'animate-spin' : ''}`} />
                 Refresh data
               </button>
-              <nav className="flex rounded-xl border border-white/10 p-1 bg-black/30" aria-label="View tabs">
+              <nav className="flex rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-1.5 shadow-xl" aria-label="View tabs">
                 {TABS.map((t) => {
                   const Icon = t.icon;
                   const isActive = activeTab === t.id;
@@ -300,13 +269,13 @@ export default function StreamerAnalytics() {
                       id={`tab-${t.id}`}
                       aria-controls={`panel-${t.id}`}
                       onClick={() => setActiveTab(t.id)}
-                      className={`flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
+                      className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
                         isActive
-                          ? 'bg-white/10 text-white shadow-sm'
-                          : 'text-white/60 hover:text-white/80 hover:bg-white/5'
+                          ? 'bg-white/10 text-white shadow-sm ring-1 ring-white/10'
+                          : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
                       }`}
                     >
-                      <Icon className="w-4 h-4 flex-shrink-0" />
+                      <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-cyan-400' : ''}`} />
                       {t.label}
                     </button>
                   );
@@ -322,35 +291,83 @@ export default function StreamerAnalytics() {
                 role="tabpanel"
                 id="panel-categories"
                 aria-labelledby="tab-categories"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.3 }}
                 className="space-y-6"
               >
-                <div className="flex flex-col gap-2 text-xs text-white/50">
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                    <span>
-                      <strong className="text-white/70">Viewer / streamer ratio</strong> — higher ≈ more eyeballs per live
-                      channel in our sample (not financial advice).
+                <div className="flex flex-col gap-3 text-xs text-zinc-400 max-w-4xl bg-white/[0.02] border border-white/5 rounded-2xl p-4 backdrop-blur-sm">
+                  <div className="flex items-center gap-3">
+                    <TrendingUp className="w-5 h-5 text-cyan-400 flex-shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+                    <span className="leading-relaxed">
+                      <strong className="text-white/90">Viewer / streamer ratio</strong> — Higher usually means more
+                      eyeballs per live channel in that category (easier to get noticed if the game fits you). Not
+                      financial advice; Twitch numbers are a snapshot.
                     </span>
                   </div>
                   {batchErrors?.length > 0 && (
-                    <p className="text-amber-400/90 pl-6">
-                      Some categories failed to load ({batchErrors.length}). Check Mission Control logs.
+                    <p className="text-amber-400/90 text-sm pl-8 mt-1">
+                      Couldn’t load {batchErrors.length} categor{batchErrors.length === 1 ? 'y' : 'ies'} (rate limit or
+                      API hiccup). Try Refresh data or reduce batch size in Mission Control.
                     </p>
                   )}
                 </div>
 
+                <div className="rounded-2xl border border-white/10 bg-zinc-900/30 p-5 sm:p-6 backdrop-blur-sm">
+                  <div className="flex items-start gap-3 mb-4">
+                    <Link2 className="w-5 h-5 text-violet-400 flex-shrink-0 mt-0.5" aria-hidden />
+                    <div>
+                      <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">
+                        Data sources &amp; combining
+                      </h2>
+                      <p className="text-sm text-zinc-400 leading-relaxed">
+                        This page does <strong className="text-zinc-300">not</strong> invent extra provider metrics. Twitch
+                        Helix is the only live pipeline wired here. The cards below are the roadmap: normalize each
+                        provider on the server, then merge (e.g. weighted index, cross-platform tags, or “confirm with
+                        Helix” for anything live).
+                      </p>
+                    </div>
+                  </div>
+                  <ul className="grid gap-3 sm:grid-cols-2">
+                    {ANALYTICS_PROVIDERS.map((p) => {
+                      const st = providerStatusById[p.id] || p.defaultStatus;
+                      return (
+                        <li
+                          key={p.id}
+                          className={`rounded-xl border px-4 py-3 text-left ${STATUS_STYLE[st] || STATUS_STYLE.sample}`}
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-1">
+                            <span className="text-sm font-semibold text-white">{p.name}</span>
+                            <span className="text-[10px] uppercase font-bold tracking-wider opacity-90">
+                              {STATUS_LABEL[st]}
+                            </span>
+                          </div>
+                          <p className="text-xs leading-relaxed opacity-95">{p.blurb}</p>
+                          {p.docsUrl && (
+                            <a
+                              href={p.docsUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 mt-2 text-[11px] font-semibold text-cyan-400/90 hover:text-cyan-300"
+                            >
+                              Docs <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+
                 {phase === 'loading' && !categoryRows?.length && (
-                  <div className="retro-card rounded-2xl p-12 border border-[var(--retro-border)] text-center text-white/50">
-                    <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-3 text-cyan-400/80" />
-                    Fetching Twitch top games + live streams…
+                  <div className="rounded-3xl p-16 border border-white/5 bg-white/[0.02] backdrop-blur-xl text-center text-zinc-500 flex flex-col items-center justify-center min-h-[400px]">
+                    <RefreshCw className="w-8 h-8 animate-spin mb-4 text-cyan-400/80" />
+                    <p className="text-sm font-medium text-zinc-400">Loading Twitch categories…</p>
                   </div>
                 )}
 
-                <div className="grid gap-4">
+                <div className="grid gap-5">
                   {(categoryRows ||
                     MOCK_CATEGORIES.map((row) => ({ ...row, key: row.game, live: false }))).map((row, i) => {
                     const up = row.trend >= 0;
@@ -358,68 +375,64 @@ export default function StreamerAnalytics() {
                     return (
                       <div
                         key={rowKey}
-                        className="retro-card rounded-2xl p-5 sm:p-6 border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-colors"
+                        className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 hover:border-white/20 hover:bg-zinc-800/40 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.5)] group"
                       >
-                        <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8">
-                          <div className="flex items-start gap-4 flex-1 min-w-0">
-                            <div className="w-10 h-10 rounded-xl bg-[var(--retro-bg)] border border-[var(--retro-border)] flex items-center justify-center font-extrabold text-white/80 flex-shrink-0">
+                        <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
+                          
+                          <div className="flex items-start gap-5 flex-1 min-w-0">
+                            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center font-black text-white text-lg flex-shrink-0 shadow-inner">
                               {i + 1}
                             </div>
-                            <div className="min-w-0">
-                              <div className="flex flex-wrap items-center gap-2 mb-1">
-                                <h2 className="text-lg font-bold text-white">{row.game}</h2>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex flex-wrap items-center gap-3 mb-2">
+                                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">{row.game}</h2>
                                 <span
-                                  className={`text-[10px] uppercase font-extrabold tracking-wider px-2 py-0.5 rounded-md border ${gradeStyle(row.grade)}`}
+                                  className={`text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-lg border ${gradeStyle(row.grade)}`}
                                 >
-                                  {row.grade} opportunity
+                                  {row.grade} tier
                                 </span>
                                 {row.live && (
-                                  <span className="text-[10px] uppercase font-bold text-emerald-400/90">Helix</span>
+                                  <span className="text-[10px] uppercase font-bold text-emerald-400 border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 rounded-md shadow-[0_0_10px_rgba(16,185,129,0.1)]">
+                                    Live
+                                  </span>
                                 )}
                               </div>
-                              <p className="text-sm text-[var(--retro-text-dim)] leading-snug">{row.note}</p>
+                              <p className="text-sm text-zinc-400 font-light leading-relaxed max-w-2xl">{row.note}</p>
                               {row.live && row.pagesFetched != null && (
-                                <p className="text-[10px] text-white/35 mt-1">
-                                  Streams API pages scanned: {row.pagesFetched} (max {TWITCH_BATCH_MAX_PAGES} per category
-                                  in this build)
+                                <p className="text-[10px] text-zinc-500 font-mono mt-3 uppercase tracking-wider flex items-center gap-2">
+                                  Helix pages: {row.pagesFetched} / {TWITCH_BATCH_MAX_PAGES}
                                 </p>
                               )}
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 lg:gap-6 text-center lg:text-right">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 lg:gap-8 text-left lg:text-right">
                             <div>
-                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)]">Live viewers</p>
-                              <p className="font-extrabold text-lg flex items-center justify-center lg:justify-end gap-1">
-                                <Users className="w-4 h-4 text-[var(--retro-text-dim)] opacity-70" />
-                                {fmt(row.viewers)}
-                              </p>
+                              <p className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 mb-1 flex items-center lg:justify-end gap-1.5"><Users className="w-3.5 h-3.5"/> Viewers</p>
+                              <p className="font-bold text-xl text-white tracking-tight drop-shadow-sm">{fmt(row.viewers)}</p>
                             </div>
                             <div>
-                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)]">Channels live</p>
-                              <p className="font-extrabold text-lg flex items-center justify-center lg:justify-end gap-1">
-                                <Radio className="w-4 h-4 text-[var(--retro-text-dim)] opacity-70" />
-                                {fmt(row.streamers)}
-                              </p>
+                              <p className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 mb-1 flex items-center lg:justify-end gap-1.5"><Radio className="w-3.5 h-3.5"/> Broadcasters</p>
+                              <p className="font-bold text-xl text-white tracking-tight drop-shadow-sm">{fmt(row.streamers)}</p>
                             </div>
                             <div>
-                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)]">Ratio</p>
-                              <p className="font-extrabold text-lg text-cyan-400">{row.ratio}</p>
+                              <p className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 mb-1">Ratio</p>
+                              <p className="font-bold text-xl text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.3)]">{row.ratio}</p>
                             </div>
                             <div>
-                              <p className="text-[10px] uppercase font-bold text-[var(--retro-text-dim)]">Trend</p>
+                              <p className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 mb-1">Trend</p>
                               {row.live ? (
-                                <p className="font-bold text-sm text-cyan-400/90 flex items-center justify-center lg:justify-end">
-                                  Live
+                                <p className="font-bold text-[15px] text-cyan-400/90 pt-1 lg:justify-end flex">
+                                  Streaming
                                 </p>
                               ) : (
                                 <p
-                                  className={`font-bold text-sm flex items-center justify-center lg:justify-end gap-0.5 ${
-                                    up ? 'text-emerald-400' : 'text-rose-400'
+                                  className={`font-bold text-[15px] pt-1 flex items-center lg:justify-end gap-1 ${
+                                    up ? 'text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.3)]' : 'text-rose-400 drop-shadow-[0_0_5px_rgba(251,113,133,0.3)]'
                                   }`}
                                 >
                                   {up ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
-                                  {Math.abs(row.trend)}% (mock)
+                                  {Math.abs(row.trend)}%
                                 </p>
                               )}
                             </div>
@@ -438,39 +451,40 @@ export default function StreamerAnalytics() {
                 role="tabpanel"
                 id="panel-timing"
                 aria-labelledby="tab-timing"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-6"
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-8"
               >
-                <p className="text-sm text-[var(--retro-text-dim)] max-w-3xl">
-                  <strong className="text-white/80">When to go live in each category</strong> — suggested windows below are
-                  still mock. The chart uses an <strong className="text-white/70">illustrative 24h shape</strong>; when Live
-                  Helix is on, it’s <strong className="text-white/70">scaled to current viewer totals</strong> for the
-                  selected game. True hour-by-hour needs stored snapshots (next backend step).
-                </p>
+                <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-5 backdrop-blur-sm max-w-4xl">
+                  <p className="text-sm text-zinc-300 leading-relaxed border-l-2 border-amber-400/50 pl-4">
+                    <strong className="text-white font-medium">When to go live.</strong> Suggested windows below are still
+                    mock. The chart uses a rough 24h shape; with live Helix it scales to current viewer totals for the game
+                    you pick. Real heatmaps need saved hourly data later.
+                  </p>
+                </div>
 
-                <div className="retro-card rounded-2xl p-6 border border-[var(--retro-border)]">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-4 flex items-center gap-2">
-                    <Trophy className="w-4 h-4 text-amber-400" /> Suggested windows (mock)
+                <div className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-white/70 mb-6 flex items-center gap-3">
+                    <Trophy className="w-4 h-4 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.6)]" /> Suggested windows (mock)
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {MOCK_BEST_TIMES.map((bt) => (
                       <div
                         key={`${bt.game}-${bt.day}`}
-                        className="flex items-center gap-4 p-4 rounded-xl bg-[var(--retro-bg)] border border-[var(--retro-border)]"
+                        className="flex items-center gap-5 p-5 rounded-[16px] bg-white/[0.02] hover:bg-white/[0.04] border border-white/5 hover:border-white/10 transition-colors group"
                       >
-                        <div className="w-10 h-10 rounded-lg bg-amber-400/10 text-amber-400 flex items-center justify-center border border-amber-400/20 flex-shrink-0">
+                        <div className="w-12 h-12 rounded-xl bg-amber-400/10 text-amber-400 flex items-center justify-center border border-amber-400/20 group-hover:scale-110 transition-transform">
                           <Clock className="w-5 h-5" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-bold text-white">{bt.game}</p>
-                          <p className="text-sm text-[var(--retro-text-dim)]">
-                            {bt.day} · {bt.window}
+                          <p className="font-bold text-white text-base mb-1">{bt.game}</p>
+                          <p className="text-xs text-zinc-400">
+                            {bt.day} <span className="mx-1 text-zinc-600">•</span> {bt.window}
                           </p>
                         </div>
-                        <span className="text-[10px] uppercase font-extrabold text-emerald-400/90 flex-shrink-0">
+                        <span className="text-[10px] uppercase font-black tracking-widest text-emerald-400 px-2.5 py-1.5 rounded-lg border border-emerald-400/20 bg-emerald-400/10 shadow-[0_0_10px_rgba(16,185,129,0.1)]">
                           {bt.intensity}
                         </span>
                       </div>
@@ -478,14 +492,19 @@ export default function StreamerAnalytics() {
                   </div>
                 </div>
 
-                <div className="retro-card rounded-2xl p-5 sm:p-6 border border-[var(--retro-border)]">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 flex items-center gap-2">
-                      <LineChartIcon className="w-4 h-4 text-cyan-400" /> 24h curve{' '}
-                      {chartIsLive ? '(shape + live scale)' : '(mock)'}
-                    </h3>
-                    <label className="flex items-center gap-2 text-sm text-[var(--retro-text-dim)]">
-                      <span className="text-[10px] uppercase font-bold tracking-wider">Category</span>
+                <div className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-8">
+                    <div>
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-white/70 mb-3 flex items-center gap-3">
+                        <LineChartIcon className="w-4 h-4 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]" /> 24h activity (illustrative curve)
+                      </h3>
+                      <p className="text-xs text-zinc-400 max-w-xl">
+                        <span className="text-cyan-400 font-semibold">Teal</span> ≈ concurrent viewers.{' '}
+                        <span className="text-violet-400 font-semibold">Violet</span> ≈ viewer-hours (volume).
+                      </p>
+                    </div>
+                    <label className="flex flex-col gap-2 shrink-0">
+                      <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-500">Category</span>
                       <select
                         value={chartIsLive && chartGameId ? chartGameId : chartGame}
                         onChange={(e) => {
@@ -496,7 +515,7 @@ export default function StreamerAnalytics() {
                             setChartGame(v);
                           }
                         }}
-                        className="rounded-lg bg-black/40 border border-white/15 px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/40"
+                        className="rounded-xl bg-black/50 border border-white/15 px-4 py-2.5 text-sm font-semibold text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all shadow-inner"
                       >
                         {chartIsLive
                           ? [...categories]
@@ -514,75 +533,56 @@ export default function StreamerAnalytics() {
                       </select>
                     </label>
                   </div>
-                  <p className="text-xs text-[var(--retro-text-dim)] mb-4 max-w-3xl">
-                    <span className="text-cyan-400 font-semibold">Teal</span> = concurrent viewers (category activity).{' '}
-                    <span className="text-violet-400 font-semibold">Violet</span> = viewer-hours (k) — watch volume.{' '}
-                    {chartIsLive ? (
-                      <span className="text-white/45">
-                        Curve shape is template-based; magnitudes match current Helix totals for the selected game.
-                      </span>
-                    ) : (
-                      <span>Fully mock until Twitch proxy + credentials are configured.</span>
-                    )}
-                  </p>
-                  <div className="w-full h-[min(360px,55vh)] min-h-[260px]">
+                  
+                  <div className="w-full h-[400px]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={hourlyData} margin={{ top: 8, right: 12, left: 4, bottom: 4 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                      <LineChart data={hourlyData} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
                         <XAxis
                           dataKey="label"
                           interval={2}
                           tick={chartAxisStyle}
-                          axisLine={{ stroke: 'rgba(255,255,255,0.12)' }}
-                          tickLine={{ stroke: 'rgba(255,255,255,0.12)' }}
+                          axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                          tickLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                          dy={10}
                         />
                         <YAxis
                           yAxisId="ccv"
                           tickFormatter={(v) => fmt(v)}
                           tick={chartAxisStyle}
-                          axisLine={{ stroke: 'rgba(255,255,255,0.12)' }}
-                          tickLine={{ stroke: 'rgba(255,255,255,0.12)' }}
-                          label={{
-                            value: 'Concurrent viewers',
-                            angle: -90,
-                            position: 'insideLeft',
-                            style: { fill: 'rgba(0,204,255,0.7)', fontSize: 10 },
-                          }}
+                          axisLine={false}
+                          tickLine={false}
+                          dx={-10}
                         />
                         <YAxis
                           yAxisId="vh"
                           orientation="right"
                           tickFormatter={(v) => `${v}k`}
                           tick={chartAxisStyle}
-                          axisLine={{ stroke: 'rgba(255,255,255,0.12)' }}
-                          tickLine={{ stroke: 'rgba(255,255,255,0.12)' }}
-                          label={{
-                            value: 'Viewer-hours (k)',
-                            angle: 90,
-                            position: 'insideRight',
-                            style: { fill: 'rgba(167,139,250,0.85)', fontSize: 10 },
-                          }}
+                          axisLine={false}
+                          tickLine={false}
+                          dx={10}
                         />
                         <Tooltip
                           contentStyle={chartTooltipStyle}
-                          labelStyle={{ color: 'rgba(255,255,255,0.85)' }}
+                          labelStyle={{ color: 'rgba(255,255,255,0.8)', fontWeight: 'bold' }}
                           formatter={(value, name) => {
-                            if (name === 'Avg concurrent viewers') return [fmt(value), name];
-                            if (name === 'Viewer-hours (k)') return [`${value}k`, name];
+                            if (name === 'Avg concurrent viewers') return [fmt(value), 'Active Viewers'];
+                            if (name === 'Viewer-hours (k)') return [`${value}k`, 'Retention Metric'];
                             return [value, name];
                           }}
-                          labelFormatter={(_, p) => (p?.[0]?.payload ? `Hour ${p[0].payload.label}` : '')}
+                          labelFormatter={(_, p) => (p?.[0]?.payload ? `Time Block ${p[0].payload.label}:00` : '')}
                         />
-                        <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                        <Legend wrapperStyle={{ fontSize: 11, fontWeight: 'bold', paddingTop: 20, color: 'rgba(255,255,255,0.7)' }} />
                         <Line
                           yAxisId="ccv"
                           type="monotone"
                           dataKey="ccv"
                           name="Avg concurrent viewers"
-                          stroke="#00ccff"
-                          strokeWidth={2}
+                          stroke="#22d3ee"
+                          strokeWidth={3}
                           dot={false}
-                          activeDot={{ r: 4 }}
+                          activeDot={{ r: 6, fill: '#22d3ee', stroke: '#000', strokeWidth: 2 }}
                         />
                         <Line
                           yAxisId="vh"
@@ -590,16 +590,13 @@ export default function StreamerAnalytics() {
                           dataKey="viewerHoursK"
                           name="Viewer-hours (k)"
                           stroke="#a78bfa"
-                          strokeWidth={2}
+                          strokeWidth={3}
                           dot={false}
-                          activeDot={{ r: 4 }}
+                          activeDot={{ r: 6, fill: '#a78bfa', stroke: '#000', strokeWidth: 2 }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
-                  <p className="mt-3 text-[10px] text-white/35">
-                    Heatmap day × hour can stack on this later; data from Helix + stored snapshots when wired.
-                  </p>
                 </div>
               </motion.div>
             )}
@@ -610,110 +607,80 @@ export default function StreamerAnalytics() {
                 role="tabpanel"
                 id="panel-titles"
                 aria-labelledby="tab-titles"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.3 }}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-8"
               >
-                <div className="retro-card rounded-2xl p-6 border border-[var(--retro-border)]">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-3 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4" /> Best title patterns
+                <div className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col">
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-white/70 mb-5 flex items-center gap-3">
+                    <Sparkles className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]" /> Title patterns
                   </h3>
-                  <p className="text-sm text-[var(--retro-text-dim)] mb-4">
-                    Learn from high-performing streams in a category — patterns only, not copying verbatim.
+                  <p className="text-sm text-zinc-400 mb-8">
+                    Ideas from how strong titles are usually built — hooks, honesty, clear game or vibe. Don’t copy others
+                    verbatim; stay within Twitch ToS.
                   </p>
-                  <ul className="space-y-2">
+                  <ul className="space-y-4">
                     {MOCK_TITLE_PATTERNS.map((p) => (
-                      <li key={p} className="text-sm text-white/85 flex gap-2">
-                        <span className="text-cyan-400 flex-shrink-0">→</span>
-                        {p}
+                      <li key={p} className="text-sm font-medium text-white/90 flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors">
+                        <span className="text-cyan-400 font-bold shrink-0 block mt-0.5">→</span>
+                        <span className="leading-relaxed">{p}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="retro-card rounded-2xl p-6 border border-[var(--retro-border)]">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-3 flex items-center gap-2">
-                    <Wand2 className="w-4 h-4 text-violet-400" /> Generate titles
+                <div className="rounded-[24px] p-6 lg:p-8 bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-white/70 mb-5 flex items-center gap-3">
+                    <Wand2 className="w-5 h-5 text-violet-400 drop-shadow-[0_0_10px_rgba(167,139,250,0.6)]" /> Titles +
+                    other signals
                   </h3>
-                  <p className="text-sm text-[var(--retro-text-dim)] mb-4">
-                    Describe your stream; get AI suggestions via Base44 integration credits. Or pick a game for instant presets.
+                  <p className="text-sm text-zinc-400 mb-4">
+                    Titles work best when they match <strong className="text-zinc-300">real</strong> stream context — game,
+                    mood, schedule. We’re not adding more canned title banks here; optional next step is LLM or data from{' '}
+                    <strong className="text-zinc-300">your</strong> analytics providers (see Categories → data sources).
                   </p>
-                  <label className="block text-[10px] uppercase font-bold text-white/50 mb-2">Game (presets)</label>
-                  <select
-                    value={titleGamePreset}
-                    onChange={(e) => setTitleGamePreset(e.target.value)}
-                    className="w-full rounded-lg bg-black/40 border border-white/15 px-3 py-2 text-sm text-white mb-4 focus:outline-none focus:border-cyan-500/40"
-                  >
-                    <option value="">— None —</option>
-                    {Object.keys(PRESET_TITLES_BY_GAME).map((g) => (
-                      <option key={g} value={g}>
-                        {g}
-                      </option>
-                    ))}
-                  </select>
-                  {presetTitles.length > 0 && (
-                    <>
-                      <p className="text-[10px] uppercase font-bold text-white/40 mb-2">Preset titles</p>
-                      <ul className="space-y-2 mb-4">
-                        {presetTitles.map((s) => (
-                          <li
-                            key={s}
-                            className="text-sm p-3 rounded-lg bg-white/[0.04] border border-white/10 text-white/90"
-                          >
-                            {s}
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  )}
-                  <label htmlFor="title-prompt" className="block text-[10px] uppercase font-bold text-white/50 mb-2">
-                    Stream description (for AI)
+                  <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-4 mb-6 text-xs text-zinc-400 leading-relaxed">
+                    <strong className="text-violet-200/90">Combine carefully:</strong> use Helix for “who is live right
+                    now”; use third-party indexes or YouTube for trends and validation; resolve conflicts on the server
+                    with explicit rules (never blend mismatched units in the UI without labeling).
+                  </div>
+
+                  <label htmlFor="title-prompt" className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2 block ml-1">
+                    Your stream (optional)
                   </label>
                   <textarea
                     id="title-prompt"
-                    rows={3}
-                    value={titlePrompt}
-                    onChange={(e) => setTitlePrompt(e.target.value)}
-                    className="w-full rounded-xl bg-black/30 border border-white/10 p-3 text-sm text-white/90 mb-4 resize-none focus:outline-none focus:border-cyan-500/40"
-                    placeholder="e.g. Hollow Knight first play, chill, no backseating"
+                    rows={4}
+                    className="w-full rounded-xl bg-black/40 border border-white/10 p-4 text-sm text-white mb-8 resize-none focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-all shadow-inner placeholder:text-zinc-600"
+                    placeholder="e.g. First playthrough, no spoilers, high interaction."
                   />
-                  <button
-                    type="button"
-                    onClick={handleGenerateTitles}
-                    disabled={titleLoading}
-                    className="rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-50 px-4 py-2 text-sm font-semibold text-white transition-colors"
-                  >
-                    {titleLoading ? 'Generating…' : 'Generate titles'}
-                  </button>
-                  {titleError && (
-                    <p className="mt-3 text-sm text-amber-400/90">{titleError}</p>
-                  )}
-                  {generatedTitles.length > 0 && (
-                    <>
-                      <p className="mt-4 text-[10px] uppercase font-bold text-white/40 mb-2">Generated</p>
-                      <ul className="space-y-2">
-                        {generatedTitles.map((s) => (
-                          <li
-                            key={s}
-                            className="text-sm p-3 rounded-lg bg-white/[0.04] border border-white/10 text-white/90"
-                          >
-                            {s}
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  )}
+                  
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4 ml-1">Examples</p>
+                  <ul className="space-y-3">
+                    {MOCK_TITLE_SUGGESTIONS.map((s) => (
+                      <li
+                        key={s}
+                        className="text-sm font-medium leading-relaxed p-4 rounded-xl bg-white/[0.03] border border-white/10 text-white shadow-sm flex items-start gap-3 relative overflow-hidden group"
+                      >
+                        <div className="absolute top-0 left-0 w-1 h-full bg-violet-500/50 group-hover:bg-violet-400 transition-colors" />
+                        <span>{s}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          <p className="mt-10 text-xs text-white/30">
-            Streamer Analytics — live categories via Mission Control <code className="text-white/40">/api/twitch/*</code>;
-            hourly history = snapshots (planned).
-          </p>
+          <footer className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs text-zinc-500">
+            <p className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
+              Streamer Analytics — live categories via Mission Control <code className="text-zinc-600">/api/twitch/*</code>
+            </p>
+            <p>Operator.ink</p>
+          </footer>
         </main>
       </div>
     </>
