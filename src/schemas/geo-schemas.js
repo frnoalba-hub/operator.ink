@@ -120,6 +120,29 @@ export const FAQ_SCHEMA_HOME = {
         text: 'The Phase-0 Pilot costs $3,999. It validates your project with a working prototype before full engagement. No endless discovery or scope creep—validate fast, then scale.',
       },
     },
+    {
+      '@type': 'Question',
+      name: 'How much does Operator.ink charge for web design?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Web design projects vary by scope. The Phase-0 Pilot ($3,999) validates before full build. Full sites typically start in the $5,000–$15,000 range depending on pages, integrations, and custom features. We provide a custom quote after Brief and Discovery.',
+      },
+    },
+  ],
+};
+
+/** HowTo schema — GEO: answers "How does Operator.ink work?" for AI extraction */
+export const HOWTO_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How does Operator.ink work?',
+  description: 'Operator.ink follows a 4-step process: Brief, Discovery, Build, Launch. Phase-0 Pilot available at $3,999 to validate before full engagement.',
+  totalTime: 'P30D',
+  step: [
+    { '@type': 'HowToStep', name: 'Brief', text: 'Share your scope, goals, and constraints. We align on outcomes and timeline.' },
+    { '@type': 'HowToStep', name: 'Discovery', text: 'We map your ops, audience, and tech. You get a clear deployment plan.' },
+    { '@type': 'HowToStep', name: 'Build', text: 'Sprints, check-ins, and iterative delivery. You see progress, we ship.' },
+    { '@type': 'HowToStep', name: 'Launch', text: 'Handoff, docs, and ongoing support. Systems active, you stay in control.' },
   ],
 };
 
@@ -141,6 +164,14 @@ export const FAQ_SCHEMA_SERVICES = {
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'GEO (Generative Engine Optimization) means optimizing content to appear in AI-generated summaries (e.g., ChatGPT, Perplexity). AEO (Answer Engine Optimization) means capturing featured snippets and voice search. Both extend traditional SEO for the AI era.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How much does Operator.ink charge for web design?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Web design projects vary by scope. The Phase-0 Pilot ($3,999) validates before full build. Full sites typically start in the $5,000–$15,000 range. We provide a custom quote after Brief and Discovery.',
       },
     },
   ],

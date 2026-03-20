@@ -6,7 +6,7 @@ import { createPageUrl } from '@/utils';
 import SEO from '@/components/SEO';
 import StickyNav from '../components/StickyNav';
 import SummaryBox from '../components/SummaryBox';
-import { ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME } from '@/schemas/geo-schemas';
+import { ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME, HOWTO_SCHEMA } from '@/schemas/geo-schemas';
 import IntakeForm from '../components/intake/IntakeForm';
 
 const LOGO_URL = "/operator-logo.png";
@@ -64,7 +64,7 @@ export default function Home() {
       <SEO
         title={HOME_TITLE}
         description={HOME_DESC}
-        schema={[ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME]}
+        schema={[ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME, HOWTO_SCHEMA]}
         canonicalUrl="https://operator.ink/"
         ogImage="/operator-logo.png"
       />

@@ -199,6 +199,34 @@ export default function Services() {
           </p>
         </motion.header>
 
+        {/* ServiceSummaryBox — GEO Phase 2 #10: Problem/Solution block at top (like Outright) */}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.04 }}
+          className="mb-12"
+          aria-labelledby="problem-solution-heading"
+        >
+          <dl className="retro-card rounded-2xl p-6 lg:p-8 border-l-4" style={{ borderLeftColor: 'var(--retro-border-bright)' }}>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-2 h-2 rounded-full" style={{ background: 'var(--rgb-gradient)' }} />
+              <h2 id="problem-solution-heading" className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">Problem &amp; Solution</h2>
+            </div>
+            <div>
+              <dt className="font-bold text-[var(--retro-text)] mb-2">Problem</dt>
+              <dd className="text-[var(--retro-text-muted)] leading-relaxed mb-6 m-0">
+                Websites that don&apos;t convert. Search visibility lost to AI summaries. Manual tasks that eat hours. Weak brands that leak CAC. New platforms set up wrong from day one.
+              </dd>
+            </div>
+            <div>
+              <dt className="font-bold text-[var(--retro-text)] mb-2">Solution</dt>
+              <dd className="text-[var(--retro-text-muted)] leading-relaxed m-0">
+                Conversion-focused websites, GEO/AEO/SEO for every surface, AI agents that run 24/7, cohesive brand + precision ads, and guided Base44 setup. One process: Brief → Discovery → Build → Launch. Phase-0 Pilot $3,999 to validate before full engagement.
+              </dd>
+            </div>
+          </dl>
+        </motion.section>
+
         <SummaryBox
           title="Services Summary"
           items={[
