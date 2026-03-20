@@ -11,7 +11,18 @@ import {
   Radio,
   Trophy,
   Wand2,
+  LineChart as LineChartIcon,
 } from 'lucide-react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 import SEO from '@/components/SEO';
 import StickyNav from '@/components/StickyNav';
 import GridOverlay from '@/components/GridOverlay';
@@ -85,6 +96,48 @@ const MOCK_TITLE_SUGGESTIONS = [
   'Cozy Just Chatting — career Q&A + channel updates',
 ];
 
+/** Hour label for chart (0 = midnight). */
+function formatHourLabel(h) {
+  const p = h >= 12 ? 'p' : 'a';
+  const d = h % 12 === 0 ? 12 : h % 12;
+  return `${d}${p}`;
+}
+
+/**
+ * Mock 24h curves: ccv ≈ avg concurrent viewers in category; viewerHours = thousands of viewer-hours
+ * in that hour (volume). Real data = snapshots + integration window.
+ */
+function buildHourlyCurve(peakHour, baseCcv, ampCcv, vhScale) {
+  return Array.from({ length: 24 }, (_, h) => {
+    const dist = Math.min(Math.abs(h - peakHour), Math.abs(h - peakHour + 24), Math.abs(h - peakHour - 24));
+    const ccv = baseCcv + ampCcv * Math.exp(-(dist * dist) / 20);
+    const viewerHoursK = (ccv / 1000) * vhScale * (0.65 + 0.2 * Math.sin((h / 24) * Math.PI * 2));
+    return {
+      hour: h,
+      label: formatHourLabel(h),
+      ccv: Math.round(ccv),
+      viewerHoursK: Math.round(viewerHoursK * 10) / 10,
+    };
+  });
+}
+
+const MOCK_HOURLY_BY_GAME = {
+  Valorant: buildHourlyCurve(21, 78000, 52000, 1.15),
+  'Hollow Knight': buildHourlyCurve(15, 1800, 4200, 0.95),
+  'Just Chatting': buildHourlyCurve(20, 240000, 95000, 1.25),
+  'Indie Horror (tag aggregate)': buildHourlyCurve(22, 8000, 16000, 1.05),
+};
+
+const CHART_GAME_OPTIONS = Object.keys(MOCK_HOURLY_BY_GAME);
+
+const chartAxisStyle = { fontSize: 11, fill: 'rgba(255,255,255,0.45)' };
+const chartTooltipStyle = {
+  backgroundColor: 'rgba(15,15,18,0.95)',
+  border: '1px solid rgba(255,255,255,0.12)',
+  borderRadius: '12px',
+  fontSize: 12,
+};
+
 const TABS = [
   { id: 'categories', label: 'Categories', icon: Layers },
   { id: 'timing', label: 'Best times', icon: Clock },
@@ -105,6 +158,8 @@ function gradeStyle(grade) {
 
 export default function StreamerAnalytics() {
   const [activeTab, setActiveTab] = useState('categories');
+  const [chartGame, setChartGame] = useState('Valorant');
+  const hourlyData = MOCK_HOURLY_BY_GAME[chartGame] ?? MOCK_HOURLY_BY_GAME.Valorant;
 
   return (
     <>
@@ -299,8 +354,106 @@ export default function StreamerAnalytics() {
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-dashed border-white/20 p-8 text-center text-sm text-white/40">
-                  Heatmap by hour × day-of-week (per category) — placeholder for v2.
+                <div className="retro-card rounded-2xl p-5 sm:p-6 border border-[var(--retro-border)]">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 flex items-center gap-2">
+                      <LineChartIcon className="w-4 h-4 text-cyan-400" /> 24h curve (mock)
+                    </h3>
+                    <label className="flex items-center gap-2 text-sm text-[var(--retro-text-dim)]">
+                      <span className="text-[10px] uppercase font-bold tracking-wider">Category</span>
+                      <select
+                        value={chartGame}
+                        onChange={(e) => setChartGame(e.target.value)}
+                        className="rounded-lg bg-black/40 border border-white/15 px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/40"
+                      >
+                        {CHART_GAME_OPTIONS.map((g) => (
+                          <option key={g} value={g}>
+                            {g}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                  <p className="text-xs text-[var(--retro-text-dim)] mb-4 max-w-3xl">
+                    <span className="text-cyan-400 font-semibold">Teal</span> = avg concurrent viewers in the category
+                    (how busy the directory is). <span className="text-violet-400 font-semibold">Violet</span> = viewer-hours
+                    in that hour (thousands) — total watch volume, good for spotting “heavy” slots.
+                  </p>
+                  <div className="w-full h-[min(360px,55vh)] min-h-[260px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={hourlyData} margin={{ top: 8, right: 12, left: 4, bottom: 4 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                        <XAxis
+                          dataKey="label"
+                          interval={2}
+                          tick={chartAxisStyle}
+                          axisLine={{ stroke: 'rgba(255,255,255,0.12)' }}
+                          tickLine={{ stroke: 'rgba(255,255,255,0.12)' }}
+                        />
+                        <YAxis
+                          yAxisId="ccv"
+                          tickFormatter={(v) => fmt(v)}
+                          tick={chartAxisStyle}
+                          axisLine={{ stroke: 'rgba(255,255,255,0.12)' }}
+                          tickLine={{ stroke: 'rgba(255,255,255,0.12)' }}
+                          label={{
+                            value: 'Concurrent viewers',
+                            angle: -90,
+                            position: 'insideLeft',
+                            style: { fill: 'rgba(0,204,255,0.7)', fontSize: 10 },
+                          }}
+                        />
+                        <YAxis
+                          yAxisId="vh"
+                          orientation="right"
+                          tickFormatter={(v) => `${v}k`}
+                          tick={chartAxisStyle}
+                          axisLine={{ stroke: 'rgba(255,255,255,0.12)' }}
+                          tickLine={{ stroke: 'rgba(255,255,255,0.12)' }}
+                          label={{
+                            value: 'Viewer-hours (k)',
+                            angle: 90,
+                            position: 'insideRight',
+                            style: { fill: 'rgba(167,139,250,0.85)', fontSize: 10 },
+                          }}
+                        />
+                        <Tooltip
+                          contentStyle={chartTooltipStyle}
+                          labelStyle={{ color: 'rgba(255,255,255,0.85)' }}
+                          formatter={(value, name) => {
+                            if (name === 'Avg concurrent viewers') return [fmt(value), name];
+                            if (name === 'Viewer-hours (k)') return [`${value}k`, name];
+                            return [value, name];
+                          }}
+                          labelFormatter={(_, p) => (p?.[0]?.payload ? `Hour ${p[0].payload.label}` : '')}
+                        />
+                        <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                        <Line
+                          yAxisId="ccv"
+                          type="monotone"
+                          dataKey="ccv"
+                          name="Avg concurrent viewers"
+                          stroke="#00ccff"
+                          strokeWidth={2}
+                          dot={false}
+                          activeDot={{ r: 4 }}
+                        />
+                        <Line
+                          yAxisId="vh"
+                          type="monotone"
+                          dataKey="viewerHoursK"
+                          name="Viewer-hours (k)"
+                          stroke="#a78bfa"
+                          strokeWidth={2}
+                          dot={false}
+                          activeDot={{ r: 4 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <p className="mt-3 text-[10px] text-white/35">
+                    Heatmap day × hour can stack on this later; data from Helix + stored snapshots when wired.
+                  </p>
                 </div>
               </motion.div>
             )}
