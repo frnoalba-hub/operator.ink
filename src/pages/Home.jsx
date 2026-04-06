@@ -11,7 +11,7 @@ import IntakeForm from '../components/intake/IntakeForm';
 
 const LOGO_URL = "/operator-logo.png";
 const LINKEDIN_URL = "https://www.linkedin.com/in/franciscoalbavc/";
-const FOUNDER_PHOTO = "/francisco-alba.jpg";
+const FOUNDER_PHOTO = '/francisco-alba.png';
 
 const ventures = [
   { title: 'Operator.ink', subtitle: 'AI operations platform', href: 'https://operator.ink', external: false },
@@ -170,14 +170,29 @@ export default function Home() {
           <div className="retro-card rounded-[24px] p-6 lg:p-10 border border-[var(--retro-border)] flex flex-col sm:flex-row gap-8 items-start">
             <div className="flex-shrink-0 mx-auto sm:mx-0">
               {!founderPhotoError ? (
-                <img
-                  src={FOUNDER_PHOTO}
-                  alt="Francisco Alba, founder of Operator.ink"
-                  width={160}
-                  height={160}
-                  className="w-36 h-36 sm:w-40 sm:h-40 rounded-2xl object-cover border border-[var(--retro-border)] shadow-xl"
-                  onError={() => setFounderPhotoError(true)}
-                />
+                <div
+                  className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-2xl overflow-hidden border border-[var(--retro-border)] shadow-xl select-none [contain:paint]"
+                  style={{ WebkitTouchCallout: 'none' }}
+                  onContextMenu={(e) => e.preventDefault()}
+                >
+                  <img
+                    src={FOUNDER_PHOTO}
+                    alt="Francisco Alba, founder of Operator.ink"
+                    width={160}
+                    height={160}
+                    draggable={false}
+                    loading="lazy"
+                    decoding="async"
+                    onDragStart={(e) => e.preventDefault()}
+                    className="w-full h-full object-cover object-top pointer-events-none select-none"
+                    style={{
+                      userSelect: 'none',
+                      WebkitUserSelect: 'none',
+                      WebkitUserDrag: 'none',
+                    }}
+                    onError={() => setFounderPhotoError(true)}
+                  />
+                </div>
               ) : (
                 <div
                   className="w-36 h-36 sm:w-40 sm:h-40 rounded-2xl flex items-center justify-center text-2xl font-extrabold tracking-tight border border-[var(--retro-border)]"
