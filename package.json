@@ -9,7 +9,8 @@
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p ./jsconfig.json",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gen:founder": "node scripts/gen-founder-inline.mjs"
   },
   "dependencies": {
     "@base44/sdk": "^0.8.24",

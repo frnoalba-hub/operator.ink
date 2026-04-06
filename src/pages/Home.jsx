@@ -8,15 +8,10 @@ import StickyNav from '../components/StickyNav';
 import SummaryBox from '../components/SummaryBox';
 import { ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME, HOWTO_SCHEMA } from '@/schemas/geo-schemas';
 import IntakeForm from '../components/intake/IntakeForm';
+import { FOUNDER_INLINE_SRC } from '@/assets/founderPhotoInline.js';
 
 const LOGO_URL = "/operator-logo.png";
 const LINKEDIN_URL = "https://www.linkedin.com/in/franciscoalbavc/";
-const FOUNDER_BASE = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
-/** Public file first (same pattern as operator-logo.png); then bundled /assets hash if CDN skipped public. */
-const FOUNDER_PHOTO_URLS = [
-  `${FOUNDER_BASE}francisco-alba.png`,
-  new URL('../assets/francisco-alba.png', import.meta.url).href,
-];
 
 const ventures = [
   { title: 'Operator.ink', subtitle: 'AI operations platform', href: 'https://operator.ink', external: false },
@@ -57,8 +52,7 @@ const HOME_TITLE = 'Operator.ink — Digital Operations & Growth Systems | GEO, 
 const HOME_DESC = 'Operator.ink is a digital operations agency building AI workflows, automated systems, operational websites, and GEO/AEO/SEO strategies across 6 concurrent business lines.';
 
 export default function Home() {
-  /** When >= FOUNDER_PHOTO_URLS.length, show initials fallback */
-  const [founderPhotoIndex, setFounderPhotoIndex] = useState(0);
+  const [founderImgFailed, setFounderImgFailed] = useState(false);
 
   return (
     <>
@@ -177,20 +171,18 @@ export default function Home() {
           </div>
           <div className="retro-card rounded-[24px] p-6 lg:p-10 border border-[var(--retro-border)] flex flex-col sm:flex-row gap-8 items-start">
             <div className="flex-shrink-0 mx-auto sm:mx-0">
-              {founderPhotoIndex < FOUNDER_PHOTO_URLS.length ? (
+              {!founderImgFailed ? (
                 <div
                   className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-2xl overflow-hidden border border-[var(--retro-border)] shadow-xl select-none [contain:paint]"
                   style={{ WebkitTouchCallout: 'none' }}
                   onContextMenu={(e) => e.preventDefault()}
                 >
                   <img
-                    key={FOUNDER_PHOTO_URLS[founderPhotoIndex]}
-                    src={FOUNDER_PHOTO_URLS[founderPhotoIndex]}
+                    src={FOUNDER_INLINE_SRC}
                     alt="Francisco Alba, founder of Operator.ink"
                     width={160}
                     height={160}
                     draggable={false}
-                    loading="lazy"
                     decoding="async"
                     onDragStart={(e) => e.preventDefault()}
                     className="w-full h-full object-cover object-top pointer-events-none select-none"
@@ -199,7 +191,7 @@ export default function Home() {
                       WebkitUserSelect: 'none',
                       WebkitUserDrag: 'none',
                     }}
-                    onError={() => setFounderPhotoIndex((i) => i + 1)}
+                    onError={() => setFounderImgFailed(true)}
                   />
                 </div>
               ) : (
