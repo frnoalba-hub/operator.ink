@@ -195,7 +195,7 @@ export default function Services() {
             What We<br /><span className="retro-link-accent">Deploy.</span>
           </h1>
           <p className="text-lg text-[var(--retro-text-muted)] leading-relaxed max-w-2xl">
-            Five core service lines engineered to capture demand, automate operations, and grow revenue: Web Design, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. Pricing is scoped after Brief and Discovery. Built for businesses serious about scalable growth. <strong className="text-[var(--retro-text)]">Compliance-aware and safe for healthcare.</strong>
+            Five service lines below cover web, search, automation, ads, and Base44 setup—priced after Brief and Discovery. <strong className="text-[var(--retro-text)]">Compliance-aware delivery;</strong> we keep demos synthetic by default.
           </p>
         </motion.header>
 
@@ -221,7 +221,7 @@ export default function Services() {
             <div>
               <dt className="font-bold text-[var(--retro-text)] mb-2">Solution</dt>
               <dd className="text-[var(--retro-text-muted)] leading-relaxed m-0">
-                Conversion-focused websites, GEO/AEO/SEO for every surface, AI agents that run 24/7, cohesive brand + precision ads, and guided Base44 setup. One process: Brief → Discovery → Build → Launch. Focused validation when scope fits.
+                The same five tracks you will see spelled out in the cards—executed under one process (Brief → Discovery → Build → Launch) with validation sprints when they de-risk the build.
               </dd>
             </div>
           </dl>
@@ -230,12 +230,10 @@ export default function Services() {
         <SummaryBox
           title="Services Summary"
           items={[
-            '5 core service lines. Custom quote after Brief and Discovery.',
-            'Web Design & Operations — conversion-first websites that generate leads.',
-            'GEO, AEO & SEO — appear in AI summaries (ChatGPT, Perplexity), featured snippets, and traditional search.',
-            'Workflows & AI Agents — automate manual tasks 24/7 (Make, n8n, Zapier, custom APIs).',
-            'Ads & Brand Identity — cohesive brand + precision campaigns (Meta, Google, LinkedIn).',
-            'Base44 Setup — guided architecture and 1-on-1 consultation.',
+            'Quote after Brief + Discovery—no cookie-cutter packages on this page.',
+            'Web + search + automation + ads + Base44: depth sits in each section below (skim the card that matches your choke point).',
+            'GEO/AEO called out explicitly because AI answers eat traffic that classic SEO alone won’t recover.',
+            'If you only need one line, we still start with Discovery so we don’t automate the wrong workflow.',
           ]}
         />
 

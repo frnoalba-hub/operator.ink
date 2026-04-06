@@ -8,10 +8,15 @@ import StickyNav from '../components/StickyNav';
 import SummaryBox from '../components/SummaryBox';
 import { ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME, HOWTO_SCHEMA } from '@/schemas/geo-schemas';
 import IntakeForm from '../components/intake/IntakeForm';
-import founderPhotoUrl from '@/assets/francisco-alba.png';
 
 const LOGO_URL = "/operator-logo.png";
 const LINKEDIN_URL = "https://www.linkedin.com/in/franciscoalbavc/";
+const FOUNDER_BASE = (import.meta.env.BASE_URL || '/').replace(/\/?$/, '/');
+/** Public file first (same pattern as operator-logo.png); then bundled /assets hash if CDN skipped public. */
+const FOUNDER_PHOTO_URLS = [
+  `${FOUNDER_BASE}francisco-alba.png`,
+  new URL('../assets/francisco-alba.png', import.meta.url).href,
+];
 
 const ventures = [
   { title: 'Operator.ink', subtitle: 'AI operations platform', href: 'https://operator.ink', external: false },
@@ -52,7 +57,8 @@ const HOME_TITLE = 'Operator.ink — Digital Operations & Growth Systems | GEO, 
 const HOME_DESC = 'Operator.ink is a digital operations agency building AI workflows, automated systems, operational websites, and GEO/AEO/SEO strategies across 6 concurrent business lines.';
 
 export default function Home() {
-  const [founderPhotoError, setFounderPhotoError] = useState(false);
+  /** When >= FOUNDER_PHOTO_URLS.length, show initials fallback */
+  const [founderPhotoIndex, setFounderPhotoIndex] = useState(0);
 
   return (
     <>
@@ -108,7 +114,9 @@ export default function Home() {
               <span className="retro-link-accent"> &amp; Growth Systems.</span>
             </h1>
             <p className="text-base sm:text-lg text-[var(--retro-text-muted)] max-w-xl">
-              We ship AI workflows, automation, operational websites, and GEO/AEO/SEO systems so your business runs faster with less manual work. Five service lines—from web ops to agents and ads—built for operators who need execution, not slide decks.
+              We ship AI workflows, automation, operational sites, and GEO/AEO/SEO so ops move faster with less manual work. Built for operators who want execution—see{' '}
+              <Link to={createPageUrl('Services')} className="retro-link font-semibold text-[var(--retro-text)]">Services</Link>
+              {' '}for the full stack.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
                <a href="#intake" className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto" aria-label="Get in touch about your project">
@@ -136,8 +144,8 @@ export default function Home() {
               <h3 className="text-xs uppercase tracking-widest font-bold" style={{ color: '#00ccff' }}>System Architecture & Mission</h3>
             </div>
             <p className="text-base sm:text-lg text-[var(--retro-text)] leading-relaxed">
-              <strong>Operator.ink</strong> is a digital operations agency that builds conversion-focused websites, GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) search strategies, AI workflows, and precision ad campaigns. Five core service lines: Web Design &amp; Operations, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. Process: Brief → Discovery → Build → Launch. Demos use synthetic data only; we design with compliance in mind for regulated industries. <strong className="text-[var(--retro-text)]">Get in touch:</strong>{' '}
-              <a href="mailto:orders@operator.ink" className="retro-link">orders@operator.ink</a>
+              <strong>Operator.ink</strong> is a digital operations agency: conversion-led sites, GEO/AEO/SEO, AI workflows, and disciplined ad spend—plus Base44 architecture when that is your platform. <strong className="text-[var(--retro-text)]">How we work:</strong> Brief → Discovery → Build → Launch. Public demos use synthetic data; production work respects your compliance needs.{' '}
+              <a href="mailto:orders@operator.ink" className="retro-link font-semibold">orders@operator.ink</a>
             </p>
           </div>
         </motion.section>
@@ -145,10 +153,10 @@ export default function Home() {
         <SummaryBox
           title="At a Glance"
           items={[
-            'Operator.ink builds operational websites, GEO/AEO/SEO search strategies, AI workflows, and ads.',
-            '5 service lines: Web Design, GEO/AEO/SEO Search, Workflows & AI Agents, Ads & Brand Identity, Base44 Setup.',
-            'Process: Brief → Discovery → Build → Launch. Focused validation when scope fits.',
-            'Compliance-aware: demos use synthetic data only. Safe for healthcare and regulated industries.',
+            'Outcome: fewer manual handoffs, clearer acquisition, and sites engineered to convert—not just look sharp.',
+            'One engagement rhythm (Brief → Discovery → Build → Launch); validation sprint when scope calls for it.',
+            'Full stack lives on the Services page—avoiding a second rerun of every line item here.',
+            'Regulated sectors: we treat demos as synthetic-by-default and scope real data carefully.',
           ]}
         />
 
@@ -169,14 +177,15 @@ export default function Home() {
           </div>
           <div className="retro-card rounded-[24px] p-6 lg:p-10 border border-[var(--retro-border)] flex flex-col sm:flex-row gap-8 items-start">
             <div className="flex-shrink-0 mx-auto sm:mx-0">
-              {!founderPhotoError ? (
+              {founderPhotoIndex < FOUNDER_PHOTO_URLS.length ? (
                 <div
                   className="relative w-36 h-36 sm:w-40 sm:h-40 rounded-2xl overflow-hidden border border-[var(--retro-border)] shadow-xl select-none [contain:paint]"
                   style={{ WebkitTouchCallout: 'none' }}
                   onContextMenu={(e) => e.preventDefault()}
                 >
                   <img
-                    src={founderPhotoUrl}
+                    key={FOUNDER_PHOTO_URLS[founderPhotoIndex]}
+                    src={FOUNDER_PHOTO_URLS[founderPhotoIndex]}
                     alt="Francisco Alba, founder of Operator.ink"
                     width={160}
                     height={160}
@@ -190,7 +199,7 @@ export default function Home() {
                       WebkitUserSelect: 'none',
                       WebkitUserDrag: 'none',
                     }}
-                    onError={() => setFounderPhotoError(true)}
+                    onError={() => setFounderPhotoIndex((i) => i + 1)}
                   />
                 </div>
               ) : (
@@ -226,7 +235,7 @@ export default function Home() {
         <blockquote
           className="retro-card rounded-2xl p-6 lg:p-8 mb-14 border-l-4"
           style={{ borderLeftColor: 'var(--retro-border-bright)' }}
-          cite="https://www.linkedin.com/in/franciscoalbavc/"
+          cite={LINKEDIN_URL}
         >
           <p className="text-lg text-[var(--retro-text)] leading-relaxed mb-4">
             &ldquo;We build systems that work while you sleep. Every website, every workflow, every campaign — engineered for one outcome: your operations scale without you having to scale yourself.&rdquo;
@@ -362,7 +371,7 @@ export default function Home() {
             <div className="retro-card rounded-2xl p-6">
               <h2 id="why-heading" className="text-base font-bold mb-3">Why Operator.ink</h2>
               <ul className="space-y-2 text-sm text-[var(--retro-text)]">
-                {["Premium website design.", "Managed fast hosting.", "Conversion-focused sites.", "GEO + AEO search.", "Agents & workflows.", "Precision ads.", "Client Portal — upload assets & notes.", "Compliance-aware & safe for healthcare."].map((item, i) => (
+                {['Client Portal for briefs, files, and notes.', 'Hosting and performance treated as product, not an afterthought.', 'Compliance-aware delivery—demos stay synthetic; prod follows your rules.', 'One partner across web, search, automation, and ads so messaging stays coherent.'].map((item, i) => (
                   <li key={i} className="flex items-center gap-2">
                     <span className="w-1 h-1 rounded-full" style={{ background: 'var(--rgb-gradient)' }} />
                     {item}
