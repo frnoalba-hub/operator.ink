@@ -5,7 +5,7 @@
 
 const BASE_URL = 'https://operator.ink';
 
-const LINKEDIN_FOUNDER = 'https://www.linkedin.com/in/francisco-albavc/';
+const LINKEDIN_FOUNDER = 'https://www.linkedin.com/in/franciscoalbavc/';
 
 /** Authoritative citation URLs for GEO Glossary (Cite Sources — KDD '24 ~30% visibility lift) */
 export const GEO_CITATION_URLS = {
@@ -21,7 +21,7 @@ export const ORGANIZATION_SCHEMA = {
   name: 'Operator.ink',
   url: BASE_URL,
   logo: `${BASE_URL}/operator-logo.png`,
-  description: 'Operator.ink builds operational websites, GEO/AEO/SEO search strategies, AI workflows, and ads. Digital operations and growth systems for businesses serious about scalable growth.',
+  description: 'Operator.ink is a digital operations agency building AI workflows, automated systems, operational websites, and GEO/AEO/SEO strategies across 6 concurrent business lines.',
   email: 'orders@operator.ink',
   founder: {
     '@type': 'Person',
@@ -93,7 +93,7 @@ export const FAQ_SCHEMA_HOME = {
       name: 'How does the Operator.ink process work?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Brief (share scope and goals) → Discovery (we map your ops and audience) → Build (sprints with check-ins) → Launch (handoff, docs, ongoing support). We start with Phase-0 Pilot when it fits to validate fast, then scale.',
+        text: 'Brief (share scope and goals) → Discovery (we map your ops and audience) → Build (sprints with check-ins) → Launch (handoff, docs, ongoing support). When scope fits, we validate with a focused sprint before full build.',
       },
     },
     {
@@ -114,10 +114,10 @@ export const FAQ_SCHEMA_HOME = {
     },
     {
       '@type': 'Question',
-      name: 'How much does the Phase-0 Pilot cost?',
+      name: 'How does pricing work?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The Phase-0 Pilot costs $3,999. It validates your project with a working prototype before full engagement. No endless discovery or scope creep—validate fast, then scale.',
+        text: 'Every engagement is scoped after Brief and Discovery. Full sites typically start in the $5,000–$15,000 range depending on pages, integrations, and custom features. We provide a written quote before build.',
       },
     },
     {
@@ -125,7 +125,7 @@ export const FAQ_SCHEMA_HOME = {
       name: 'How much does Operator.ink charge for web design?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Web design projects vary by scope. The Phase-0 Pilot ($3,999) validates before full build. Full sites typically start in the $5,000–$15,000 range depending on pages, integrations, and custom features. We provide a custom quote after Brief and Discovery.',
+        text: 'Web design projects vary by scope. Full sites typically start in the $5,000–$15,000 range depending on pages, integrations, and custom features. We provide a custom quote after Brief and Discovery.',
       },
     },
   ],
@@ -136,7 +136,7 @@ export const HOWTO_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: 'How does Operator.ink work?',
-  description: 'Operator.ink follows a 4-step process: Brief, Discovery, Build, Launch. Phase-0 Pilot available at $3,999 to validate before full engagement.',
+  description: 'Operator.ink follows a 4-step process: Brief, Discovery, Build, Launch. Focused validation sprints are available when scope warrants them.',
   totalTime: 'P30D',
   step: [
     { '@type': 'HowToStep', name: 'Brief', text: 'Share your scope, goals, and constraints. We align on outcomes and timeline.' },
@@ -171,7 +171,7 @@ export const FAQ_SCHEMA_SERVICES = {
       name: 'How much does Operator.ink charge for web design?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Web design projects vary by scope. The Phase-0 Pilot ($3,999) validates before full build. Full sites typically start in the $5,000–$15,000 range. We provide a custom quote after Brief and Discovery.',
+        text: 'Web design projects vary by scope. Full sites typically start in the $5,000–$15,000 range. We provide a custom quote after Brief and Discovery.',
       },
     },
   ],

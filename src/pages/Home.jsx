@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Mail, ArrowRight, Search, Zap, BarChart2, Globe, MessageSquare, FileSearch, Wrench, Rocket } from 'lucide-react';
+import { Mail, ArrowRight, Search, Zap, BarChart2, Globe, MessageSquare, FileSearch, Wrench, Rocket, ExternalLink } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import SEO from '@/components/SEO';
 import StickyNav from '../components/StickyNav';
@@ -10,7 +10,16 @@ import { ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME, HOWTO_SCHEMA } from '@/schemas/ge
 import IntakeForm from '../components/intake/IntakeForm';
 
 const LOGO_URL = "/operator-logo.png";
-const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
+const LINKEDIN_URL = "https://www.linkedin.com/in/franciscoalbavc/";
+const FOUNDER_PHOTO = "/francisco-alba.jpg";
+
+const ventures = [
+  { title: 'Operator.ink', subtitle: 'AI operations platform', href: 'https://operator.ink', external: false },
+  { title: 'Dental Core Supplies', subtitle: 'Dental equipment e-commerce', href: 'https://github.com/frnoalba-hub/dentalcore', external: true },
+  { title: 'Outright Landscape', subtitle: 'Commercial/residential construction', href: 'https://outrightlandscape.com', external: true },
+  { title: 'Dr. Jose Dental', subtitle: 'Tijuana dental implants', href: 'https://github.com/frnoalba-hub/tijuana-dental-implants', external: true },
+  { title: 'G8 Solar', subtitle: 'Solar energy services', href: 'https://github.com/frnoalba-hub/g8-solar', external: true },
+];
 
 const capabilities = [
   {
@@ -39,25 +48,11 @@ const capabilities = [
   }
 ];
 
-const PIPELINE_STAGES = [
-  { id: 'referral', label: 'Referral', patients: [{ name: 'M. Johnson', payer: 'Medicare', flag: 'New' }] },
-  { id: 'clinical', label: 'Clinical', patients: [] },
-  { id: 'bed', label: 'Bed Offer', patients: [{ name: 'L. Martinez', payer: 'HMO', flag: 'Prior Auth' }] },
-  { id: 'admitted', label: 'Admitted', patients: [{ name: 'J. Williams', payer: 'Private', flag: 'Complete' }] },
-  { id: 'denied', label: 'Discharged', patients: [] },
-];
-
 const HOME_TITLE = 'Operator.ink — Digital Operations & Growth Systems | GEO, AEO, SEO, AI Workflows';
-const HOME_DESC = 'Operator.ink builds operational websites, GEO/AEO/SEO search strategies, AI workflows, and ads. Web design, local SEO, generative engine optimization, skilled nursing census tools.';
+const HOME_DESC = 'Operator.ink is a digital operations agency building AI workflows, automated systems, operational websites, and GEO/AEO/SEO strategies across 6 concurrent business lines.';
 
 export default function Home() {
-  const [movingCardStage, setMovingCardStage] = useState(0);
-  useEffect(() => {
-    const t = setInterval(() => {
-      setMovingCardStage((s) => (s + 1) % 5);
-    }, 2400);
-    return () => clearInterval(t);
-  }, []);
+  const [founderPhotoError, setFounderPhotoError] = useState(false);
 
   return (
     <>
@@ -113,15 +108,15 @@ export default function Home() {
               <span className="retro-link-accent"> &amp; Growth Systems.</span>
             </h1>
             <p className="text-base sm:text-lg text-[var(--retro-text-muted)] max-w-xl">
-              5 core service lines: Web Design, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. Premium websites, managed hosting, custom AI agents. Phase-0 Pilot: $3,999. We build the digital infrastructure that scales your operations.
+              We ship AI workflows, automation, operational websites, and GEO/AEO/SEO systems so your business runs faster with less manual work. Five service lines—from web ops to agents and ads—built for operators who need execution, not slide decks.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-               <Link to={createPageUrl('InventoryDashboard')} className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto" aria-label="Try the dashboard demo">
-                 Dashboard Demo <ArrowRight className="w-4 h-4 ml-2" />
-               </Link>
-               <a href="#intake" className="retro-link inline-flex items-center justify-center px-6 h-12 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)] w-full sm:w-auto" aria-label="Request a custom dashboard">
-                 Custom Dashboard Request
+               <a href="#intake" className="retro-rgb-btn inline-flex items-center justify-center px-6 h-12 rounded-xl text-sm font-bold hover:opacity-95 transition-all w-full sm:w-auto" aria-label="Get in touch about your project">
+                 Get in touch <ArrowRight className="w-4 h-4 ml-2" />
                </a>
+               <Link to={createPageUrl('InventoryDashboard')} className="retro-link inline-flex items-center justify-center px-6 h-12 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)] w-full sm:w-auto" aria-label="See a live operations sample dashboard">
+                 See a live sample
+               </Link>
             </div>
           </div>
         </motion.header>
@@ -141,7 +136,8 @@ export default function Home() {
               <h3 className="text-xs uppercase tracking-widest font-bold" style={{ color: '#00ccff' }}>System Architecture & Mission</h3>
             </div>
             <p className="text-base sm:text-lg text-[var(--retro-text)] leading-relaxed">
-              <strong>Operator.ink</strong> is a digital operations agency that builds conversion-focused websites, GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) search strategies, AI workflows, and precision ad campaigns. The agency offers 5 core service lines: Web Design &amp; Operations, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. The process follows Brief → Discovery → Build → Launch. An optional Phase-0 Pilot costs $3,999 to validate before full engagement. All demos and pilots use synthetic data only. Operator.ink designs for healthcare and regulated industries with HIPAA considerations from the start. Contact: orders@operator.ink.
+              <strong>Operator.ink</strong> is a digital operations agency that builds conversion-focused websites, GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) search strategies, AI workflows, and precision ad campaigns. Five core service lines: Web Design &amp; Operations, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. Process: Brief → Discovery → Build → Launch. Demos use synthetic data only; we design with compliance in mind for regulated industries. <strong className="text-[var(--retro-text)]">Get in touch:</strong>{' '}
+              <a href="mailto:orders@operator.ink" className="retro-link">orders@operator.ink</a>
             </p>
           </div>
         </motion.section>
@@ -151,16 +147,71 @@ export default function Home() {
           items={[
             'Operator.ink builds operational websites, GEO/AEO/SEO search strategies, AI workflows, and ads.',
             '5 service lines: Web Design, GEO/AEO/SEO Search, Workflows & AI Agents, Ads & Brand Identity, Base44 Setup.',
-            'Process: Brief → Discovery → Build → Launch. Phase-0 Pilot $3,999 to validate fast.',
+            'Process: Brief → Discovery → Build → Launch. Focused validation when scope fits.',
             'Compliance-aware: demos use synthetic data only. Safe for healthcare and regulated industries.',
           ]}
         />
+
+        {/* About the Operator */}
+        <motion.section
+          id="about-operator"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.06 }}
+          className="mb-14 lg:mb-16 scroll-mt-24"
+          aria-labelledby="about-operator-heading"
+        >
+          <div className="flex items-center gap-2 mb-6">
+            <span className="w-2 h-2 rounded-full" style={{ background: 'var(--rgb-gradient)' }} />
+            <h2 id="about-operator-heading" className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">
+              About the Operator
+            </h2>
+          </div>
+          <div className="retro-card rounded-[24px] p-6 lg:p-10 border border-[var(--retro-border)] flex flex-col sm:flex-row gap-8 items-start">
+            <div className="flex-shrink-0 mx-auto sm:mx-0">
+              {!founderPhotoError ? (
+                <img
+                  src={FOUNDER_PHOTO}
+                  alt="Francisco Alba, founder of Operator.ink"
+                  width={160}
+                  height={160}
+                  className="w-36 h-36 sm:w-40 sm:h-40 rounded-2xl object-cover border border-[var(--retro-border)] shadow-xl"
+                  onError={() => setFounderPhotoError(true)}
+                />
+              ) : (
+                <div
+                  className="w-36 h-36 sm:w-40 sm:h-40 rounded-2xl flex items-center justify-center text-2xl font-extrabold tracking-tight border border-[var(--retro-border)]"
+                  style={{ background: 'linear-gradient(135deg, rgba(255,51,102,0.2), rgba(0,204,255,0.15))' }}
+                  aria-hidden
+                >
+                  FA
+                </div>
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-base sm:text-lg text-[var(--retro-text)] leading-relaxed mb-5">
+                Founded by <strong>Francisco Alba</strong>, a self-taught AI practitioner since the day ChatGPT launched. 5+ years of sales operations experience at DoWell Dental Products, working with enterprise DSOs like Affordable Dentures and Sevaredent. Now running AI operations, workflow automation, and growth systems across 6 concurrent business lines. Working daily across Claude, Gemini, Cursor, Antigravity, and Composer. Consistently 6–8+ months ahead of mainstream AI adoption.
+              </p>
+              <a
+                href={LINKEDIN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="retro-link inline-flex items-center gap-2 font-semibold text-sm"
+              >
+                <svg className="w-4 h-4 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                LinkedIn — Francisco Alba
+              </a>
+            </div>
+          </div>
+        </motion.section>
 
         {/* Quotation — GEO: KDD '24 ~41% visibility lift for attributed quotes */}
         <blockquote
           className="retro-card rounded-2xl p-6 lg:p-8 mb-14 border-l-4"
           style={{ borderLeftColor: 'var(--retro-border-bright)' }}
-          cite="https://www.linkedin.com/in/francisco-albavc/"
+          cite="https://www.linkedin.com/in/franciscoalbavc/"
         >
           <p className="text-lg text-[var(--retro-text)] leading-relaxed mb-4">
             &ldquo;We build systems that work while you sleep. Every website, every workflow, every campaign — engineered for one outcome: your operations scale without you having to scale yourself.&rdquo;
@@ -213,7 +264,7 @@ export default function Home() {
             })}
           </dl>
           <p className="text-sm text-[var(--retro-text-dim)] mt-4">
-            No endless discovery. No scope creep. We start with a Phase-0 Pilot when it fits — validate fast, then scale.
+            No endless discovery. No scope creep. When scope fits, we validate with a focused sprint—then scale.
           </p>
         </motion.section>
 
@@ -232,11 +283,10 @@ export default function Home() {
             </h2>
           </div>
           <p className="text-sm text-[var(--retro-text-muted)] mb-4 max-w-xl">
-            Live interactive environments demonstrating our custom workflows, from inventory command centers to skilled nursing admissions tracking.
+            Live sample: inventory, orders, and inbox in one operational surface—same stack we use on client builds.
           </p>
-          
+
           <div className="grid grid-cols-1 gap-6 mb-8" role="list">
-            {/* Project 1: Inventory Dashboard */}
             <article>
             <Link
               to={createPageUrl('InventoryDashboard')}
@@ -249,7 +299,7 @@ export default function Home() {
                     <span className="text-[10px] text-[#00ccff]/90 bg-[#00ccff]/10 rounded px-2 py-0.5 border border-[#00ccff]/30 uppercase font-bold tracking-wider">Live Demo</span>
                   </div>
                 </div>
-                
+
                 <p className="text-sm text-[var(--retro-text-muted)] mb-4">
                   A high-performance MVP simulating logistics management. Try toggling between stock counts, detailed order tracking panes, and the omnichannel message inbox.
                 </p>
@@ -268,74 +318,6 @@ export default function Home() {
               </div>
             </Link>
             </article>
-
-            {/* Project 2: SNF Admissions */}
-          <article>
-          <Link
-            to={createPageUrl('Pilot')}
-            className="block retro-card rounded-2xl overflow-hidden border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group"
-          >
-            <div className="p-4 sm:p-5">
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <h3 className="text-base font-bold group-hover:text-[#00ccff] transition-colors">Admissions &amp; Bed Tracking Dashboard</h3>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-white/50 bg-white/5 rounded px-2 py-0.5">Coordinator: my pipeline</span>
-                  <span className="text-xs text-[#00ccff]/90 bg-[#00ccff]/10 rounded px-2 py-0.5 border border-[#00ccff]/30">Admin: view all + metrics</span>
-                </div>
-              </div>
-              <p className="text-xs text-white/40 mb-2 font-semibold">View all administrators:</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {['K. Smith', 'J. Lee', 'M. Chen', 'R. Davis', 'T. Park', '+5'].map((name) => (
-                  <span key={name} className="text-xs font-bold text-white/70 bg-white/5 rounded px-2.5 py-1.5 border border-white/10 uppercase tracking-tight">
-                    {name}
-                  </span>
-                ))}
-              </div>
-              <div className="flex gap-2 min-h-[72px] overflow-x-auto hide-scrollbar pb-2">
-                {PIPELINE_STAGES.map((col, i) => (
-                  <div key={col.id} className="w-28 flex-shrink-0 md:flex-1 md:w-auto rounded-lg bg-black/40 border border-white/5 p-2">
-                    <p className="text-[10px] md:text-xs text-white/40 font-bold truncate mb-1.5 border-b border-white/10 pb-1">{col.label}</p>
-                    <div className="space-y-1">
-                      {col.patients.map((p) => (
-                        <div key={p.name} className="text-sm py-1.5 px-2 rounded bg-white/5 border border-white/5 shadow-sm">
-                          <span className="text-white font-bold truncate block">{p.name}</span>
-                          <span className="text-xs text-white/50 block font-medium uppercase tracking-tight">{p.payer}</span>
-                          {p.flag && (
-                            <span className={`text-[10px] mt-1 inline-block rounded px-1.5 py-0.5 font-black uppercase tracking-wider ${p.flag === 'Complete' ? 'bg-green-500/20 text-green-400' : p.flag === 'Prior Auth' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/10 text-white/60'}`}>
-                              {p.flag}
-                            </span>
-                          )}
-                        </div>
-                      ))}
-                      {i === movingCardStage && (
-                        <motion.div
-                          key="moving"
-                          initial={{ opacity: 0, y: 4 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.25 }}
-                          className="text-sm py-1.5 px-2 rounded bg-[#00ccff]/10 border border-[#00ccff]/40 shadow-xl shadow-[#00ccff]/20"
-                        >
-                          <span className="text-[#00ccff] font-black block">R. Davis</span>
-                          <span className="text-xs text-[#00ccff]/80 block font-bold uppercase tracking-tight">HMO</span>
-                          <span className="text-[10px] mt-1 inline-block rounded px-1.5 py-0.5 bg-amber-500/30 text-amber-400 font-black uppercase tracking-wider">Prior Auth</span>
-                        </motion.div>
-                      )}
-                      {col.patients.length === 0 && i !== movingCardStage && (
-                        <span className="text-xs text-white/20 px-1">—</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-[var(--retro-text-dim)] mt-3">
-                Flags: New, Prior Auth, Urgent, Complete • Finish & clear patients • Coordinators see who has beds, message each other
-              </p>
-              <span className="text-xs font-semibold retro-link inline-flex items-center gap-1 mt-2">
-                View full brief <ArrowRight className="w-3.5 h-3.5" />
-              </span>
-            </div>
-          </Link>
-          </article>
           </div>
         </motion.section>
 
@@ -356,8 +338,8 @@ export default function Home() {
               <Link to={createPageUrl('InventoryDashboard')} className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }}>
                 View Demo
               </Link>
-              <a href="mailto:orders@operator.ink" className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }}>
-                <Mail className="w-4 h-4 opacity-70" /> orders@operator.ink
+              <a href="mailto:orders@operator.ink" className="retro-link inline-flex items-center gap-2 px-6 rounded-xl border border-[var(--retro-border)] font-semibold text-sm hover:border-[var(--retro-border-bright)]" style={{ minHeight: '48px' }} title="Business inquiries">
+                <Mail className="w-4 h-4 opacity-70" /> Get in touch — orders@operator.ink
               </a>
             </div>
           </div>
@@ -376,7 +358,7 @@ export default function Home() {
                 Start Initialization
               </a>
               <p className="text-xs text-[var(--retro-text-muted)] mt-3 pt-3 border-t border-[var(--retro-border)]">
-                Phase-0 Pilot $3,999 → <Link to={createPageUrl('Pilot')} className="retro-link">Pilot</Link>
+                <Link to={createPageUrl('Pilot')} className="retro-link">Pilot program</Link> — scoped operations dashboard sample (details on request).
               </p>
             </div>
           </aside>
@@ -416,6 +398,52 @@ export default function Home() {
           </div>
         </motion.section>
 
+        {/* Ventures / proof of work */}
+        <motion.section
+          id="ventures"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, delay: 0.15 }}
+          className="mb-16 lg:mb-20 scroll-mt-24"
+          aria-labelledby="ventures-heading"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <span className="w-2 h-2 rounded-full" style={{ background: 'var(--rgb-gradient)' }} />
+            <h2 id="ventures-heading" className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold">Ventures</h2>
+          </div>
+          <p className="text-sm text-[var(--retro-text-muted)] mb-6 max-w-2xl">
+            Live properties and repos shipped on <strong className="text-[var(--retro-text)]">Base44 + Vite + React</strong>, with GitHub CI/CD and Vercel deployment.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" role="list">
+            {ventures.map((v) => {
+              const inner = (
+                <>
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <h3 className="text-lg font-bold tracking-tight group-hover:text-[#00ccff] transition-colors">{v.title}</h3>
+                    {v.external ? (
+                      <ExternalLink className="w-4 h-4 flex-shrink-0 opacity-50 group-hover:opacity-90 mt-1" aria-hidden />
+                    ) : null}
+                  </div>
+                  <p className="text-sm text-[var(--retro-text-muted)] leading-relaxed m-0">{v.subtitle}</p>
+                  <p className="text-xs font-mono text-[var(--retro-text-dim)] mt-3 truncate">{v.href.replace(/^https:\/\//, '')}</p>
+                </>
+              );
+              const cardClass = 'block retro-card rounded-2xl p-5 lg:p-6 border border-[var(--retro-border)] hover:border-[var(--retro-border-bright)] transition-all duration-200 group h-full';
+              return (
+                <article key={v.title} className="h-full" role="listitem">
+                  <a
+                    href={v.href}
+                    className={cardClass}
+                    {...(v.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    {inner}
+                  </a>
+                </article>
+              );
+            })}
+          </div>
+        </motion.section>
+
         {/* INTAKE FORM */}
         <motion.section
           id="intake"
@@ -431,15 +459,16 @@ export default function Home() {
               Describe your scope and receive a custom deployment plan with timeline and next steps.
             </p>
             <div className="retro-card rounded-[28px] p-6">
-              <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-4">Direct Contact</p>
-              <a href="mailto:orders@operator.ink" className="retro-link flex items-center gap-2 font-semibold mb-3" style={{ minHeight: '44px' }}>
+              <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-4">Get in touch</p>
+              <a href="mailto:orders@operator.ink" className="retro-link flex items-center gap-2 font-semibold mb-1" style={{ minHeight: '44px' }}>
                 <Mail className="w-4 h-4 opacity-60" /> orders@operator.ink
               </a>
+              <p className="text-xs text-[var(--retro-text-dim)] mb-4">Business inquiries &amp; project scope</p>
               <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="retro-link flex items-center gap-2 font-semibold" style={{ minHeight: '44px' }}>
                 <svg className="w-4 h-4 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
-                linkedin.com/in/francisco-albavc
+                linkedin.com/in/franciscoalbavc
               </a>
             </div>
           </div>

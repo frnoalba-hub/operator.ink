@@ -8,8 +8,9 @@ import StickyNav from '../components/StickyNav';
 import GridOverlay from '../components/GridOverlay';
 import BackToHome from '../components/BackToHome';
 
-const PILOT_TITLE = 'Phase-0 Pilot — SNF Admissions & Bed Tracking | Nursing Facility Dashboard | Operator.ink';
-const PILOT_DESC = 'Phase-0 Pilot: Dual-role dashboard for nursing facilities. Admissions coordinators, Kanban pipeline, executive analytics. CensusBoard demo, real-time chat, AI workflow simulation. $3,999.';
+const PILOT_TITLE = 'Pilot Program — Operations Dashboard Sample | Operator.ink';
+const PILOT_DESC =
+  'Operator.ink pilot program: dual-role operations dashboard sample with Kanban-style workflow, analytics, contextual chat, and simulated automation—scoped per client.';
 
 export default function Pilot() {
   return (
@@ -21,7 +22,6 @@ export default function Pilot() {
       <main className="relative z-10 max-w-3xl mx-auto px-5 sm:px-8 lg:px-12 pt-24 pb-16">
         <BackToHome />
 
-        {/* Hero */}
         <motion.header
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -29,14 +29,13 @@ export default function Pilot() {
           className="mb-12"
         >
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.08] tracking-tight mb-4">
-            Phase-0 Pilot: Dual-Role Dashboard for Nursing Facilities
+            Pilot Program — Operations Dashboard
           </h1>
           <p className="text-lg text-[var(--retro-text-muted)]">
-            Interactive demo with real-time analytics, workflow boards, and onboarding.
+            Interactive sample with role-based views, workflow boards, and onboarding—tailored when we scope your build.
           </p>
         </motion.header>
 
-        {/* What You Get */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,10 +49,10 @@ export default function Pilot() {
                 <LayoutDashboard className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
               </div>
               <div>
-                <h3 className="font-bold mb-1">Dual-Role Dashboard</h3>
+                <h3 className="font-bold mb-1">Dual-role dashboard</h3>
                 <ul className="text-sm text-[var(--retro-text-muted)] space-y-1">
-                  <li>Admissions Coordinators: Interactive Kanban pipeline (Referral → Review → Bed Offer)</li>
-                  <li>Executive Dashboard: Bed Forecast, Payer Mix, Bottleneck Alerts</li>
+                  <li>Operator view: pipeline boards and day-to-day workflow</li>
+                  <li>Leadership view: forecast-style metrics, mix, and bottleneck signals</li>
                 </ul>
               </div>
             </div>
@@ -62,8 +61,8 @@ export default function Pilot() {
                 <MessageSquare className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
               </div>
               <div>
-                <h3 className="font-bold mb-1">Real-time Contextual Chat</h3>
-                <p className="text-sm text-[var(--retro-text-muted)]">Flag missing documents, assign tasks, simulate team collaboration</p>
+                <h3 className="font-bold mb-1">Contextual collaboration</h3>
+                <p className="text-sm text-[var(--retro-text-muted)]">Task handoffs, notes, and team-style messaging patterns—demo uses synthetic data only.</p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -71,14 +70,13 @@ export default function Pilot() {
                 <Zap className="w-5 h-5" style={{ color: 'var(--retro-text)' }} />
               </div>
               <div>
-                <h3 className="font-bold mb-1">Simulated AI/Agent Activity</h3>
-                <p className="text-sm text-[var(--retro-text-muted)]">Auto-updating logs to visualize workflow automation</p>
+                <h3 className="font-bold mb-1">Simulated automation</h3>
+                <p className="text-sm text-[var(--retro-text-muted)]">Activity logs to show how agents and workflows attach to real operations.</p>
               </div>
             </div>
           </div>
         </motion.section>
 
-        {/* Onboarding & Support */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -88,12 +86,11 @@ export default function Pilot() {
           <h2 className="text-sm uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-4">Onboarding & Support</h2>
           <ul className="text-sm text-[var(--retro-text-muted)] space-y-2">
             <li className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--retro-border-bright)' }} /> Live or recorded walkthrough</li>
-            <li className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--retro-border-bright)' }} /> Minor customization of chart labels, color codes, alert icons</li>
-            <li className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--retro-border-bright)' }} /> Guidance on interpreting metrics and workflow outputs</li>
+            <li className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--retro-border-bright)' }} /> Label and UX tweaks aligned to your workflow</li>
+            <li className="flex items-start gap-2"><Check className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--retro-border-bright)' }} /> Guidance on reading metrics and handoff patterns</li>
           </ul>
         </motion.section>
 
-        {/* Benefits */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -102,14 +99,12 @@ export default function Pilot() {
         >
           <h2 className="text-sm uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-4">Benefits</h2>
           <ul className="text-sm text-[var(--retro-text-muted)] space-y-2">
-            <li>Test and validate your operational workflow before full-scale deployment</li>
-            <li>Understand bottlenecks, occupancy trends, and payer mix in real time</li>
-            <li>Showcase to your internal team the value of automated, role-based dashboards</li>
-            <li>Prepare the ground for future full-scale deployment with minimal risk</li>
+            <li>Validate layout and workflow before a full build</li>
+            <li>Align stakeholders on roles, metrics, and automation touchpoints</li>
+            <li>Reduce delivery risk with a concrete reference UI</li>
           </ul>
         </motion.section>
 
-        {/* Pricing card + CTA */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -117,19 +112,18 @@ export default function Pilot() {
           className="retro-card rounded-2xl p-8 border-2"
           style={{ borderColor: 'var(--retro-border-bright)' }}
         >
-          <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-2">Phase-0 Pilot</p>
-          <p className="text-4xl font-extrabold mb-1">$3,999</p>
-          <p className="text-sm text-[var(--retro-text-muted)] mb-2">Up to 10 users. Fully interactive dual-role dashboard.</p>
-          <p className="text-xs text-[var(--retro-text-dim)] mb-6 italic">Customization and data integration may increase price up to $4,500.</p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link
-              to={`${createPageUrl('Home')}#intake`}
-              className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-8 rounded-xl text-base font-bold hover:opacity-95"
-              style={{ minHeight: '52px' }}
-            >
-              Request Pilot <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
+          <p className="text-xs uppercase tracking-widest text-[var(--retro-text-dim)] font-bold mb-2">Next step</p>
+          <p className="text-lg font-bold text-[var(--retro-text)] mb-2">Scoped per project</p>
+          <p className="text-sm text-[var(--retro-text-muted)] mb-6">
+            Share your ops context via intake—we reply with timeline, deliverables, and investment. No public price card; every pilot is quoted after Brief and Discovery.
+          </p>
+          <Link
+            to={`${createPageUrl('Home')}#intake`}
+            className="retro-rgb-btn inline-flex items-center justify-center gap-2 px-8 rounded-xl text-base font-bold hover:opacity-95"
+            style={{ minHeight: '52px' }}
+          >
+            Request scope <ArrowRight className="w-4 h-4" />
+          </Link>
         </motion.section>
       </main>
     </div>

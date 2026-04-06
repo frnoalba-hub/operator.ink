@@ -9,8 +9,8 @@ import SummaryBox from '../components/SummaryBox';
 import { ORGANIZATION_SCHEMA, SERVICE_SCHEMAS, FAQ_SCHEMA_SERVICES, GEO_CITATION_URLS } from '@/schemas/geo-schemas';
 import GridOverlay from '../components/GridOverlay';
 
-const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
-const SERVICES_TITLE = 'Services — Web Design, GEO, AEO & SEO, AI Workflows, Ads | Operator.ink';
+const LINKEDIN_URL = "https://www.linkedin.com/in/franciscoalbavc/";
+const SERVICES_TITLE = 'Services | Operator.ink';
 const SERVICES_DESC = 'Web design, GEO/AEO/SEO search optimization, AI workflows, ads & brand identity. Conversion-focused websites, generative engine optimization, answer engine optimization, local SEO, technical SEO.';
 
 const services = [
@@ -195,7 +195,7 @@ export default function Services() {
             What We<br /><span className="retro-link-accent">Deploy.</span>
           </h1>
           <p className="text-lg text-[var(--retro-text-muted)] leading-relaxed max-w-2xl">
-            Five core service lines engineered to capture demand, automate operations, and grow revenue: Web Design, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. Phase-0 Pilot: $3,999 to validate before full engagement. Built for businesses serious about scalable growth. <strong className="text-[var(--retro-text)]">Compliance-aware and safe for healthcare.</strong>
+            Five core service lines engineered to capture demand, automate operations, and grow revenue: Web Design, GEO/AEO/SEO Search, Workflows &amp; AI Agents, Ads &amp; Brand Identity, and Base44 Setup. Pricing is scoped after Brief and Discovery. Built for businesses serious about scalable growth. <strong className="text-[var(--retro-text)]">Compliance-aware and safe for healthcare.</strong>
           </p>
         </motion.header>
 
@@ -221,7 +221,7 @@ export default function Services() {
             <div>
               <dt className="font-bold text-[var(--retro-text)] mb-2">Solution</dt>
               <dd className="text-[var(--retro-text-muted)] leading-relaxed m-0">
-                Conversion-focused websites, GEO/AEO/SEO for every surface, AI agents that run 24/7, cohesive brand + precision ads, and guided Base44 setup. One process: Brief → Discovery → Build → Launch. Phase-0 Pilot $3,999 to validate before full engagement.
+                Conversion-focused websites, GEO/AEO/SEO for every surface, AI agents that run 24/7, cohesive brand + precision ads, and guided Base44 setup. One process: Brief → Discovery → Build → Launch. Focused validation when scope fits.
               </dd>
             </div>
           </dl>
@@ -230,7 +230,7 @@ export default function Services() {
         <SummaryBox
           title="Services Summary"
           items={[
-            '5 core service lines. Phase-0 Pilot: $3,999 to validate before full build.',
+            '5 core service lines. Custom quote after Brief and Discovery.',
             'Web Design & Operations — conversion-first websites that generate leads.',
             'GEO, AEO & SEO — appear in AI summaries (ChatGPT, Perplexity), featured snippets, and traditional search.',
             'Workflows & AI Agents — automate manual tasks 24/7 (Make, n8n, Zapier, custom APIs).',

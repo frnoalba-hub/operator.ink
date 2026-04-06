@@ -5,7 +5,7 @@ import { Menu, X } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 
 const LOGO_URL = "/operator-logo.png";
-const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
+const LINKEDIN_URL = "https://www.linkedin.com/in/franciscoalbavc/";
 
 export default function StickyNav({ currentPage = 'home' }) {
   const [scrolled, setScrolled] = useState(false);
@@ -96,9 +96,9 @@ export default function StickyNav({ currentPage = 'home' }) {
           <Link
             to={createPageUrl('InventoryDashboard')}
             className="retro-rgb-btn hidden lg:inline-flex items-center justify-center min-h-[40px] px-6 py-2.5 rounded-lg text-sm font-bold hover:opacity-95 transition-all duration-200"
-            aria-label="Open dashboard demo"
+            aria-label="Open live operations sample dashboard"
           >
-            Dashboard Demo
+            Live sample
           </Link>
 
           {/* Mobile Menu Toggle */}

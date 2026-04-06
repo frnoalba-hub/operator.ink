@@ -2,7 +2,6 @@ import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { pagesConfig } from './pages.config'
-import StreamerAnalytics from './pages/StreamerAnalytics'
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -13,7 +12,7 @@ const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 
 /** Marketing pages that render immediately without waiting for auth/public-settings. Reduces timeout risk. */
-const PUBLIC_PATHS = ['/', '/Home', '/Pilot', '/Services', '/StreamerAnalytics'];
+const PUBLIC_PATHS = ['/', '/Home', '/Pilot', '/Services'];
 
 const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
@@ -45,15 +44,6 @@ const AuthenticatedApp = () => {
     }
   }
 
-  // Streamer Analytics: explicit route so the page ships in the JS bundle even when Base44
-  // build regenerates pages.config.js without this entry (verified: prod bundle lacked Streamer* strings).
-  const streamerEl = (
-    <LayoutWrapper currentPageName="StreamerAnalytics">
-      <StreamerAnalytics />
-    </LayoutWrapper>
-  );
-
-  // Render the main app
   return (
     <Routes>
       <Route path="/" element={
@@ -61,7 +51,6 @@ const AuthenticatedApp = () => {
           <MainPage />
         </LayoutWrapper>
       } />
-      <Route path="/StreamerAnalytics" element={streamerEl} />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}

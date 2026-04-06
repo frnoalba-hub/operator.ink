@@ -9,7 +9,7 @@ import GridOverlay from '../components/GridOverlay';
 import BackToHome from '../components/BackToHome';
 import { base44 } from '@/api/base44Client';
 
-const LINKEDIN_URL = "https://www.linkedin.com/in/francisco-albavc/";
+const LINKEDIN_URL = "https://www.linkedin.com/in/franciscoalbavc/";
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const MAX_FILES = 20;
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'application/pdf'];

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 const DEFAULT_TITLE = 'Operator.ink — Web, GEO, AEO & SEO | AI Workflows & Demos';
-const DEFAULT_DESCRIPTION = 'Operator.ink — Web design, GEO, AEO & SEO, AI workflows, and skilled nursing facility census tools. CensusBoard demo: non-PHI referral pipeline, bed tracking, admissions dashboard for SNFs.';
+const DEFAULT_DESCRIPTION = 'Operator.ink is a digital operations agency building AI workflows, automated systems, operational websites, and GEO/AEO/SEO strategies across 6 concurrent business lines.';
 
 /**
  * Set page title and meta description for SEO/AEO.
