@@ -8,9 +8,9 @@ import StickyNav from '../components/StickyNav';
 import SummaryBox from '../components/SummaryBox';
 import { ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME, HOWTO_SCHEMA } from '@/schemas/geo-schemas';
 import IntakeForm from '../components/intake/IntakeForm';
-import { FOUNDER_INLINE_SRC } from '@/assets/founderPhotoInline.js';
 
 const LOGO_URL = "/operator-logo.png";
+const FOUNDER_PHOTO_URL = "/founder.png";
 const LINKEDIN_URL = "https://www.linkedin.com/in/franciscoalbavc/";
 
 const ventures = [
@@ -178,7 +178,7 @@ export default function Home() {
                   onContextMenu={(e) => e.preventDefault()}
                 >
                   <img
-                    src={FOUNDER_INLINE_SRC}
+                    src={FOUNDER_PHOTO_URL}
                     alt="Francisco Alba, founder of Operator.ink"
                     width={160}
                     height={160}

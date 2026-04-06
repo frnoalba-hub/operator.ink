@@ -1,20 +1,35 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import sharp from 'sharp';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
-const png = path.join(root, 'src', 'assets', 'francisco-alba.png');
-const out = path.join(root, 'src', 'assets', 'founderPhotoInline.js');
 
-const buf = fs.readFileSync(png);
-const b64 = buf.toString('base64');
-const isPng = buf.length >= 8 && buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47;
-const mime = isPng ? 'image/png' : 'image/jpeg';
-const body =
-  `/* eslint-disable max-len */\n` +
-  `// Auto-generated: npm run gen:founder (or run scripts/gen-founder-inline.mjs after updating src/assets/francisco-alba.png)\n` +
-  `export const FOUNDER_INLINE_SRC = 'data:${mime};base64,${b64}';\n`;
+/** Prefer full-res source on disk; `francisco-alba.png` in src/assets must be a real PNG (not JPEG renamed). */
+const candidates = [
+  path.join(root, 'public', 'francisco-alba.jpg'),
+  path.join(root, 'public', 'francisco-alba.png'),
+  path.join(root, 'src', 'assets', 'francisco-alba.jpg'),
+  path.join(root, 'src', 'assets', 'francisco-alba.png'),
+];
 
-fs.writeFileSync(out, body);
-console.log('Wrote', out, '(' + fs.statSync(out).size + ' bytes) from', png, '(' + fs.statSync(png).size + ' bytes)');
+const src = candidates.find((p) => fs.existsSync(p));
+if (!src) {
+  console.error(
+    'No founder source image found. Add one of:\n',
+    candidates.map((p) => '  - ' + path.relative(root, p)).join('\n'),
+  );
+  process.exit(1);
+}
+
+const out = path.join(root, 'public', 'founder.png');
+
+await sharp(src)
+  .rotate()
+  .resize({ width: 640, height: 640, fit: 'inside', withoutEnlargement: true })
+  .png({ compressionLevel: 9, effort: 10 })
+  .toFile(out);
+
+console.log('Wrote', out, '(' + fs.statSync(out).size + ' bytes) from', src);
+console.log("Home.jsx should use FOUNDER_PHOTO_URL = '/founder.png'");
