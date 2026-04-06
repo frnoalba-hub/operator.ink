@@ -8,10 +8,10 @@ import StickyNav from '../components/StickyNav';
 import SummaryBox from '../components/SummaryBox';
 import { ORGANIZATION_SCHEMA, FAQ_SCHEMA_HOME, HOWTO_SCHEMA } from '@/schemas/geo-schemas';
 import IntakeForm from '../components/intake/IntakeForm';
+import founderPhotoUrl from '@/assets/francisco-alba.png';
 
 const LOGO_URL = "/operator-logo.png";
 const LINKEDIN_URL = "https://www.linkedin.com/in/franciscoalbavc/";
-const FOUNDER_PHOTO = '/francisco-alba.png';
 
 const ventures = [
   { title: 'Operator.ink', subtitle: 'AI operations platform', href: 'https://operator.ink', external: false },
@@ -176,7 +176,7 @@ export default function Home() {
                   onContextMenu={(e) => e.preventDefault()}
                 >
                   <img
-                    src={FOUNDER_PHOTO}
+                    src={founderPhotoUrl}
                     alt="Francisco Alba, founder of Operator.ink"
                     width={160}
                     height={160}
