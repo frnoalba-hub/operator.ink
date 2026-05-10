@@ -1,0 +1,103 @@
+{
+  "name": "LeadSubmission",
+  "type": "object",
+  "properties": {
+    "client_name": {
+      "type": "string",
+      "description": "Client's full name"
+    },
+    "client_email": {
+      "type": "string",
+      "description": "Client's email address"
+    },
+    "company": {
+      "type": "string",
+      "description": "Company or brand name"
+    },
+    "service": {
+      "type": "string",
+      "enum": [
+        "web-design",
+        "seo",
+        "workflows",
+        "ads",
+        "multiple"
+      ],
+      "description": "Service requested"
+    },
+    "conditional_answer": {
+      "type": "string",
+      "description": "Answer to service-specific follow-up question"
+    },
+    "budget": {
+      "type": "string",
+      "enum": [
+        "under-5k",
+        "5k-15k",
+        "15k-50k",
+        "50k-plus",
+        "not-sure",
+        ""
+      ],
+      "description": "Budget range"
+    },
+    "timeline": {
+      "type": "string",
+      "enum": [
+        "asap",
+        "1-month",
+        "1-3-months",
+        "3-plus",
+        "flexible",
+        ""
+      ],
+      "description": "Project timeline"
+    },
+    "scope": {
+      "type": "string",
+      "description": "Project scope description"
+    },
+    "file_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Uploaded file URLs"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "reviewed",
+        "in-progress",
+        "closed"
+      ],
+      "default": "new",
+      "description": "Submission status"
+    }
+  },
+  "required": [
+    "client_name",
+    "client_email",
+    "service",
+    "scope"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
